@@ -1,3 +1,6 @@
+const path = require("path");
+const devicePathUpload = './uploads/devices/'
+
 // Import device model
 const Device = require("../models/deviceSchema.js");
 
@@ -85,8 +88,8 @@ module.exports.createDeviceDB = async (req, res, next) => {
             initStatus:
                 req.body.deviceInitStatus ||
                 Device.schema.path("initStatus").default, // Sử dụng giá trị mặc định từ schema
-            imageUrl: req.body.deviceUrlImg,
-            videoUrl: req.body.deviceVideo,
+            imageUrl: devicePathUpload + req.files[0].filename,
+            videoUrl: devicePathUpload + req.files[1].filename,
             location: req.body.deviceLocation,
             supplier: req.body.deviceSupplier,
             history: req.body.deviceHistory,

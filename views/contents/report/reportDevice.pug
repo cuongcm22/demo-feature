@@ -136,7 +136,7 @@ script.
   <div class="col-md-6">
   <div class="video-container">
   <h2>Hình ảnh</h2>
-  <img style="max-width: 100%;" id="deviceImage" src="${deviceInfo.imageUrl}" alt="Tivi Image">
+  <img style="max-width: 100%;" id="deviceImage" src="${deviceInfo.imageUrl ? deviceInfo.imageUrl : './images/image_placeholder.jpg'}" alt="Tivi Image">
   </div>
   </div>
   <div class="col-md-6">
@@ -159,10 +159,12 @@ script.
   </div>
   </div>
   <div class="col-md-12 text-center">
-  <video style="max-width: 100%;" id="deviceVideo" controls style="display: none;">
-  <source src="${deviceInfo.videoUrl}" type="video/mp4">
-  Your browser does not support the video tag.
-  </video>
+  ${deviceInfo.videoUrl ? `
+    <video style="max-width: 100%;" id="deviceVideo" controls style="display: none;">
+    <source src="${deviceInfo.videoUrl}" type="video/mp4">
+    Your browser does not support the video tag.
+    </video>
+  ` : ''}
   </div>
   </div>
   `;
