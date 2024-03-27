@@ -1,0 +1,52 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title Tr&#x1EA3; Thi&#x1EBF;t b&#x1ECB;
+  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css' rel='stylesheet')
+  include ../../partials/header.pug
+
+//- Truyền biến JavaScript vào Pug bằng cách sử dụng `locals`
+- var navUrl = ['user List Device Loan', 'Create Device', 'Loan Device', 'Return Device']
+
+mixin article(items)
+  include ../../components/navigation.pug 
+    
+//- Sử dụng biến JavaScript trong mixin
++article(navUrl)
+  
+style.
+  section.container {
+  margin-top: 50px;
+  }
+  .form-container {
+  max-width: 500px;
+  margin: 0 auto;
+  }
+section.container
+  h2.text-center.mb-4 Tr&#x1EA3; Thi&#x1EBF;t b&#x1ECB;
+  .form-container
+    form#returnDeviceForm
+      .mb-3
+        label.form-label(for='deviceSelect') Ch&#x1ECD;n Thi&#x1EBF;t b&#x1ECB;:
+        select#deviceSelect.form-select(name='deviceSelect' required='')
+          option(value='' disabled='' selected='') --Ch&#x1ECD;n thi&#x1EBF;t b&#x1ECB;--
+          // JavaScript will populate options from mockdata
+      .mb-3
+        label.form-label(for='returnDate') Ng&agrave;y Tr&#x1EA3;:
+        input#returnDate.form-control(type='date' name='returnDate' required='')
+      button.btn.btn-primary(type='submit') Tr&#x1EA3; Thi&#x1EBF;t b&#x1ECB;
+script.
+  // Mock data for device names
+  var mockData = {
+  devices: ["Device 1", "Device 2", "Device 3"]
+  };
+  // Populate device select options
+  var deviceSelect = document.getElementById("deviceSelect");
+  mockData.devices.forEach(function(device) {
+  var option = document.createElement("option");
+  option.text = device;
+  deviceSelect.add(option);
+  });
+script(src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js')
+script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js')

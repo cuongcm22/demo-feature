@@ -1,0 +1,44 @@
+include ../../partials/header.pug
+//- Truyền biến JavaScript vào Pug bằng cách sử dụng `locals`
+- var navUrl = ['login', 'register']
+
+mixin article(items)
+  include ../../components/navigation.pug 
+//- Sử dụng biến JavaScript trong mixin
++article(navUrl)
+
+style. 
+    .content {
+        max-width: 100%
+    }
+    .wrapper {
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+body
+    block content
+        .content
+            .wrapper
+                h2.mb-4 Đăng Ký
+                form#registerForm
+                    .mb-3
+                        label.form-label(for='username') Tên đăng nhập:
+                        input#username.form-control(type='text', name='username', required='')
+                    .mb-3
+                        label.form-label(for='password') Mật khẩu:
+                        input#password.form-control(type='password', name='password', required='')
+                    .mb-3
+                        label.form-label(for='id_student') Mã sinh viên:
+                        input#id_student.form-control(type='text', name='id_student', required='')
+                    .mb-3
+                        label.form-label(for='email') Email:
+                        input#email.form-control(type='email', name='email', required='')
+                    .mb-3
+                        label.form-label(for='phoneNumber') Số điện thoại:
+                        input#phoneNumber.form-control(type='tel', name='phoneNumber', pattern='[0-9]{10}', required='')
+                        small.text-muted Vui lòng nhập số điện thoại gồm 10 chữ số.
+                    button.btn.btn-primary(style='width: 100%;', type='submit') Đăng Ký
+                    .text-center(style='margin-top: 50px; border: 1px solid #ccc; border-radius: 8px;')
+                        a.btn(href='./login') Return login page

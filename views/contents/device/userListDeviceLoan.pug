@@ -1,0 +1,107 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title Danh s&aacute;ch Thi&#x1EBF;t b&#x1ECB; &Dstrok;&atilde; M&#x1B0;&#x1EE3;n
+  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css' rel='stylesheet')
+  
+  include ../../partials/header.pug
+  //- Truyền biến JavaScript vào Pug bằng cách sử dụng `locals`
+  - var navUrl = ['user List Device Loan', 'Create Device', 'Loan Device', 'Return Device']
+
+  mixin article(items)
+    include ../../components/navigation.pug 
+      
+  //- Sử dụng biến JavaScript trong mixin
+  +article(navUrl)
+
+  style.
+    section.container {
+    margin-top: 50px;
+    }
+    .table-container {
+    max-width: 100%;
+    overflow-x: auto;
+    }
+    @media (max-width: 576px) {
+    .table-container {
+    padding-bottom: 15px;
+    }
+    }
+section.container
+  h2.text-center.mb-4 Danh s&aacute;ch Thi&#x1EBF;t b&#x1ECB; &Dstrok;&atilde; M&#x1B0;&#x1EE3;n
+  .mb-3
+    input#searchInput.form-control(type='text' autocomplete='off' placeholder='Tìm kiếm theo tên hoặc loại thiết bị')
+  .table-container
+    table.table.table-striped
+      thead
+        tr
+          th(scope='col') T&ecirc;n Thi&#x1EBF;t b&#x1ECB;
+          th(scope='col') Lo&#x1EA1;i Thi&#x1EBF;t b&#x1ECB;
+          th(scope='col') Ng&agrave;y M&#x1B0;&#x1EE3;n
+          th(scope='col') Ng&agrave;y Tr&#x1EA3; (D&#x1EF1; ki&#x1EBF;n)
+          th(scope='col') Tr&#x1EA1;ng th&aacute;i
+          th(scope='col') T&igrave;nh tr&#x1EA1;ng
+      tbody#deviceLoanTableBody
+        // JavaScript will populate table rows from mockdata
+  a#returnDeviceButton.btn.btn-primary.btn-block(href='/returnDevice' style='width: 100%;') Tr&#x1EA3; Thi&#x1EBF;t b&#x1ECB;
+script.
+  // Mock data for device loans
+  var mockData = {
+  deviceLoans: [
+  { deviceName: "Device 1", deviceType: "Type 1", loanDate: "2024-03-20", returnDate: "2024-03-25", status: "Đang hoạt động" },
+  { deviceName: "Device 2", deviceType: "Type 2", loanDate: "2024-03-21", returnDate: "2024-03-26", status: "Không hoạt động" },
+  { deviceName: "Device 3", deviceType: "Type 3", loanDate: "2024-03-22", returnDate: "2024-03-27", status: "Đang sửa chữa" },
+  { deviceName: "Device 4", deviceType: "Type 4", loanDate: "2024-04-22", returnDate: "2024-03-27", status: "Đang sửa chữa" },
+  { deviceName: "Device 5", deviceType: "Type 5", loanDate: "2024-05-22", returnDate: "2024-03-27", status: "Đang sửa chữa" },
+  { deviceName: "Device 6", deviceType: "Type 6", loanDate: "2024-06-22", returnDate: "2024-03-27", status: "Đang sửa chữa" },
+  { deviceName: "Device 7", deviceType: "Type 7", loanDate: "2024-07-22", returnDate: "2024-03-27", status: "Đang sửa chữa" },
+  { deviceName: "Device 8", deviceType: "Type 8", loanDate: "2024-08-22", returnDate: "2024-03-27", status: "Đang sửa chữa" }
+  ]
+  };
+  // Function to populate device loan table
+  function populateTable(data) {
+  var tableBody = document.getElementById("deviceLoanTableBody");
+  tableBody.innerHTML = ""; // Clear previous content
+  data.forEach(function(loan) {
+  var row = document.createElement("tr");
+  row.innerHTML = `
+  <td>${loan.deviceName}</td>
+  <td>${loan.deviceType}</td>
+  <td>${loan.loanDate}</td>
+  <td>${loan.returnDate}</td>
+  <td>${loan.status}</td>
+  <td>
+  <select class="form-select" onchange="updateStatus(this)">
+  <option ${loan.status === '' ? 'selected' : ''}>--select--</option>
+  <option ${loan.status === 'bị hư hỏng' ? 'selected' : ''}>bị hư hỏng</option>
+  <option ${loan.status === 'bị thất lạc' ? 'selected' : ''}>bị thất lạc</option>
+  </select>
+  </td>
+  `;
+  tableBody.appendChild(row);
+  });
+  }
+  // Initial population of table
+  populateTable(mockData.deviceLoans);
+  // Search function
+  document.getElementById("searchInput").addEventListener("keyup", function() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("searchInput");
+  filter = input.value.toUpperCase();
+  table = document.querySelector("table");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+  td = tr[i].getElementsByTagName("td")[0]; // Search based on device name (first column)
+  if (td) {
+  txtValue = td.textContent || td.innerText;
+  if (txtValue.toUpperCase().indexOf(filter) > -1) {
+  tr[i].style.display = ""; // Show row if search matches
+  } else {
+  tr[i].style.display = "none"; // Hide row if search does not match
+  }
+  }
+  }
+  });
+script(src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js')
+script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js')
