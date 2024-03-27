@@ -6,7 +6,7 @@ const devicesController = require("../controllers/devicesController")
 // Import multer
 const uploadFile = require('../models/multerSetting')
 
-router.get('/', devicesController.reportDevice)
+router.get('/report', devicesController.reportDevice)
 router.get('/create', devicesController.createDevice)
 router.post('/create', uploadFile.array('deviceUrlFile', 2), devicesController.createDeviceDB)
 router.post('/update', devicesController.updateDeviceDB)

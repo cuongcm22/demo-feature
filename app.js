@@ -25,14 +25,13 @@ app.use(bodyParser.json());
 const colors = require('colors');
 
 // Import routers
+const homeRouter = require('./routers/home.route')
 const deviceRouter = require('./routers/device.route')
+const userRouter = require('./routers/user.route')
 
-// app.use("/", (req, res) => {
-//     // Khi truy cập trang chủ, render tệp mẫu "index.pug"
-//     res.render('index');
-// });
-
+app.use("/", homeRouter)
 app.use("/device", deviceRouter);
+app.use("/user", userRouter)
 
 // Kết nối tới cổng máy chủ
 const PORT = process.env.PORT || 3200; // Sử dụng cổng mặc định 3100 nếu không được chỉ định

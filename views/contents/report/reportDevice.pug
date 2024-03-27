@@ -7,13 +7,13 @@ head
   include ../../partials/header.pug
 
 //- Truyền biến JavaScript vào Pug bằng cách sử dụng `locals`
-- var navUrl = ['userListDeviceLoan', 'createDevice', 'loanDevice', 'returnDevice']
-
-mixin article(items)
+- var navUrl = ['Report', 'Create', 'Loan', 'Return']
+- var local = 'device'
+mixin article({navUrl, local})
   include ../../components/navigation.pug 
     
 //- Sử dụng biến JavaScript trong mixin
-+article(navUrl)
++article({navUrl, local})
 
 style.
   section.container {

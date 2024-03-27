@@ -15,13 +15,13 @@ script.
   }
 
 //- Truyền biến JavaScript vào Pug bằng cách sử dụng `locals`
-- var navUrl = ['user List Device Loan', 'Create Device', 'Loan Device', 'Return Device']
-
-mixin article(items)
+- var navUrl = ['Report', 'Create', 'Loan', 'Return']
+- var local = 'device'
+mixin article({navUrl, local})
   include ../../components/navigation.pug 
     
 //- Sử dụng biến JavaScript trong mixin
-+article(navUrl)
++article({navUrl, local})
 
 style.
   section.container {
