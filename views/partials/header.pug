@@ -1,33 +1,56 @@
 link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css' rel='stylesheet')
 
+style.
+  /* Custom CSS */
+  .user-section {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  }
+  .user-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #6c757d;
+  margin-right: 5px;
+  }
+  .user-name {
+  color: #fff;
+  }
+
 nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
   .container
-    a.navbar-brand(href="#") Device manage
-    button.navbar-toggler(type="button", data-bs-toggle="collapse", data-bs-target="#navbarSupportedContent", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
+    a.navbar-brand(href='#') Device manage
+    button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation')
       span.navbar-toggler-icon
-    .collapse.navbar-collapse#navbarSupportedContent
+    #navbarSupportedContent.collapse.navbar-collapse
       ul.navbar-nav.me-auto.mb-2.mb-lg-0
         li.nav-item
-          a.nav-link.active(href="/") Home
+          a.nav-link.active(href='/') Home
         li.nav-item
-          a.nav-link(href="/login") User
+          a#user-link.nav-link(href='/login') User
         li.nav-item
-          a.nav-link(href="/userlistdeviceloan") Device
+          a.nav-link(href='/userlistdeviceloan') Device
         li.nav-item
-          a.nav-link(href="/report") Report
+          a.nav-link(href='/report') Report
         li.nav-item.dropdown
-          a.nav-link.dropdown-toggle(href="#", id="navbarDropdown", role="button", data-bs-toggle="dropdown", aria-expanded="false") Dropdown
-          ul.dropdown-menu(aria-labelledby="navbarDropdown")
+          a#navbarDropdown.nav-link.dropdown-toggle(href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false') Dropdown
+          ul.dropdown-menu(aria-labelledby='navbarDropdown')
             li
-              a.dropdown-item(href="#") Action
+              a.dropdown-item(href='#') Action
             li
-              a.dropdown-item(href="#") Another action
+              a.dropdown-item(href='#') Another action
             li
               hr.dropdown-divider
             li
-              a.dropdown-item(href="#") Something else here
+              a.dropdown-item(href='#') Something else here
+      // User Section
+      .user-section
+        img.user-icon(src='https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg' alt='User Icon')
+        span.user-name
 
 script.
+  document.querySelector('.user-section').hidden = true
   document.addEventListener("DOMContentLoaded", (event) => {
     // Accessing cookies using JavaScript
     var cookies = document.cookie.split(';');
@@ -40,4 +63,8 @@ script.
     });
     // Output cookie data to console (for demonstration)
     console.log("Cookie Data:", cookieData);
+    if (cookieData.sessionId && cookieData.sessionUserName) {
+      document.querySelector('.user-section').hidden = false
+      document.querySelector('.user-name').innerText = cookieData.sessionUserName
+    }
   });

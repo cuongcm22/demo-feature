@@ -3,6 +3,7 @@ const devicePathUpload = './uploads/devices/'
 
 // Import device model
 const Device = require("../models/deviceSchema.js");
+const LoanRecord = require("../models/loanSchema.js");
 
 function convertTimerToString(time) {
     const purchaseDate = new Date(time);
@@ -153,6 +154,73 @@ module.exports.deleteDeviceDB = async (req, res, next) => {
                 message: `Delete device successfully! ${result}`
             })
         });
+    } catch (error) {
+        res.status(401).json({
+            message: error
+        })
+    }
+}
+
+module.exports.loanDevice = async (req, res, next) => {
+    try {
+        await Device.aggregate([
+            {
+                $lookup: {
+                    from: "loanrecords", // Tên bảng trong database
+                    localField: "id",
+                    foreignField: "deviceID",
+                    as: "loanRecords"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$loanRecords",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $match: {
+                    $or: [
+                        { "loanRecords": { $exists: false } }, // Trường hợp không có bản ghi trong loanrecords
+                        { "loanRecords.status": "notborrowed" } // Trường hợp có bản ghi với status là notborrowed
+                    ]
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    deviceID: "$id",
+                    deviceName: "$name",
+                    deviceImage: "$imageUrl",
+                    deviceVideo: "$videoUrl",
+                    deviceLocation: "$location",
+                    deviceSupplier: "$supplier",
+                }
+            }
+        ]).then(results => {
+            console.table(results);
+            // Xử lý kết quả ở đây
+            res.render("./contents/device/loanDevice", {
+                data: JSON.stringify(results)
+            });
+        }).catch(err => {
+            console.error(err);
+            // Xử lý lỗi ở đây
+            res.status(400).json({
+                message: err
+            })
+        });
+
+    } catch (error) {
+        res.status(401).json({
+            message: error
+        })
+    }
+}
+
+module.exports.loanDeviceDB = async (req, res, next) => {
+    try {
+        
     } catch (error) {
         res.status(401).json({
             message: error

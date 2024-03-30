@@ -35,7 +35,9 @@ async function comparePassword(password, hashedPassword) {
 
 module.exports.userLogin = async (req, res, next) => {
     try {
-        console.log(req.session);
+        // console.log(req.session);
+        // const cookies = req.headers.cookie;
+        // console.log(cookies);
         res.render("contents/user/loginForm")
     } catch (error) {
         res.status(400).json({
