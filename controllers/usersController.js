@@ -35,6 +35,7 @@ async function comparePassword(password, hashedPassword) {
 
 module.exports.userLogin = async (req, res, next) => {
     try {
+        console.log(req.session);
         res.render("contents/user/loginForm")
     } catch (error) {
         res.status(400).json({
@@ -45,12 +46,23 @@ module.exports.userLogin = async (req, res, next) => {
 
 module.exports.userLoginDB = async (req, res, next) => {
     try {
+        const expireTimeSession = 5000
+
         await User.find({'username': req.body.username}).then(user => {
             // console.log(req.body.password, user[0].password)
             comparePassword(req.body.password, user[0].password).then(match => {
                 if (match) {
+                    console.log(`User ${req.body.username} just login!`.bgBlue);
+                    // Pass session identifier to client-side
+                    // res.setHeader('Set-Cookie', `sessionId=${req.sessionID}; HttpOnly; Max-Age=${expireTimeSession}; SameSite=Strict` );
+                    // res.setHeader('Set-Cookie', `[sessionUser=${req.body.username}, sessionUser=${req.sessionID}]; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`);
+                    const sessionId = `sessionId=${req.sessionID}; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;
+                    const sessionUserName = `sessionUserName=${req.body.username}; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;
+
+                    res.setHeader('Set-Cookie', [sessionId, sessionUserName]);
+
                     res.status(200).json({
-                        check: true,
+                        success: true,
                         message: 'Login success'
                     })
                 } else {
@@ -107,12 +119,12 @@ module.exports.userRegisterDB = async (req, res, next) => {
             console.log("New user has been create".bgBlue)
             console.log(result)
             res.status(200).json({
-                check: true
+                success: true
             })
         }).catch(err => {
             console.error(err)
             res.status(401).json({
-                check: false,
+                success: false,
                 message: err
             })
         })

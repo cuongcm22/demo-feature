@@ -53,14 +53,14 @@ script.
           phone: document.querySelector('#phoneNumber').value
         }).then(result => {
             console.log(result)
-            if (result.data.check) {
+            if (result.data.success) {
                 alert('Đăng kí thành công!')
                 window.location.assign(window.location.origin  + '/user/login');
             }
             
         }).catch(err => {
             console.log(err)
-            if (!err.response.data.check) {
+            if (!err.response.data.success) {
                 alert('Đăng kí thất bại, vui lòng thử tên người khác')
             }
         })

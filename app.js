@@ -1,6 +1,20 @@
 const express = require("express");
 const app = express();
 
+// import .env
+const dotenv = require('dotenv')
+dotenv.config()
+
+// Session
+const session = require('express-session');
+
+// Express session middleware
+app.use(session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false
+  }));  
+
 // Import các module cần thiết
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
