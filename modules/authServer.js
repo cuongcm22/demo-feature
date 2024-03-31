@@ -11,7 +11,7 @@ module.exports.authenToken = async (req, res, next) => {
         jwt.verify(sessionToken, process.env.ACCESS_TOKEN_SECRET, (err, decodedData) => {
             console.log(err, decodedData);
             if (err) {
-                res.sendStatus(403) //Nếu token không hợp lệ hoặc hết hạn sẽ thông báo lỗi 403 tức người dùng không có quyền truy cập vào route này
+                res.status(401).redirect("/user/login") //Nếu token không hợp lệ hoặc hết hạn sẽ thông báo lỗi 403 tức người dùng không có quyền truy cập vào route này
             } else {
                 
                 // Check time stamp token (lưu ý trong product cần loại bỏ phần check time stamp)

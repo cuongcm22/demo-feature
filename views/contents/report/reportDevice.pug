@@ -248,25 +248,35 @@ script.
   `
   }
   // Delete function
-  function deleteDevice(event, index, id) {
+  async function deleteDevice(event, index, id) {
   // Prompt the user for confirmation
   var confirmation = confirm("Are you sure you want to delete this device?");
   // If the user confirms the deletion
   if (confirmation) {
-  handleDelete(id)
-  console.log("Đã xóa thiết bị!");
-  /*
-  Tham số đầu tiên (1) là chỉ mục của phần tử bạn muốn bắt đầu xóa.
-  Tham số thứ hai (1) là số lượng phần tử bạn muốn xóa từ chỉ mục đã chỉ định.
-  */
-  mockData.devices.splice(index, 1);
-  // Rerender table
-  populateTable(mockData.devices);
+    
+  handleDelete(id, index)
+  
   }
   }
-  function handleDelete(idDevice) {
+  function handleDelete(idDevice, index) {
     axios.post('/device/delete', {
       id: `${idDevice}`
+    }).then(res => {
+      console.log(res)
+      if (!res.data.success) { 
+        alert('Không thể xóa thiết bị đã có người mượn')
+      } 
+      else { 
+        /*
+        Tham số đầu tiên (1) là chỉ mục của phần tử bạn muốn bắt đầu xóa.
+        Tham số thứ hai (1) là số lượng phần tử bạn muốn xóa từ chỉ mục đã chỉ định.
+        */
+        mockData.devices.splice(index, 1);
+        // Rerender table
+        populateTable(mockData.devices);
+
+        alert('Xóa thiết bị thành công')
+       }
     })
   }
   // Search function

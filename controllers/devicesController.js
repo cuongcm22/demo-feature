@@ -148,12 +148,28 @@ module.exports.updateDeviceDB = async (req, res, next) => {
 
 module.exports.deleteDeviceDB = async (req, res, next) => {
     try {
-        Device.deleteOne({ id: req.body.id }).then(result => {
-            console.log('Delete device successfully!'.bgRed);
-            res.status(200).json({
-                message: `Delete device successfully! ${result}`
-            })
-        });
+        // console.log(req.body);
+        LoanRecord.findOne({ deviceID: req.body.id, status: 'borrowed' })
+        .then(existingLoanRecord => {
+            if (existingLoanRecord) {
+                console.log(existingLoanRecord);
+                res.status(200).json({
+                    success: false,
+                    message: 'Delete device fail'
+                })
+            } else {
+                LoanRecord.deleteOne({ deviceID: req.body.id }).then(result => {
+                    console.log('Delete device in loanRecord table successfully!'.bgRed);
+                }).catch(err => console.log(`Đã xảy ra lỗi khi xóa thiết bị trong bảng loanRecord ${req.body.id}`.yellow))
+                Device.deleteOne({ id: req.body.id }).then(result => {
+                    console.log('Delete device successfully!'.bgRed)
+                }).catch(err => {console.log(`Đã xảy ra lỗi khi xóa thiết bị trong bảng device ${req.body.id}`.yellow)})
+                res.status(200).json({
+                    success: true,
+                    message: 'Deleted device'
+                })
+            }
+        })
     } catch (error) {
         res.status(401).json({
             message: error
@@ -240,7 +256,6 @@ module.exports.loanDeviceDB = async (req, res, next) => {
                 )
             } else {
                 // Nếu không tìm thấy bản ghi, chưa có người dùng nào mượn thiết bị
-                console.log('No existing loan record found for this device');
 
                 // Tiếp tục với việc cập nhật hoặc tạo mới bản ghi
                 // ... Tiếp tục với code trong phần trước ...

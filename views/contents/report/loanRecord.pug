@@ -44,7 +44,7 @@ script.
   <td>${item.borrowedAt.toLocaleString()}</td>
   <td>${item.returnedAt.toLocaleString()}</td>
   <td>${item.status}</td>
-  <td>${item.notes ? 'item.notes' : ''}</td>
+  <td>${item.notes ? `${item.notes}` : ''}</td>
   `;
   dataBody.appendChild(row);
   });

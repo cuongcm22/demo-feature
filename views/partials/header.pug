@@ -32,7 +32,7 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
         li.nav-item
           a.nav-link(href='/device/report') Device
         li.nav-item
-          a.nav-link(href='/device/loanrecord') Report
+          a.nav-link(href='/device/loanrecord') Record
         li.nav-item.dropdown
           a#navbarDropdown.nav-link.dropdown-toggle(href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false') Dropdown
           ul.dropdown-menu(aria-labelledby='navbarDropdown')
@@ -63,7 +63,7 @@ script.
     });
     // Output cookie data to console (for demonstration)
     console.log("Cookie Data:", cookieData);
-    if (cookieData.sessionUserName) {
+    if (cookieData.sessionUserName && cookieData.token) {
       document.querySelector('.user-section').hidden = false
       document.querySelector('.user-name').innerText = cookieData.sessionUserName
     }
