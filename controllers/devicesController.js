@@ -198,7 +198,7 @@ module.exports.loanDevice = async (req, res, next) => {
                 }
             }
         ]).then(results => {
-            console.table(results);
+            // console.log(results);
             // Xử lý kết quả ở đây
             res.render("./contents/device/loanDevice", {
                 data: JSON.stringify(results)
@@ -220,10 +220,92 @@ module.exports.loanDevice = async (req, res, next) => {
 
 module.exports.loanDeviceDB = async (req, res, next) => {
     try {
-        
+        // using inherited variable from authenServer
+
+        const username = req.user.username;
+        console.log(req.body);
+
+        // Đối tượng cần lưu vào bảng LoanRecord
+        const loanRecordData = {
+            username: username, // Thay 'userid' bằng giá trị thực tế
+            deviceID: req.body.deviceId,
+            borrowedAt: new Date(req.body.loanDate),
+            returnedAt: new Date(req.body.returnDate),
+            status: 'borrowed',
+            notes: '', // Nếu cần
+            created_at: Date.now(), // Mongoose sẽ tự động thêm
+            updated_at: Date.now() // Mongoose sẽ tự động thêm
+        };
+
+        // Tạo một bản ghi mới của LoanRecord và lưu vào cơ sở dữ liệu
+        const newLoanRecord = new LoanRecord(loanRecordData);
+        newLoanRecord.save()
+        .then(savedRecord => {
+            console.log('Loan record saved:', savedRecord);
+            // Thực hiện các thao tác tiếp theo nếu cần
+            res.status(200).send(
+                `<script>
+                    alert(Mượn thiết bị thành công!)
+                </script>`
+            )
+        })
+        .catch(error => {
+            console.error('Error saving loan record:', error);
+            // Xử lý lỗi nếu có
+        });
     } catch (error) {
         res.status(401).json({
             message: error
         })
+    }
+}
+
+module.exports.loanRecord = async (req, res, next) => {
+    try {
+        // Thực hiện truy vấn để lấy ra tất cả dữ liệu trong bảng LoanRecord, loại trừ các trường _id, __v và notes
+        LoanRecord.find({}, { _id: 0, __v: 0, notes: 0 })
+        .then(records => {
+            console.log('All records:', records);
+
+            const formattedDevices = records.map((record) => {
+                // Chuyển đổi purchaseDate
+                const borrowedAt =
+                    record.borrowedAt instanceof Date
+                        ? record.borrowedAt.toLocaleDateString("en-GB")
+                        : record.borrowedAt;
+                // Chuyển đổi warrantyExpiry
+                const returnedAt =
+                    record.returnedAt instanceof Date
+                        ? record.returnedAt.toLocaleDateString("en-GB")
+                        : record.returnedAt;
+                // Chuyển đổi createDate
+                const created_at =
+                    record.created_at instanceof Date
+                        ? record.created_at.toLocaleDateString("en-GB")
+                        : record.created_at;
+                // Chuyển đổi updateDate
+                const updated_at =
+                    record.updated_at instanceof Date
+                        ? record.updated_at.toLocaleDateString("en-GB")
+                        : record.updated_at;
+
+                return {
+                    ...record._doc,
+                    borrowedAt,
+                    returnedAt,
+                    created_at,
+                    updated_at,
+                };
+            });
+            console.log(formattedDevices);
+            res.render("./contents/report/loanRecord", {data: JSON.stringify(formattedDevices)})
+        })
+        .catch(error => {
+            console.error('Error fetching records:', error);
+        });
+    } catch(error) {
+        res.status(400).json(
+            {success: false}
+        )
     }
 }

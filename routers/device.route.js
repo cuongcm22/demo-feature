@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
+const authenToken = require("../modules/authServer")
 const devicesController = require("../controllers/devicesController")
 
 // Import multer
@@ -11,7 +12,8 @@ router.post('/create', uploadFile.array('deviceUrlFile', 2), devicesController.c
 router.post('/update', devicesController.updateDeviceDB)
 router.post('/delete', devicesController.deleteDeviceDB)
 router.get('/report', devicesController.reportDevice)
-router.get('/loan', devicesController.loanDevice)
-router.post('/loan', devicesController.loanDeviceDB)
+router.get('/loan', authenToken.authenToken, devicesController.loanDevice)
+router.post('/loan', authenToken.authenToken, devicesController.loanDeviceDB)
+router.get('/loanrecord', devicesController.loanRecord)
 
 module.exports = router;
