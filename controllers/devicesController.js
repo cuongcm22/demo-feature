@@ -182,7 +182,8 @@ module.exports.loanDevice = async (req, res, next) => {
                 $match: {
                     $or: [
                         { "loanRecords": { $exists: false } }, // Trường hợp không có bản ghi trong loanrecords
-                        { "loanRecords.status": "notborrowed" }, // Trường hợp có bản ghi với status là notborrowed
+                        { "loanRecords.status": "notborrowed" }// Trường hợp có bản ghi với status là notborrowed
+                        // { "loanRecords.deviceID": "$id", "loanRecords.status": "notborrowed" }// Trường hợp có bản ghi với status là notborrowed
                     ]
                 }
             },
@@ -198,7 +199,7 @@ module.exports.loanDevice = async (req, res, next) => {
                 }
             }
         ]).then(results => {
-            // console.log(results);
+            console.log(results);
             // Xử lý kết quả ở đây
             res.render("./contents/device/loanDevice", {
                 data: JSON.stringify(results)
@@ -245,8 +246,9 @@ module.exports.loanDeviceDB = async (req, res, next) => {
                 // ... Tiếp tục với code trong phần trước ...
                 // Tìm bản ghi LoanRecord dựa trên username và deviceID
                 LoanRecord.findOneAndUpdate(
-                    { username: username, deviceID: req.body.deviceId }, // Điều kiện tìm kiếm
+                    { deviceID: req.body.deviceId }, // Điều kiện tìm kiếm
                     { $set: { 
+                        username: username,
                         borrowedAt: new Date(req.body.loanDate),
                         returnedAt: new Date(req.body.returnDate),
                         status: 'borrowed',
@@ -351,7 +353,7 @@ module.exports.loanRecord = async (req, res, next) => {
                     updated_at,
                 };
             });
-            console.log(formattedDevices);
+            // console.log(formattedDevices);
             res.render("./contents/report/loanRecord", {data: JSON.stringify(formattedDevices)})
         })
         .catch(error => {
