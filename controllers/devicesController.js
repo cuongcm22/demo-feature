@@ -132,7 +132,7 @@ module.exports.updateDeviceDB = async (req, res, next) => {
       { new: true, upsert: true } // Tùy chọn để trả về bản ghi mới sau khi cập nhật và tạo bản ghi mới nếu không tìm thấy
     ).then(updatedDevice => {
       console.log("Update device successfully!!!".bgYellow.bold);
-      res.status(200).redirect('/device')
+      res.status(200).redirect('/device/report')
     }).catch(error => {
       res.status(401).json({
         message: "Xảy ra lỗi khi cập nhật thiết bị",

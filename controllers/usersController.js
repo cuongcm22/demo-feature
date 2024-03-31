@@ -56,7 +56,8 @@ module.exports.userLogin = async (req, res, next) => {
 
 module.exports.userLoginDB = async (req, res, next) => {
     try {
-        const { username, password } = req.body
+        var { username, password } = req.body
+        password = password.toLowerCase()
         const expireTimeSession = 5000
         const accessToken = jwt.sign(req.body, process.env.ACCESS_TOKEN_SECRET, {
             expiresIn: "3600s",
@@ -72,7 +73,7 @@ module.exports.userLoginDB = async (req, res, next) => {
                     // res.setHeader('Set-Cookie', `[sessionUser=${req.body.username}, sessionUser=${req.sessionID}]; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`);
                     const sessionId = `sessionId=${req.sessionID}; Max-Age=${expireTimeSession}; HttpOnly; SameSite=Strict; Path=/`;
                     const sessionUserName = `sessionUserName=${username}; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;
-                    const sessionToken = `token=${accessToken}; Max-Age=${expireTimeSession}; HttpOnly; SameSite=Strict; Path=/`;
+                    const sessionToken = `token=${accessToken}; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;
 
                     res.setHeader('Set-Cookie', [sessionId, sessionUserName, sessionToken]);
 
@@ -123,7 +124,7 @@ module.exports.userRegisterDB = async (req, res, next) => {
         const user = await User.create({
             id: parseInt(newId),
             username: req.body.username,
-            password: `${await hashPassword(req.body.password)}`,
+            password: `${await hashPassword(req.body.password.toLowerCase())}`,
             studentID: req.body.studentID,
             email: req.body.email,
             phone: req.body.phone,
