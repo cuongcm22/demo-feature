@@ -1,6 +1,6 @@
 module.exports.homePage = async (req, res, next) => {
     try {
-        res.render("contents/report/loanReport");
+        res.render("contents/home/home");
     } catch(err) {
         console.log(err)
         res.status(404)

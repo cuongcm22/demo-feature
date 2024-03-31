@@ -182,7 +182,7 @@ module.exports.loanDevice = async (req, res, next) => {
                 $match: {
                     $or: [
                         { "loanRecords": { $exists: false } }, // Trường hợp không có bản ghi trong loanrecords
-                        { "loanRecords.status": "notborrowed" } // Trường hợp có bản ghi với status là notborrowed
+                        { "loanRecords.status": "notborrowed" }, // Trường hợp có bản ghi với status là notborrowed
                     ]
                 }
             },
@@ -221,38 +221,92 @@ module.exports.loanDevice = async (req, res, next) => {
 module.exports.loanDeviceDB = async (req, res, next) => {
     try {
         // using inherited variable from authenServer
-
         const username = req.user.username;
         console.log(req.body);
+        // Kiểm tra xem có bản ghi nào với device id và trạng thái borrowed
+        LoanRecord.findOne({ deviceID: req.body.deviceId, status: 'borrowed' })
+        .then(existingLoanRecord => {
+            if (existingLoanRecord) {
+                // Nếu đã tồn tại bản ghi, có người dùng đã mượn thiết bị
+                console.log('This device is already borrowed by another user:', existingLoanRecord);
+                // Thực hiện các hành động phù hợp, ví dụ: trả về thông báo lỗi
+                // res.status(400).send('This device is already borrowed by another user');
+                res.send(
+                    `<script>
+                        alert('Thiết bị này đã có người mượn, vui lòng mượn thiết bị khác!')
+                        window.location.assign(window.location.origin  + '/device/loan');
+                    </script>`
+                )
+            } else {
+                // Nếu không tìm thấy bản ghi, chưa có người dùng nào mượn thiết bị
+                console.log('No existing loan record found for this device');
 
-        // Đối tượng cần lưu vào bảng LoanRecord
-        const loanRecordData = {
-            username: username, // Thay 'userid' bằng giá trị thực tế
-            deviceID: req.body.deviceId,
-            borrowedAt: new Date(req.body.loanDate),
-            returnedAt: new Date(req.body.returnDate),
-            status: 'borrowed',
-            notes: '', // Nếu cần
-            created_at: Date.now(), // Mongoose sẽ tự động thêm
-            updated_at: Date.now() // Mongoose sẽ tự động thêm
-        };
+                // Tiếp tục với việc cập nhật hoặc tạo mới bản ghi
+                // ... Tiếp tục với code trong phần trước ...
+                // Tìm bản ghi LoanRecord dựa trên username và deviceID
+                LoanRecord.findOneAndUpdate(
+                    { username: username, deviceID: req.body.deviceId }, // Điều kiện tìm kiếm
+                    { $set: { 
+                        borrowedAt: new Date(req.body.loanDate),
+                        returnedAt: new Date(req.body.returnDate),
+                        status: 'borrowed',
+                        updated_at: Date.now()
+                    } }, // Dữ liệu cập nhật
+                    { upsert: true, new: true } // Tạo mới nếu không tìm thấy
+                )
+                .then(loanRecord => {
+                    if (loanRecord) {
+                        // Nếu bản ghi đã tồn tại, cập nhật thông tin
+                        console.log('Updated loan record:', loanRecord);
+                        res.status(200).send(
+                            `<script>
+                                alert('Mượn thiết bị thành công!')
+                                window.location.assign(window.location.origin  + '/');
+                            </script>`
+                        )
+                    } else {
+                        // Nếu bản ghi không tồn tại, tạo mới bản ghi
+                        const loanRecordData = {
+                            username: username,
+                            deviceID: req.body.deviceId,
+                            borrowedAt: new Date(req.body.loanDate),
+                            returnedAt: new Date(req.body.returnDate),
+                            status: 'borrowed',
+                            created_at: Date.now(),
+                            updated_at: Date.now()
+                        };
 
-        // Tạo một bản ghi mới của LoanRecord và lưu vào cơ sở dữ liệu
-        const newLoanRecord = new LoanRecord(loanRecordData);
-        newLoanRecord.save()
-        .then(savedRecord => {
-            console.log('Loan record saved:', savedRecord);
-            // Thực hiện các thao tác tiếp theo nếu cần
-            res.status(200).send(
-                `<script>
-                    alert(Mượn thiết bị thành công!)
-                </script>`
-            )
+                        // Tạo một bản ghi mới của LoanRecord và lưu vào cơ sở dữ liệu
+                        const newLoanRecord = new LoanRecord(loanRecordData);
+                        newLoanRecord.save()
+                        .then(savedRecord => {
+                            console.log('Loan record saved:', savedRecord);
+                            // Thực hiện các thao tác tiếp theo nếu cần
+                            res.status(200).send(
+                                `<script>
+                                    alert('Mượn thiết bị thành công!')
+                                    window.location.assign(window.location.origin  + '/');
+                                </script>`
+                            )
+                        })
+                        .catch(error => {
+                            console.error('Error saving loan record:', error);
+                            // Xử lý lỗi nếu có
+                            res.status(400).json({
+                                message: error
+                            })
+                        });
+                    }
+                })
+            }
         })
         .catch(error => {
-            console.error('Error saving loan record:', error);
-            // Xử lý lỗi nếu có
+            console.error('Error:', error);
+            // Xử lý lỗi nếu có lỗi xảy ra trong quá trình thực hiện truy vấn
+            res.status(500).send('Internal Server Error');
         });
+        
+
     } catch (error) {
         res.status(401).json({
             message: error
@@ -307,5 +361,55 @@ module.exports.loanRecord = async (req, res, next) => {
         res.status(400).json(
             {success: false}
         )
+    }
+}
+
+module.exports.returnDevice = async (req, res, next) => {
+    try {
+        const username = req.user.username;
+        LoanRecord.find({ username: username, status: 'borrowed' }, { _id: 0, __v: 0, notes: 0 })
+        .then(records => {
+            console.log(`Records with username ${username}`, records);
+            const deviceIDs = records.map(record => record.deviceID);
+            console.log(deviceIDs);
+            res.render("./contents/device/returnDevice", {data: JSON.stringify(deviceIDs)})
+        })
+        .catch(error => {
+            console.error('Error fetching records:', error);
+            res.status(401).json({
+                message: 'Cant find device'
+            })
+        });
+    } catch (error) {
+        
+    }
+}
+
+module.exports.returnDeviceDB = async (req, res, next) => {
+    try {
+        const username = req.user.username;
+        const { deviceId, returnDate } = req.body
+        // Thực hiện câu lệnh truy vấn để cập nhật bản ghi trong bảng LoanRecord
+        LoanRecord.findOneAndUpdate(
+            { username: username, deviceID: deviceId }, // Điều kiện tìm kiếm
+            { $set: { status: 'notborrowed', updated_at: new Date(returnDate) } }, // Dữ liệu cập nhật
+            { new: true } // Tùy chọn để trả về bản ghi đã được cập nhật
+        )
+        .then(updatedRecord => {
+            console.log('Updated record:', updatedRecord);
+            res.status(200).send(
+                `<script>
+                    alert('Trả thiết bị thành công!')
+                    window.location.assign(window.location.origin  + '/');
+                </script>`
+            )
+        })
+        .catch(error => {
+            console.error('Error updating record:', error);
+        });
+    } catch (error) {
+        res.status(400).json({
+            message: error
+        })
     }
 }

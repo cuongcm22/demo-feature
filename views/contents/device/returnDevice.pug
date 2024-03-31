@@ -7,13 +7,13 @@ head
   include ../../partials/header.pug
 
 //- Truyền biến JavaScript vào Pug bằng cách sử dụng `locals`
-- var navUrl = ['user List Device Loan', 'Create Device', 'Loan Device', 'Return Device']
-
-mixin article(items)
+- var navUrl = ['Report', 'Create', 'Loan', 'Return']
+- var local = 'device'
+mixin article({navUrl, local})
   include ../../components/navigation.pug 
     
 //- Sử dụng biến JavaScript trong mixin
-+article(navUrl)
++article({navUrl, local})
   
 style.
   section.container {
@@ -26,10 +26,10 @@ style.
 section.container
   h2.text-center.mb-4 Tr&#x1EA3; Thi&#x1EBF;t b&#x1ECB;
   .form-container
-    form#returnDeviceForm
+    form#returnDeviceForm(action='/device/return' method='post' enctype='multipart/json')
       .mb-3
         label.form-label(for='deviceSelect') Ch&#x1ECD;n Thi&#x1EBF;t b&#x1ECB;:
-        select#deviceSelect.form-select(name='deviceSelect' required='')
+        select#deviceSelect.form-select(name='deviceId' required='')
           option(value='' disabled='' selected='') --Ch&#x1ECD;n thi&#x1EBF;t b&#x1ECB;--
           // JavaScript will populate options from mockdata
       .mb-3
@@ -39,7 +39,7 @@ section.container
 script.
   // Mock data for device names
   var mockData = {
-  devices: ["Device 1", "Device 2", "Device 3"]
+  devices: !{data}
   };
   // Populate device select options
   var deviceSelect = document.getElementById("deviceSelect");

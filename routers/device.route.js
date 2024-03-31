@@ -14,6 +14,8 @@ router.post('/delete', devicesController.deleteDeviceDB)
 router.get('/report', devicesController.reportDevice)
 router.get('/loan', authenToken.authenToken, devicesController.loanDevice)
 router.post('/loan', authenToken.authenToken, devicesController.loanDeviceDB)
+router.get('/return', authenToken.authenToken, devicesController.returnDevice)
+router.post('/return', authenToken.authenToken, devicesController.returnDeviceDB)
 router.get('/loanrecord', devicesController.loanRecord)
 
 module.exports = router;
