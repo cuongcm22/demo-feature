@@ -2,6 +2,7 @@ const path = require("path");
 const devicePathUpload = '/public/uploads/devices/'
 
 // Import device model
+const Supplier = require("../models/supplierSchema.js")
 const Device = require("../models/deviceSchema.js");
 const LoanRecord = require("../models/loanSchema.js");
 
@@ -63,7 +64,7 @@ module.exports.reportDevice = async (req, res, next) => {
                     title: 'Home page',
                     routes: {
                         'Home': '/',
-                        'Report': '/device/report',
+                        'Detail Device': '/device/report',
                         'Create': '/device/create',
                         'Loan': '/device/loan',
                         'Return': '/device/return'
@@ -83,16 +84,23 @@ module.exports.reportDevice = async (req, res, next) => {
 module.exports.createDevice = async (req, res, next) => {
     console.log("Create device routers".blue.bold);
     try {
+        // Truy vấn tất cả các tài liệu từ bảng Supplier
+        const suppliers = await Supplier.find();
+
+        // Lặp qua danh sách các tài liệu và trích xuất trường 'name' từ mỗi tài liệu
+        const supplierNames = suppliers.map(supplier => supplier.name)
         res.render("./contents/device/createDevice.pug", {
             title: 'Home page',
             routes: {
                 'Home': '/',
-                'Report': '/device/report',
+                'Detail Device': '/device/report',
                 'Create': '/device/create',
                 'Loan': '/device/loan',
                 'Return': '/device/return'
-            }
+            },
+            suppliers: supplierNames
         });
+           
     } catch (error) {
         res.status(400).send(error);
     }
@@ -128,15 +136,23 @@ module.exports.createDeviceDB = async (req, res, next) => {
                 //     message: "New device has been create!",
                 //     data: result,
                 // });
-                // res.status(200).redirect('/device')
-                res.status(200).json({status:"ok"})
+                res.send(
+                    `<script>
+                        alert('Thiết bị đã được thêm vào thành công!')
+                        window.location.assign(window.location.origin  + '/device/report');
+                    </script>`
+                )
             })
             .catch((error) => {
                 console.log('ID thiết bị đã tồn tại, vui lòng thử id khác'.red.bold);
-                res.status(400).json({
-                    message: error,
-                    server: "This may you have create this device, try another ID",
-                });
+                res.send(`
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            alert('Đã xảy ra lỗi khi thêm thiết bị, có thể id thiết bị đã tồn tại, vui lòng thử lại!');
+                            window.location.assign(window.location.origin  + '/device/create');
+                        });
+                    </script>
+                `);
             });
     } catch (error) {
         res.status(404);
@@ -242,7 +258,7 @@ module.exports.loanDevice = async (req, res, next) => {
                 title: 'Home page',
                 routes: {
                     'Home': '/',
-                    'Report': '/device/report',
+                    'Detail Device': '/device/report',
                     'Create': '/device/create',
                     'Loan': '/device/loan',
                     'Return': '/device/return'
@@ -403,7 +419,7 @@ module.exports.loanRecord = async (req, res, next) => {
                 title: 'Home page',
                 routes: {
                     'Home': '/',
-                    'Report': '/device/report',
+                    'Detail Device': '/device/report',
                     'Create': '/device/create',
                     'Loan': '/device/loan',
                     'Return': '/device/return'
@@ -433,7 +449,7 @@ module.exports.returnDevice = async (req, res, next) => {
                 title: 'Home page',
                 routes: {
                     'Home': '/',
-                    'Report': '/device/report',
+                    'Detail Device': '/device/report',
                     'Create': '/device/create',
                     'Loan': '/device/loan',
                     'Return': '/device/return'
