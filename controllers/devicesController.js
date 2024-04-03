@@ -64,7 +64,7 @@ module.exports.reportDevice = async (req, res, next) => {
                     title: 'Home page',
                     routes: {
                         'Home': '/',
-                        'Detail Device': '/device/report',
+                        'Detail': '/device/report',
                         'Create': '/device/create',
                         'Loan': '/device/loan',
                         'Return': '/device/return'
@@ -93,7 +93,7 @@ module.exports.createDevice = async (req, res, next) => {
             title: 'Home page',
             routes: {
                 'Home': '/',
-                'Detail Device': '/device/report',
+                'Detail': '/device/report',
                 'Create': '/device/create',
                 'Loan': '/device/loan',
                 'Return': '/device/return'
@@ -258,7 +258,7 @@ module.exports.loanDevice = async (req, res, next) => {
                 title: 'Home page',
                 routes: {
                     'Home': '/',
-                    'Detail Device': '/device/report',
+                    'Detail': '/device/report',
                     'Create': '/device/create',
                     'Loan': '/device/loan',
                     'Return': '/device/return'
@@ -419,7 +419,7 @@ module.exports.loanRecord = async (req, res, next) => {
                 title: 'Home page',
                 routes: {
                     'Home': '/',
-                    'Detail Device': '/device/report',
+                    'Detail': '/device/report',
                     'Create': '/device/create',
                     'Loan': '/device/loan',
                     'Return': '/device/return'
@@ -449,7 +449,7 @@ module.exports.returnDevice = async (req, res, next) => {
                 title: 'Home page',
                 routes: {
                     'Home': '/',
-                    'Detail Device': '/device/report',
+                    'Detail': '/device/report',
                     'Create': '/device/create',
                     'Loan': '/device/loan',
                     'Return': '/device/return'

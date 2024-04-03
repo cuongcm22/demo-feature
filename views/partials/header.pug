@@ -3,29 +3,30 @@ head
   meta(charset='UTF-8')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title #{titlePage}
+  link(href='/css/reset.css' rel='stylesheet')
   link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css' rel='stylesheet')
+  link(href='/css/partials/header.css' rel='stylesheet')
 
-
-style.
-  /* Custom styles */
-  .header {
-  background-color: #f8f9fa;
-  }
-  .navbar-brand {
-  font-weight: bold;
-  }
 header.header
   .container
     nav.navbar.navbar-expand-lg.navbar-light
       .container-fluid
-        a.navbar-brand(href='#') Your Logo
-        button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarNav' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation')
-          span.navbar-toggler-icon
+        .navigation-section
+          a.navbar-brand(href='/') Your Logo
+          button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarNav' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation')
+            span.navbar-toggler-icon
         #navbarNav.collapse.navbar-collapse
+          .navbar-user.user-section
+            p Welcome back! 
+            span.user-name
           ul.navbar-nav.ms-auto
             each route, nameRoute in routes
               li.nav-item
                 a.nav-link(href=route) #{nameRoute}
+        .user-section
+            img.user-icon(src='https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg' alt='User Icon')
+            span.user-name
 // Bootstrap Bundle with Popper
 script(src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js')
 script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js')
+script(src='../../javascript/partials/authLoginHeaderSection.js')

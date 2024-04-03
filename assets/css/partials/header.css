@@ -1,0 +1,76 @@
+/* Custom styles */
+
+.header {
+    background-color: #f8f9fa;
+}
+
+.container-fluid {
+    position: relative;
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+/* Navigation section */
+.navigation-section {
+    display: flex;
+    flex-direction: row;
+}
+
+.navbar-collapse .navbar-nav {
+    margin-left: 0 !important;
+}
+
+.navbar-collapse .navbar-user {
+    display: none;
+    flex-direction: row;
+    align-items: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.navbar-collapse .navbar-user > * {
+    font-weight: bold;
+    margin: unset;
+}
+
+.navbar-collapse .navbar-user .user-name {
+    margin-left: 6px;
+}
+
+/* Custom CSS */
+
+.container-fluid ~ .user-section {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.user-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #6c757d;
+    margin-right: 5px;
+}
+
+.user-name {
+    color: #000;
+}
+
+@media (max-width: 991.98px) {
+    .navigation-section {
+        justify-content: space-between;
+        position: relative;
+        width: 100%;
+    }
+
+    .navbar-collapse .navbar-user {
+        display: flex;
+    }
+
+    .user-section {
+        display: none;
+    }
+}
