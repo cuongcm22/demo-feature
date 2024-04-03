@@ -34,7 +34,7 @@ style.
 section.container
   h2.text-center.mb-4 &Dstrok;&abreve;ng k&yacute; Thi&#x1EBF;t b&#x1ECB;
   .form-container
-    form#deviceRegistrationForm(action='./create' method='post' enctype='multipart/form-data')
+    form#deviceRegistrationForm(action='./add' method='post' enctype='multipart/form-data')
       .mb-3
         label.form-label(for='deviceName') T&ecirc;n thi&#x1EBF;t b&#x1ECB;: (devices.name)
         input#deviceName.form-control(value='Tivi Sam sung' type='text' name='deviceName' required='')
@@ -80,7 +80,8 @@ section.container
           option(value='' disabled='' selected='') --Ch&#x1ECD;n &#x1EA3;nh--
       .mb-3
         label.form-label(for='deviceUrlImg') &#x1EA2;nh thi&#x1EBF;t b&#x1ECB;: (devices.imageUrl)
-        input#deviceUrlImg.form-control(type='file' accept='image/*' name='deviceUrlFile' onchange='imageRender.src = window.URL.createObjectURL(this.files[0])')
+        //- accept='image/*'
+        input#deviceUrlImg.form-control(type='file' name='deviceUrlFile' onchange='imageRender.src = window.URL.createObjectURL(this.files[0])')
         .warrper.text-center
           img#imageRender(style='max-width: 100%' src='' alt='')
       script.

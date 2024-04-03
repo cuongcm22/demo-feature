@@ -1,5 +1,5 @@
 const path = require("path");
-const devicePathUpload = './uploads/devices/'
+const devicePathUpload = '/uploads/devices/'
 
 // Import device model
 const Device = require("../models/deviceSchema.js");
@@ -108,7 +108,8 @@ module.exports.createDeviceDB = async (req, res, next) => {
                 //     message: "New device has been create!",
                 //     data: result,
                 // });
-                res.status(201).redirect('/device')
+                // res.status(200).redirect('/device')
+                res.status(200).json({status:"ok"})
             })
             .catch((error) => {
                 console.log('ID thiết bị đã tồn tại, vui lòng thử id khác'.red.bold);

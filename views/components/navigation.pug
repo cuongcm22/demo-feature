@@ -73,9 +73,16 @@ style.
 
 #toggleIcon.toggle-icon &#x2630;
 #sidebar.sidebar
-  each item in navUrl
-        li.nav-item
-            a.nav-link(href=`/${local + '/' + item.replace(/ /g,'')}`, title=item.charAt(0).toUpperCase() + item.slice(1))= item.charAt(0).toUpperCase() + item.slice(1)
+    li.nav-item
+        a.nav-link(href='/') Home
+        a.nav-link(href='/user/login') User
+        a.nav-link(href='/device/report') Device
+        a.nav-link(href='/device/loanrecord') Record
+    each item in navUrl
+            li.nav-item
+                a.nav-link(href=`/${local + '/' + item.replace(/ /g,'')}`, title=item.charAt(0).toUpperCase() + item.slice(1))= item.charAt(0).toUpperCase() + item.slice(1)
+            
+    
 
 script.
     document.addEventListener("DOMContentLoaded", function() {
