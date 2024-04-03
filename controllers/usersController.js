@@ -46,7 +46,14 @@ module.exports.userLogin = async (req, res, next) => {
         // const sessionUserName = cookiesArray[1].split("=")[1];
 
         // console.log(sessionId, sessionUserName);
-        res.render("contents/user/loginForm")
+        res.render("./contents/user/loginForm.pug", {
+            title: 'Home page',
+            routes: {
+                'Home': '/',
+                'User': '/user/login',
+                'Register': '/user/register'
+            }
+        });
     } catch (error) {
         res.status(400).json({
             error: error
@@ -98,7 +105,14 @@ module.exports.userLoginDB = async (req, res, next) => {
 
 module.exports.userRegister = async (req, res, next) => {
     try {
-        res.render("contents/user/registerForm")
+        res.render("./contents/user/registerForm.pug", {
+            title: 'Home page',
+            routes: {
+                'Home': '/',
+                'Login': '/user/login',
+                'Register': '/user/register'
+            }
+        });
     } catch (error) {
         res.status(400).json({
             error: error

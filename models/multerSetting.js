@@ -1,7 +1,7 @@
 const multer = require('multer')
 const path = require("path");
 
-const devicePathUpload = '../public/uploads/devices/'
+const devicePathUpload = '../assets/public/uploads/devices/'
 
 // Hoặc sử dụng path.join để kết hợp đường dẫn
 const pathUpload = path.join(__dirname, devicePathUpload);

@@ -1,28 +1,6 @@
-doctype html
-head
-  meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  title Tr&#x1EA3; Thi&#x1EBF;t b&#x1ECB;
-  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css' rel='stylesheet')
-  include ../../partials/header.pug
-
-//- Truyền biến JavaScript vào Pug bằng cách sử dụng `locals`
-- var navUrl = ['Report', 'Create', 'Loan', 'Return']
-- var local = 'device'
-mixin article({navUrl, local})
-  include ../../components/navigation.pug 
-    
-//- Sử dụng biến JavaScript trong mixin
-+article({navUrl, local})
+include ../../main.pug
+link(href='/css/device/returnDevice.css' rel='stylesheet')
   
-style.
-  section.container {
-  margin-top: 50px;
-  }
-  .form-container {
-  max-width: 500px;
-  margin: 0 auto;
-  }
 section.container
   h2.text-center.mb-4 Tr&#x1EA3; Thi&#x1EBF;t b&#x1ECB;
   .form-container
@@ -41,12 +19,6 @@ script.
   var mockData = {
   devices: !{data}
   };
-  // Populate device select options
-  var deviceSelect = document.getElementById("deviceSelect");
-  mockData.devices.forEach(function(device) {
-  var option = document.createElement("option");
-  option.text = device;
-  deviceSelect.add(option);
-  });
-script(src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js')
-script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js')
+  
+
+script(src="/javascript/device/returnDevice.js") 

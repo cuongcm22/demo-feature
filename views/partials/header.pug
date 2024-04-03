@@ -1,70 +1,31 @@
-link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css' rel='stylesheet')
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title #{titlePage}
+  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css' rel='stylesheet')
+
 
 style.
-  /* Custom CSS */
-  .user-section {
-  display: flex;
-  align-items: center;
-  margin-left: auto;
+  /* Custom styles */
+  .header {
+  background-color: #f8f9fa;
   }
-  .user-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background-color: #6c757d;
-  margin-right: 5px;
+  .navbar-brand {
+  font-weight: bold;
   }
-  .user-name {
-  color: #fff;
-  }
-
-nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+header.header
   .container
-    a.navbar-brand(href='#') Device manage
-    button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation')
-      span.navbar-toggler-icon
-    #navbarSupportedContent.collapse.navbar-collapse
-      ul.navbar-nav.me-auto.mb-2.mb-lg-0
-        li.nav-item
-          a.nav-link.active(href='/') Home
-        li.nav-item
-          a#user-link.nav-link(href='/user/login') User
-        li.nav-item
-          a.nav-link(href='/device/report') Device
-        li.nav-item
-          a.nav-link(href='/device/loanrecord') Record
-        li.nav-item.dropdown
-          a#navbarDropdown.nav-link.dropdown-toggle(href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false') Dropdown
-          ul.dropdown-menu(aria-labelledby='navbarDropdown')
-            li
-              a.dropdown-item(href='#') Action
-            li
-              a.dropdown-item(href='#') Another action
-            li
-              hr.dropdown-divider
-            li
-              a.dropdown-item(href='#') Something else here
-      // User Section
-      .user-section
-        img.user-icon(src='https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg' alt='User Icon')
-        span.user-name
-
-script.
-  document.querySelector('.user-section').hidden = true
-  document.addEventListener("DOMContentLoaded", (event) => {
-    // Accessing cookies using JavaScript
-    var cookies = document.cookie.split(';');
-    var cookieData = {};
-    cookies.forEach(function(cookie) {
-    var parts = cookie.split('=');
-    var name = parts[0].trim();
-    var value = decodeURIComponent(parts.slice(1).join('=').trim());
-    cookieData[name] = value;
-    });
-    // Output cookie data to console (for demonstration)
-    console.log("Cookie Data:", cookieData);
-    if (cookieData.sessionUserName && cookieData.token) {
-      document.querySelector('.user-section').hidden = false
-      document.querySelector('.user-name').innerText = cookieData.sessionUserName
-    }
-  });
+    nav.navbar.navbar-expand-lg.navbar-light
+      .container-fluid
+        a.navbar-brand(href='#') Your Logo
+        button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarNav' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation')
+          span.navbar-toggler-icon
+        #navbarNav.collapse.navbar-collapse
+          ul.navbar-nav.ms-auto
+            each route, nameRoute in routes
+              li.nav-item
+                a.nav-link(href=route) #{nameRoute}
+// Bootstrap Bundle with Popper
+script(src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js')
+script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js')

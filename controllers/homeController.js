@@ -1,6 +1,14 @@
 module.exports.homePage = async (req, res, next) => {
     try {
-        res.render("contents/home/home");
+        res.render("./main", {
+            title: 'Home page',
+            routes: {
+                'Home': '/',
+                'User': '/user/login',
+                'Device': '/device/report',
+                'Record loan': '/device/loanrecord',
+            }
+        });
     } catch(err) {
         console.log(err)
         res.status(404)

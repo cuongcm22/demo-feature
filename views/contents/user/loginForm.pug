@@ -1,22 +1,6 @@
-include ../../partials/header.pug
-
-//- Truyền biến JavaScript vào Pug bằng cách sử dụng `locals`
-- var navUrl = ['login', 'register']
-- var local = 'user'
-mixin article({navUrl, local})
-  include ../../components/navigation.pug 
-//- Sử dụng biến JavaScript trong mixin
-+article({navUrl, local})
-
-style. 
-    section.content {
-        max-width: 100%
-    }
-    .wrapper {
-        max-width: 500px;
-        margin-left: auto;
-        margin-right: auto;
-    }
+include ../../main.pug
+link(href='/css/user/loginForm.css' rel='stylesheet')
+script(src="/javascript/user/loginForm.js") 
 
 .content
     .wrapper
@@ -32,24 +16,4 @@ style.
             .text-center(style='margin-top: 50px; border: 1px solid #ccc; border-radius: 8px;')
                 a.btn(href='./register') Still haven&apos;t account, register here!
 
-script.
-    async function handleLogin(event) {
-        await axios.post('/user/login', {
-          username: document.querySelector('#username').value,
-          password: document.querySelector('#password').value,
-        }).then(result => {
-            console.log(result)
-            if (result.data.success) {
-                alert('Đăng nhập thành công!')
-                window.location.assign(window.location.origin  + '/');
-            }
-            
-        }).catch(err => {
-            console.log(err)
-            if (!err.response.data.success) {
-                alert('Đăng nhập thất bại, vui lòng kiểm tra lại tên người dùng hoặc mật khẩu')
-            }
-        })
-    }
 
-script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js')

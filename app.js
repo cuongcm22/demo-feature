@@ -25,7 +25,15 @@ const mongodb = require('./models/connectDB')
 mongodb()
 
 // Setting static folder
-app.use(express.static('public'));
+// Middleware để phục vụ các tệp tĩnh từ thư mục public
+app.use(express.static(path.join(__dirname, 'assets'), {
+  // Cấu hình kiểu MIME cho tệp JavaScript
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.js')) {
+      res.setHeader('Content-Type', 'application/javascript');
+    }
+  }
+}));
 
 // ==== Thiết lập Pug là công cụ mẫu cho Express ====
 app.set('view engine', 'pug'); // Sử dụng Pug làm công cụ mẫu

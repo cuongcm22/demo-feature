@@ -74,13 +74,9 @@ style.
 #toggleIcon.toggle-icon &#x2630;
 #sidebar.sidebar
     li.nav-item
-        a.nav-link(href='/') Home
-        a.nav-link(href='/user/login') User
-        a.nav-link(href='/device/report') Device
-        a.nav-link(href='/device/loanrecord') Record
-    each item in navUrl
+    each route, nameRoute in routes
             li.nav-item
-                a.nav-link(href=`/${local + '/' + item.replace(/ /g,'')}`, title=item.charAt(0).toUpperCase() + item.slice(1))= item.charAt(0).toUpperCase() + item.slice(1)
+                a.nav-link(href=route, title=nameRoute.charAt(0).toUpperCase() + nameRoute.slice(1))= nameRoute.charAt(0).toUpperCase() + nameRoute.slice(1)
             
     
 

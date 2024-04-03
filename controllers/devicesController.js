@@ -1,5 +1,5 @@
 const path = require("path");
-const devicePathUpload = '/uploads/devices/'
+const devicePathUpload = '/public/uploads/devices/'
 
 // Import device model
 const Device = require("../models/deviceSchema.js");
@@ -56,7 +56,18 @@ module.exports.reportDevice = async (req, res, next) => {
                 });
 
                 // console.log(formattedDevices);
-                res.render("./contents/report/reportDevice", {
+                // res.render("./contents/report/reportDevice", {
+                //     formattedDevices: JSON.stringify(formattedDevices)
+                // });
+                res.render("./contents/report/reportDevice.pug", {
+                    title: 'Home page',
+                    routes: {
+                        'Home': '/',
+                        'Report': '/device/report',
+                        'Create': '/device/create',
+                        'Loan': '/device/loan',
+                        'Return': '/device/return'
+                    },
                     formattedDevices: JSON.stringify(formattedDevices)
                 });
             })
@@ -72,7 +83,16 @@ module.exports.reportDevice = async (req, res, next) => {
 module.exports.createDevice = async (req, res, next) => {
     console.log("Create device routers".blue.bold);
     try {
-        res.render("contents/device/createDevice");
+        res.render("./contents/device/createDevice.pug", {
+            title: 'Home page',
+            routes: {
+                'Home': '/',
+                'Report': '/device/report',
+                'Create': '/device/create',
+                'Loan': '/device/loan',
+                'Return': '/device/return'
+            }
+        });
     } catch (error) {
         res.status(400).send(error);
     }
@@ -218,7 +238,15 @@ module.exports.loanDevice = async (req, res, next) => {
         ]).then(results => {
             console.log(results);
             // Xử lý kết quả ở đây
-            res.render("./contents/device/loanDevice", {
+            res.render("./contents/device/loanDevice.pug", {
+                title: 'Home page',
+                routes: {
+                    'Home': '/',
+                    'Report': '/device/report',
+                    'Create': '/device/create',
+                    'Loan': '/device/loan',
+                    'Return': '/device/return'
+                },
                 data: JSON.stringify(results)
             });
         }).catch(err => {
@@ -370,7 +398,18 @@ module.exports.loanRecord = async (req, res, next) => {
                 };
             });
             // console.log(formattedDevices);
-            res.render("./contents/report/loanRecord", {data: JSON.stringify(formattedDevices)})
+            // res.render("./contents/report/loanRecord", {data: JSON.stringify(formattedDevices)})
+            res.render("./contents/report/loanRecord.pug", {
+                title: 'Home page',
+                routes: {
+                    'Home': '/',
+                    'Report': '/device/report',
+                    'Create': '/device/create',
+                    'Loan': '/device/loan',
+                    'Return': '/device/return'
+                },
+                data: JSON.stringify(formattedDevices)
+            });
         })
         .catch(error => {
             console.error('Error fetching records:', error);
@@ -390,7 +429,17 @@ module.exports.returnDevice = async (req, res, next) => {
             console.log(`Records with username ${username}`, records);
             const deviceIDs = records.map(record => record.deviceID);
             console.log(deviceIDs);
-            res.render("./contents/device/returnDevice", {data: JSON.stringify(deviceIDs)})
+            res.render("./contents/device/returnDevice.pug", {
+                title: 'Home page',
+                routes: {
+                    'Home': '/',
+                    'Report': '/device/report',
+                    'Create': '/device/create',
+                    'Loan': '/device/loan',
+                    'Return': '/device/return'
+                },
+                data: JSON.stringify(deviceIDs)
+            });
         })
         .catch(error => {
             console.error('Error fetching records:', error);
