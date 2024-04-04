@@ -60,7 +60,7 @@ section.container
         input#deviceLocation.form-control(value='P0E2' type='text' name='deviceLocation' required='')
       .mb-3
         label.form-label(for='deviceSupplier') Select Supplier
-        select#deviceSelect.form-select(name='deviceSupplier' required='')
+        select#deviceSelect.form-select(name='deviceSupplier')
           option(value='' selected='' disabled='') Select Device
           each supplier in suppliers
             option(value=supplier) #{supplier}
