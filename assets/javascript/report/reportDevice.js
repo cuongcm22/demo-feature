@@ -46,7 +46,7 @@ function populateModal(deviceInfo) {
 <div class="col-md-6">
 <div class="video-container">
 <h2>Hình ảnh</h2>
-<img style="max-width: 100%;" id="deviceImage" src="${deviceInfo.imageUrl ? deviceInfo.imageUrl : './images/image_placeholder.jpg'}" alt="Tivi Image">
+<img style="max-width: 100%;" id="deviceImage" src="${deviceInfo.imageUrl ? deviceInfo.imageUrl : '/public/images/image_placeholder.jpg'}" alt="Tivi Image">
 </div>
 </div>
 <div class="col-md-6">

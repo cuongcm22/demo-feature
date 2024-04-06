@@ -42,6 +42,7 @@ window.onload = function () {
 };
 // Function to change the displayed image when a different option is selected
 function changeImage(selectElement) {
+    // console.log(selectElement)
     var selectedImage = selectElement.value;
     var imageRender = document.getElementById("imageRender");
     // Set the src of the img tag to display the selected image
@@ -59,3 +60,49 @@ function renderVideo(input) {
     // Tự động phát video sau khi được tải lên
     videoRender.autoplay = true;
 }
+
+function convertToBase64AndLog() {
+    // Lấy element select và option được chọn
+    var selectElement = document.getElementById("imageSelect");
+    var selectedOption = selectElement.options[selectElement.selectedIndex];
+    console.log(selectedOption);
+    // Kiểm tra xem option đã chọn có giá trị không
+    if (selectedOption.value) {
+        // Tạo một XMLHttpRequest để tải ảnh từ URL
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', selectedOption.value, true);
+        xhr.responseType = 'blob';
+  
+        // Xử lý khi tải xong
+        xhr.onload = function(event) {
+          var blob = xhr.response;
+          
+          // Tạo một FileReader để đọc file blob
+          var reader = new FileReader();
+  
+          // Xử lý khi đọc file hoàn thành
+          reader.onload = function() {
+            // Lấy dữ liệu base64 từ file đã chọn
+            var base64Image = reader.result;
+  
+            // Log dữ liệu base64 ra console
+            // console.log("Base64 image data:", base64Image);
+
+            // Tạo URL đối tượng blob
+            var blobUrl = URL.createObjectURL(blob);
+
+            // Log URL đối tượng blob ra console
+            console.log("Blob URL:", blobUrl);
+
+
+            document.querySelector('#imageRender').src = blobUrl
+          };
+  
+          // Đọc file dưới dạng base64
+          reader.readAsDataURL(blob);
+        };
+  
+        // Bắt đầu tải ảnh
+        xhr.send();
+    }
+  }

@@ -108,6 +108,8 @@ module.exports.createDevice = async (req, res, next) => {
 
 module.exports.createDeviceDB = async (req, res, next) => {
     try {
+        console.log('Image', req.files);
+        // console.log('Video', req.files[1].filename);
         const device = new Device({
             id: req.body.serialNumber,
             name: req.body.deviceName,
@@ -117,8 +119,8 @@ module.exports.createDeviceDB = async (req, res, next) => {
             initStatus:
                 req.body.deviceInitStatus ||
                 Device.schema.path("initStatus").default, // Sử dụng giá trị mặc định từ schema
-            imageUrl: !devicePathUpload ? devicePathUpload + req.files[0].filename : '',
-            videoUrl: !devicePathUpload ? devicePathUpload + req.files[1].filename : '',
+            imageUrl: req.files ? devicePathUpload + req.files[0].filename : '',
+            videoUrl: req.files ? devicePathUpload + req.files[1].filename : '',
             location: req.body.deviceLocation,
             supplier: req.body.deviceSupplier,
             history: req.body.deviceHistory,
