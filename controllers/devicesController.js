@@ -117,8 +117,8 @@ module.exports.createDeviceDB = async (req, res, next) => {
             initStatus:
                 req.body.deviceInitStatus ||
                 Device.schema.path("initStatus").default, // Sử dụng giá trị mặc định từ schema
-            imageUrl: devicePathUpload + req.files[0].filename,
-            videoUrl: devicePathUpload + req.files[1].filename,
+            imageUrl: !devicePathUpload ? devicePathUpload + req.files[0].filename : '',
+            videoUrl: !devicePathUpload ? devicePathUpload + req.files[1].filename : '',
             location: req.body.deviceLocation,
             supplier: req.body.deviceSupplier,
             history: req.body.deviceHistory,
