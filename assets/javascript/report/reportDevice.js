@@ -130,6 +130,20 @@ function updateRenderDevice(deviceInfo) {
     <option value="notused" ${deviceInfo.initStatus === 'notused' ? 'selected' : ''}>Chưa mượn</option>
 </select>
 </div>
+<div class="mb-3"><label class="form-label" for="deviceUrlImg">&#x1EA2;nh thi&#x1EBF;t b&#x1ECB;: (devices.imageUrl)</label><input class="form-control" id="deviceUrlImg" type="file" />
+    <div class="warrper text-center">
+        <div class="spinner-border text-primary" id="spinner1" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <img class="img-fluid" id="imageRender" style="max-width: 100%" src="${deviceInfo.imageUrl}" alt="" /></div>
+</div>
+<div class="mb-3"><label class="form-label" for="deviceVideo">Video thi&#x1EBF;t b&#x1ECB;: (devices.videoUrl)</label><input class="form-control" id="deviceVideo" type="file" accept="video/*" />
+    <div class="warrper center-video">
+        <div class="spinner-border text-primary" id="spinner2" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <video src="${deviceInfo.videoUrl}" class="img-fluid" id="videoRender" controls="" style="max-width: 100%"><!-- Nếu trình duyệt không hỗ trợ video, thông báo sẽ hiển thị ở đây-->Tr&igrave;nh duy&#x1EC7;t c&#x1EE7;a b&#x1EA1;n kh&ocirc;ng h&#x1ED7; tr&#x1EE3; ph&aacute;t video.</video></div>
+</div>
 <div class="mb-3">
 <label for="location" class="form-label">Location</label>
 <input value="${deviceInfo.location}" type="text" class="form-control" id="location" name="location" placeholder="Enter device location">
@@ -154,9 +168,13 @@ function updateRenderDevice(deviceInfo) {
 <label for="updateDate" class="form-label">Return Date</label>
 <input value="${updateDate}" type="date" class="form-control" name="updateDate" id="updateDate">
 </div>
+<input id="localStorageDataImage" type="hidden" name="imageUrl" />
+<input id="localStorageDataVideo" type="hidden" name="videoUrl" />
 <button type="submit" class="btn btn-primary">Update</button>
 </form>
 `
+
+renderImageVideo()
 }
 // Delete function
 async function deleteDevice(event, index, id) {
@@ -209,3 +227,88 @@ document.getElementById("searchInput").addEventListener("keyup", function() {
         }
     }
 });
+
+function renderImageVideo() {
+
+    $('#spinner1').hide();
+    $('#spinner2').hide();
+    const imageRender = document.querySelector('#imageRender');
+    const videoRender = document.querySelector('#videoRender');
+
+    var imageUrlValue = '';
+    var videoUrlValue = '';
+
+    $('#deviceUrlImg').on('change', function(event) {
+        const fileName = $(this)[0].files[0].name;
+        event.preventDefault();
+        const formData = new FormData($(this).closest('form')[0]);
+        formData.append('file', $(this)[0].files[0]);
+        
+        // Show spinner
+        $('#spinner1').show()
+
+        uploadFile(formData, function(error, response) {
+
+            if (error) {
+                console.error(error);
+            } else {
+                imageUrlValue = response.data;
+                imageRender.src = response.data;
+                try {
+                    localStorage.setItem('imageUrl', response.data);
+                    document.getElementById('localStorageDataImage').value = localStorage.getItem('imageUrl');
+                    // Hide spinner regardless of response status
+                    $('#spinner1').hide()
+                } catch (e) {
+                    console.error('LocalStorage error: ', e);
+                }
+            }
+        });
+    });
+
+    $('#deviceVideo').on('change', function(event) {
+        const fileName = $(this)[0].files[0].name;
+        event.preventDefault();
+        const formData = new FormData($(this).closest('form')[0]);
+        formData.append('file', $(this)[0].files[0]);
+        
+        // Show spinner
+        $('#spinner2').show()
+
+        uploadFile(formData, function(error, response) {
+            // Hide spinner regardless of response status
+
+            if (error) {
+                console.error(error);
+            } else {
+                videoRender.src = response.data;
+                videoRender.style.display = "flex";
+                try {
+                    localStorage.setItem('videoUrl', response.data);
+                    document.getElementById('localStorageDataVideo').value = localStorage.getItem('videoUrl');
+                    $('#spinner2').hide()
+                } catch (e) {
+                    console.error('LocalStorage error: ', e);
+                }
+            }
+        });
+    });
+
+    // Function to upload file using AJAX
+    function uploadFile(formData, callback) {
+        $.ajax({
+            url: '/uploads',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log('response: ', response);
+                callback(null, response);
+            },
+            error: function(xhr, status, error) {
+                callback(error);
+            }
+        });
+    }
+}

@@ -30,7 +30,7 @@ function responseAlert() {
 module.exports.reportDevice = async (req, res, next) => {
     console.log("Get device routers".blue.bold);
     try {
-        Device.find({})
+        Device.find({}, { _id: 0, __v: 0 })
             .then((devices) => {
                 const formattedDevices = devices.map((device) => {
                     // Chuyển đổi purchaseDate
