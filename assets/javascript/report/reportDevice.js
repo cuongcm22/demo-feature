@@ -13,9 +13,9 @@ function populateTable(devices) {
 <td>${device.purchaseDate}</td>
 <td>${device.warrantyExpiry}</td>
 <td>
-<button class="btn btn-primary" onclick="detailDevice(event, ${index})">Detail</button>
-<button class="btn btn-success" onclick="updateDevice(event, ${index})">Update</button>
-<button class="btn btn-danger" onclick="deleteDevice(event, ${index}, '${device.id}')">Delete</button>
+<span class="btn badge bg-success" onclick="detailDevice(event, ${index})">Detail</span>
+<span class="btn badge bg-warning" onclick="updateDevice(event, ${index})">Update</span>
+<span class="btn badge bg-danger" onclick="deleteDevice(event, ${index}, '${device.id}')">Delete</span>
 </td>
 `;
         tableBody.appendChild(row);

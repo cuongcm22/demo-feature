@@ -11,7 +11,7 @@ script.
 section.container
   h2.text-center.mb-4 &Dstrok;&abreve;ng k&yacute; Thi&#x1EBF;t b&#x1ECB;
   .form-container
-    form#deviceRegistrationForm(action='./add' method='post' enctype='multipart/form-data')
+    form#deviceRegistrationForm(action='./add' method='post' enctype='application/json')
       .mb-3
         label.form-label(for='deviceName') T&ecirc;n thi&#x1EBF;t b&#x1ECB;: (devices.name)
         input#deviceName.form-control(value='Tivi Sam sung' type='text' name='deviceName' required='')
@@ -50,16 +50,21 @@ section.container
       .mb-3
         label.form-label(for='deviceUrlImg') &#x1EA2;nh thi&#x1EBF;t b&#x1ECB;: (devices.imageUrl)
         //- accept='image/*'
-        input#deviceUrlImg.form-control(type='file' name='deviceUrlFile' onchange='imageRender.src = window.URL.createObjectURL(this.files[0])')
+        input#deviceUrlImg.form-control(type='file')
         .warrper.text-center
-          img#imageRender(style='max-width: 100%' src='' alt='')
+          #spinner1.spinner-border.text-primary(role='status')
+            span.visually-hidden Loading...
+          img#imageRender.img-fluid(style='max-width: 100%' src='' alt='')
       
       .mb-3
         label.form-label(for='deviceVideo') Video thi&#x1EBF;t b&#x1ECB;: (devices.videoUrl)
-        input#deviceVideo.form-control(type='file' name='deviceUrlFile' accept='video/*' onchange='renderVideo(this)')
-        video#videoRender(controls='' style='max-width: 100%; display: none;')
-          // Nếu trình duyệt không hỗ trợ video, thông báo sẽ hiển thị ở đây
-          | Tr&igrave;nh duy&#x1EC7;t c&#x1EE7;a b&#x1EA1;n kh&ocirc;ng h&#x1ED7; tr&#x1EE3; ph&aacute;t video.
+        input#deviceVideo.form-control(type='file' accept='video/*')
+        .warrper.center-video
+          #spinner2.spinner-border.text-primary(role='status')
+            span.visually-hidden Loading...
+          video#videoRender.img-fluid(controls='' style='max-width: 100%; display: none;')
+            // Nếu trình duyệt không hỗ trợ video, thông báo sẽ hiển thị ở đây
+            | Tr&igrave;nh duy&#x1EC7;t c&#x1EE7;a b&#x1EA1;n kh&ocirc;ng h&#x1ED7; tr&#x1EE3; ph&aacute;t video.
       
       .mb-3
         label.form-label(for='deviceLocation') V&#x1ECB; tr&iacute;: (devices.location)
@@ -79,6 +84,8 @@ section.container
       .mb-3
         label.form-label(for='warrantyExpiry') Ng&agrave;y h&#x1EBF;t h&#x1EA1;n: (device.warrantyExpiry)
         input#warrantyExpiry.form-control(type='date' name='warrantyExpiry' required='')
+      input#localStorageDataImage(type='hidden' name='localStorageDataImage')
+      input#localStorageDataVideo(type='hidden' name='localStorageDataVideo')
       button.btn.btn-primary(type='submit') &Dstrok;&abreve;ng k&yacute;
 
 script(src='https://unpkg.com/html5-qrcode')

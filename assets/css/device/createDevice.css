@@ -6,3 +6,16 @@ section.container {
     max-width: 500px;
     margin: 0 auto;
 }
+
+#videoRender.img-fluid, 
+#imageRender.img-fluid {
+    max-height: 300px;
+    margin-top: 20px;
+}
+
+.center-video {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

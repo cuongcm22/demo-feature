@@ -4,6 +4,14 @@
     background-color: #f8f9fa;
 }
 
+th {
+    font-weight: 700;
+}
+
+thead {
+    border-bottom: 1px solid #000;
+}
+
 .container-fluid {
     position: relative;
 }

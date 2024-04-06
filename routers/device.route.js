@@ -4,11 +4,8 @@ const router = express.Router()
 const authenToken = require("../modules/authServer")
 const devicesController = require("../controllers/devicesController")
 
-// Import multer
-const uploadFile = require('../models/multerSetting')
-
 router.get('/create', devicesController.createDevice)
-router.post('/add', uploadFile.array('deviceUrlFile', 2), devicesController.createDeviceDB)
+router.post('/add', devicesController.createDeviceDB)
 router.post('/update', devicesController.updateDeviceDB)
 router.post('/delete', devicesController.deleteDeviceDB)
 router.get('/report', devicesController.reportDevice)

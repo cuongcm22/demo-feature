@@ -20,6 +20,13 @@ function convertTimerToString(time) {
     return formattedDate;
 }
 
+function responseAlert() {
+    return `<script>
+        alert('Thiết bị đã được thêm vào thành công!')
+        window.location.assign(window.location.origin  + '/device/report');
+    </script>`
+}
+
 module.exports.reportDevice = async (req, res, next) => {
     console.log("Get device routers".blue.bold);
     try {
@@ -108,8 +115,7 @@ module.exports.createDevice = async (req, res, next) => {
 
 module.exports.createDeviceDB = async (req, res, next) => {
     try {
-        console.log('Image', req.files);
-        // console.log('Video', req.files[1].filename);
+        console.log(req.body);
         const device = new Device({
             id: req.body.serialNumber,
             name: req.body.deviceName,
@@ -119,8 +125,8 @@ module.exports.createDeviceDB = async (req, res, next) => {
             initStatus:
                 req.body.deviceInitStatus ||
                 Device.schema.path("initStatus").default, // Sử dụng giá trị mặc định từ schema
-            imageUrl: req.files ? devicePathUpload + req.files[0].filename : '',
-            videoUrl: req.files ? devicePathUpload + req.files[1].filename : '',
+            imageUrl: req.body.localStorageDataImage,
+            videoUrl: req.body.localStorageDataVideo,
             location: req.body.deviceLocation,
             supplier: req.body.deviceSupplier,
             history: req.body.deviceHistory,

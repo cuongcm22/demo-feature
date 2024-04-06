@@ -61,48 +61,87 @@ function renderVideo(input) {
     videoRender.autoplay = true;
 }
 
-function convertToBase64AndLog() {
-    // Lấy element select và option được chọn
-    var selectElement = document.getElementById("imageSelect");
-    var selectedOption = selectElement.options[selectElement.selectedIndex];
-    console.log(selectedOption);
-    // Kiểm tra xem option đã chọn có giá trị không
-    if (selectedOption.value) {
-        // Tạo một XMLHttpRequest để tải ảnh từ URL
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', selectedOption.value, true);
-        xhr.responseType = 'blob';
-  
-        // Xử lý khi tải xong
-        xhr.onload = function(event) {
-          var blob = xhr.response;
-          
-          // Tạo một FileReader để đọc file blob
-          var reader = new FileReader();
-  
-          // Xử lý khi đọc file hoàn thành
-          reader.onload = function() {
-            // Lấy dữ liệu base64 từ file đã chọn
-            var base64Image = reader.result;
-  
-            // Log dữ liệu base64 ra console
-            // console.log("Base64 image data:", base64Image);
+$(document).ready(function() {
+    $('#spinner1').hide();
+    $('#spinner2').hide();
 
-            // Tạo URL đối tượng blob
-            var blobUrl = URL.createObjectURL(blob);
+    const imageRender = document.querySelector('#imageRender');
+    const videoRender = document.querySelector('#videoRender');
 
-            // Log URL đối tượng blob ra console
-            console.log("Blob URL:", blobUrl);
+    var imageUrlValue = '';
+    var videoUrlValue = '';
 
+    $('#deviceUrlImg').on('change', function(event) {
+        const fileName = $(this)[0].files[0].name;
+        event.preventDefault();
+        const formData = new FormData($(this).closest('form')[0]);
+        formData.append('file', $(this)[0].files[0]);
+        
+        // Show spinner
+        $('#spinner1').show()
 
-            document.querySelector('#imageRender').src = blobUrl
-          };
-  
-          // Đọc file dưới dạng base64
-          reader.readAsDataURL(blob);
-        };
-  
-        // Bắt đầu tải ảnh
-        xhr.send();
+        uploadFile(formData, function(error, response) {
+
+            if (error) {
+                console.error(error);
+            } else {
+                imageUrlValue = response.data;
+                imageRender.src = response.data;
+                try {
+                    localStorage.setItem('imageUrl', response.data);
+                    document.getElementById('localStorageDataImage').value = localStorage.getItem('imageUrl');
+                    // Hide spinner regardless of response status
+                    $('#spinner1').hide()
+                } catch (e) {
+                    console.error('LocalStorage error: ', e);
+                }
+            }
+        });
+    });
+
+    $('#deviceVideo').on('change', function(event) {
+        const fileName = $(this)[0].files[0].name;
+        event.preventDefault();
+        const formData = new FormData($(this).closest('form')[0]);
+        formData.append('file', $(this)[0].files[0]);
+        
+        // Show spinner
+        $('#spinner2').show()
+
+        uploadFile(formData, function(error, response) {
+            // Hide spinner regardless of response status
+
+            if (error) {
+                console.error(error);
+            } else {
+                videoRender.src = response.data;
+                videoRender.style.display = "flex";
+                try {
+                    localStorage.setItem('videoUrl', response.data);
+                    document.getElementById('localStorageDataVideo').value = localStorage.getItem('videoUrl');
+                    $('#spinner2').hide()
+                } catch (e) {
+                    console.error('LocalStorage error: ', e);
+                }
+            }
+        });
+    });
+
+    // Function to upload file using AJAX
+    function uploadFile(formData, callback) {
+        $.ajax({
+            url: '/uploads',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log('response: ', response);
+                callback(null, response);
+            },
+            error: function(xhr, status, error) {
+                callback(error);
+            }
+        });
     }
-  }
+});
