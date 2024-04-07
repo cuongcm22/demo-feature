@@ -1,4 +1,3 @@
-/* 1 */
 {
     "_id" : ObjectId("660dd273d6b67e81edeb31d5"),
     "name" : "ABC Electronics",
@@ -6,9 +5,7 @@
     "address" : "123 Main St, City, Country",
     "website" : "www.abcelectronics.com",
     "__v" : 0
-}
-
-/* 2 */
+},
 {
     "_id" : ObjectId("660dd273d6b67e81edeb31d6"),
     "name" : "XYZ Technologies",
@@ -16,9 +13,7 @@
     "address" : "456 Park Ave, City, Country",
     "website" : "www.xyztech.com",
     "__v" : 0
-}
-
-/* 3 */
+},
 {
     "_id" : ObjectId("660dd273d6b67e81edeb31d7"),
     "name" : "TechCorp Inc.",

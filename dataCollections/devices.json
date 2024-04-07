@@ -1,4 +1,3 @@
-/* 1 */
 {
     "_id" : ObjectId("660cb6285b6ee9307c8f8263"),
     "id" : "LAP000015",
@@ -16,9 +15,7 @@
     "createDate" : ISODate("2024-04-03T00:00:00.000Z"),
     "updateDate" : ISODate("2024-04-03T00:00:00.000Z"),
     "__v" : 0
-}
-
-/* 2 */
+},
 {
     "_id" : ObjectId("660cb7785b6ee9307c8f826b"),
     "id" : "TV000019",
@@ -36,9 +33,7 @@
     "createDate" : ISODate("2024-04-03T00:00:00.000Z"),
     "updateDate" : ISODate("2024-04-03T00:00:00.000Z"),
     "__v" : 0
-}
-
-/* 3 */
+},
 {
     "_id" : ObjectId("660cb8c05b6ee9307c8f827a"),
     "id" : "PE000001",
@@ -56,9 +51,7 @@
     "createDate" : ISODate("2024-04-03T00:00:00.000Z"),
     "updateDate" : ISODate("2024-04-03T00:00:00.000Z"),
     "__v" : 0
-}
-
-/* 4 */
+},
 {
     "_id" : ObjectId("660cbf08fb73c639100ecb72"),
     "id" : "Phone000002",
@@ -76,9 +69,7 @@
     "createDate" : ISODate("2024-04-03T02:29:28.500Z"),
     "updateDate" : ISODate("2024-04-03T02:29:28.500Z"),
     "__v" : 0
-}
-
-/* 5 */
+},
 {
     "_id" : ObjectId("660d5e27063e90428864d9e5"),
     "id" : "TV000050",
@@ -96,9 +87,7 @@
     "createDate" : ISODate("2024-04-03T13:48:23.268Z"),
     "updateDate" : ISODate("2024-04-03T13:48:23.268Z"),
     "__v" : 0
-}
-
-/* 6 */
+},
 {
     "_id" : ObjectId("660dc9296fbb87cde4d90482"),
     "id" : "TV000001",
@@ -116,9 +105,7 @@
     "createDate" : ISODate("2024-04-03T21:24:57.323Z"),
     "updateDate" : ISODate("2024-04-03T21:24:57.323Z"),
     "__v" : 0
-}
-
-/* 7 */
+},
 {
     "_id" : ObjectId("660dcb3c7fa400d504ec25d1"),
     "id" : "TV000002",
@@ -136,9 +123,7 @@
     "createDate" : ISODate("2024-04-03T21:33:48.933Z"),
     "updateDate" : ISODate("2024-04-03T21:33:48.933Z"),
     "__v" : 0
-}
-
-/* 8 */
+},
 {
     "_id" : ObjectId("660dd73f605a4841ef1a5575"),
     "id" : "TV000003",
@@ -156,9 +141,7 @@
     "createDate" : ISODate("2024-04-03T22:25:03.067Z"),
     "updateDate" : ISODate("2024-04-03T22:25:03.067Z"),
     "__v" : 0
-}
-
-/* 9 */
+},
 {
     "_id" : ObjectId("660ec07e3a6df58e4ed0b57f"),
     "id" : "TV000022",
