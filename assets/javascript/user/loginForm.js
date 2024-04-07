@@ -1,3 +1,21 @@
+document.addEventListener("DOMContentLoaded", (event) => {
+    // Accessing cookies using JavaScript
+    var cookies = document.cookie.split(";");
+    var cookieData = {};
+    cookies.forEach(function (cookie) {
+        var parts = cookie.split("=");
+        var name = parts[0].trim();
+        var value = decodeURIComponent(parts.slice(1).join("=").trim());
+        cookieData[name] = value;
+    });
+    // Output cookie data to console (for demonstration)
+    console.log("Cookie Data:", cookieData);
+    if (cookieData.token) {
+        window.location.assign(window.location.origin  + '/user');
+    }
+});
+
+
 async function handleLogin(event) {
     await axios.post('/user/login', {
         username: document.querySelector('#username').value,

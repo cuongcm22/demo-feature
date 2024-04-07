@@ -1,24 +1,64 @@
-{
-    "_id" : ObjectId("660dd273d6b67e81edeb31d5"),
-    "name" : "ABC Electronics",
-    "contactInfo" : "123-456-7890",
-    "address" : "123 Main St, City, Country",
-    "website" : "www.abcelectronics.com",
-    "__v" : 0
-},
-{
-    "_id" : ObjectId("660dd273d6b67e81edeb31d6"),
-    "name" : "XYZ Technologies",
-    "contactInfo" : "987-654-3210",
-    "address" : "456 Park Ave, City, Country",
-    "website" : "www.xyztech.com",
-    "__v" : 0
-},
-{
-    "_id" : ObjectId("660dd273d6b67e81edeb31d7"),
-    "name" : "TechCorp Inc.",
-    "contactInfo" : "555-123-4567",
-    "address" : "789 Elm St, City, Country",
-    "website" : "www.techcorp.com",
-    "__v" : 0
-}
+db.getCollection('suppliers').insertMany(
+    [
+  {
+    "name": "Supplier 1",
+    "address": "123 Main St, City, Country",
+    "phone": "123-456-7890",
+    "email": "supplier1@example.com"
+  },
+  {
+    "name": "Supplier 2",
+    "address": "456 Elm St, City, Country",
+    "phone": "456-789-0123",
+    "email": "supplier2@example.com"
+  },
+  {
+    "name": "Supplier 3",
+    "address": "789 Oak St, City, Country",
+    "phone": "789-012-3456",
+    "email": "supplier3@example.com"
+  },
+  {
+    "name": "Supplier 4",
+    "address": "321 Pine St, City, Country",
+    "phone": "321-654-9870",
+    "email": "supplier4@example.com"
+  },
+  {
+    "name": "Supplier 5",
+    "address": "654 Cedar St, City, Country",
+    "phone": "654-987-0123",
+    "email": "supplier5@example.com"
+  },
+  {
+    "name": "Supplier 6",
+    "address": "987 Birch St, City, Country",
+    "phone": "987-210-5436",
+    "email": "supplier6@example.com"
+  },
+  {
+    "name": "Supplier 7",
+    "address": "147 Maple St, City, Country",
+    "phone": "147-258-3690",
+    "email": "supplier7@example.com"
+  },
+  {
+    "name": "Supplier 8",
+    "address": "258 Walnut St, City, Country",
+    "phone": "258-369-4812",
+    "email": "supplier8@example.com"
+  },
+  {
+    "name": "Supplier 9",
+    "address": "369 Cherry St, City, Country",
+    "phone": "369-481-6023",
+    "email": "supplier9@example.com"
+  },
+  {
+    "name": "Supplier 10",
+    "address": "159 Pineapple St, City, Country",
+    "phone": "159-357-4802",
+    "email": "supplier10@example.com"
+  }
+]
+)

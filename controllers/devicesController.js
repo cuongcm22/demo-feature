@@ -2,9 +2,9 @@ const path = require("path");
 const devicePathUpload = '/public/uploads/devices/'
 
 // Import device model
-const Supplier = require("../models/supplierSchema.js")
-const Device = require("../models/deviceSchema.js");
-const LoanRecord = require("../models/loanSchema.js");
+const Supplier = require("../models/suppliersSchema.js")
+const Device = require("../models/devicesSchema.js");
+const LoanRecord = require("../models/loansSchema.js");
 
 function convertTimerToString(time) {
     const purchaseDate = new Date(time);

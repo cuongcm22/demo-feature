@@ -1,16 +1,232 @@
-doctype html
-head
-  meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  title Loan Record table
-  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css' rel='stylesheet')
-  include ../../partials/header.pug
-  //- Truyền biến JavaScript vào Pug bằng cách sử dụng `locals`
-- var navUrl = ['', '']
-- var local = 'user'
-mixin article({navUrl, local})
-  include ../../components/navigation.pug 
-//- Sử dụng biến JavaScript trong mixin
-+article({navUrl, local})
+link(href='https://fonts.googleapis.com/css?family=Poppins:200,400,700' rel='stylesheet')
+link(rel='stylesheet' href='/css/contents/home/spectre.css')
+link(rel='stylesheet' href='/css/contents/home/spectre-icons.css')
+link(rel='stylesheet' href='/css/contents/home/spectre-exp.css')
+link(rel='stylesheet' href='/css/contents/home/yeo.css')
 
-  h1 Notthing to see here 😥
+
+.yeo-slogan
+  .container.yeo-header
+    .columns
+      .column.col-12
+        header.navbar
+          section.navbar-section
+            a.navbar-brand.logo(href='./')
+              img.logo-img(src='/css/contents/images/logo.svg' alt='')
+              span Dev Space
+          section.navbar-section.hide-sm
+            a.btn.btn-link(href='#we-do') What we do
+            a.btn.btn-link(href='#we-work') How we work
+            a.btn.btn-link(href='#price') Pricing
+            a.btn.btn-link(href='#team') Our Team
+            a.btn.btn-primary.btn-hire-me(href='#') Download
+  .container.slogan
+    .columns
+      .column.col-7.col-sm-12
+        .slogan-content
+          h1
+            span.slogan-bold Design UI
+            span.slogan-bold App Development
+            span.slogan-bold Consultant Services
+          p
+            | Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          a.btn.btn-primary.btn-lg.btn-start(target='_blank' href='#y') Start a project today
+      .column.col-5.hide-sm
+        img.slogan-img(src='/css/contents/images/yeo-feature-1.svg' alt='')
+.yeo-client
+  .container.yeo-client-list
+    .columns
+      .column.col-12
+        h3.feature-title
+          | Trusted By The Best Clients
+        .client-logo
+          a(href='#' target='_blank')
+            img(src='/css/contents/images/algolia.svg' height='40px' alt='')
+          a(href='#' target='_blank')
+            img(src='/css/contents/images/lapa-logo.svg' height='40px' alt='')
+          a(href='#' target='_blank')
+            img(src='/css/contents/images/hugo.svg' height='40px' alt='')
+          a(href='#' target='_blank')
+            img(src='/css/contents/images/codecademy.svg' height='40px' alt='')
+          a(href='#' target='_blank')
+            img(src='/css/contents/images/aws.svg' height='40px' alt='')
+          a(href='#' target='_blank')
+            img(src='/css/contents/images/stripe.svg' height='40px' alt='')
+#we-do.yeo-do
+  .container.yeo-body
+    .columns
+      .column.col-12
+        h2.feature-title What We Do
+      .column.col-4.col-sm-12
+        .yeo-do-content
+          img(src='/css/contents/images/what-we-do-1.svg' alt='')
+          h3 Interface Design
+          p
+            | Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+          a(href='') Learn more
+      .column.col-4.col-sm-12
+        .yeo-do-content
+          img(src='/css/contents/images/what-we-do-2.svg' alt='')
+          h3 Web Application
+          p
+            | Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit
+          a(href='') Learn more
+      .column.col-4.col-sm-12
+        .yeo-do-content
+          img(src='/css/contents/images/what-we-do-3.svg' alt='')
+          h3 Software Development
+          p
+            | Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur
+          a(href='') Learn more
+#we-work.yeo-work
+  .container.yeo-body
+    .columns
+      .column.col-12.col-sm-12
+        h2.feature-title How We Work
+      .column.col-10.col-sm-12.centered
+        h2.yeo-work-feature
+          | We build 
+          span.yeo-work-feature-bold reliable infrastructure
+          | , use comprehensive in-house tools.
+#price.yeo-price
+  .container.yeo-body.col-sm-12
+    .columns
+      .column.col-4.col-sm-12
+        .panel
+          .panel-header
+            .panel-title
+              span PRO
+          .panel-body
+            p
+              span.price $2500 
+              span / month
+            ul
+              li
+                strong 10
+                |  billable hours included per month.
+              li
+                | Billable hourly rate of 
+                strong $300
+                |  after the included 10 hours are utilized.
+              li 24/7/365 on-call and 99.9% SLA
+              li Communication via ticketing system and e-mail.
+          .panel-footer
+            button.btn.btn-primary.btn-price Contact Us
+      .column.col-4.col-sm-12
+        .panel
+          .panel-header
+            .panel-title
+              span PREMIUM
+          .panel-body
+            p
+              span.price $5000 
+              span / month
+            ul
+              li
+                strong 10
+                |  billable hours included per month.
+              li
+                | Billable hourly rate of 
+                strong $300
+                |  after the included 10 hours are utilized.
+              li 24/7/365 on-call and 99.9% SLA
+              li Communication via ticketing system and e-mail.
+          .panel-footer
+            button.btn.btn-primary.btn-price Contact Us
+      .column.col-4.col-sm-12
+        .panel
+          .panel-header
+            .panel-title
+              span ENTERPRISE
+          .panel-body
+            p
+              span.price $15000 
+              span / month
+            ul
+              li
+                strong 10
+                |  billable hours included per month.
+              li
+                | Billable hourly rate of 
+                strong $300
+                |  after the included 10 hours are utilized.
+              li 24/7/365 on-call and 99.9% SLA
+              li Communication via ticketing system and e-mail.
+          .panel-footer
+            button.btn.btn-primary.btn-price Contact Us
+#team.yeo-team
+  .container.yeo-body
+    .columns
+      .column.col-12
+        h2.feature-title Meet Our Team
+      .column.col-4.col-sm-12
+        a(href='')
+          img.s-circle(src='/css/contents/images/team-1.jpg' alt='')
+        a(href='https://www.lapa.ninja/')
+          span.name John Doe
+        span.title DevOps
+      .column.col-4.col-sm-12
+        a(href='')
+          img.s-circle(src='/css/contents/images/team-2.jpg' alt='')
+        a(href='https://www.lapa.ninja/')
+          span.name Tinh Nguyen
+        span.title Designer
+      .column.col-4.col-sm-12
+        a(href='')
+          img.s-circle(src='/css/contents/images/team-3.jpg' alt='')
+        a(href='https://www.lapa.ninja/')
+          span.name Maria Oto
+        span.title Developer
+.yeo-open-source
+  .container.yeo-body
+    .columns
+      .column.col-12
+        h2.feature-title We love Open Source
+      .column.col-10.centered.col-sm-12
+        img.open-source-img(src='/css/contents/images/open-source.svg' alt='')
+        h2.open-source-feature
+          | We&apos;re making 
+          br
+          |                         Open Source Software
+        a.btn.btn-lg.btn-open-source(href='#') Follow us on Github
+.yeo-footer
+  .container
+    .columns
+      .column.col-3.col-sm-6
+        .yeo-footer-content
+          h4 Services
+          ul.nav
+            li.nav-item
+              a(href='https://www.lapa.ninja/') DevOps
+            li.nav-item
+              a(href='https://www.lapa.ninja/') Development
+            li.nav-item
+              a(href='https://www.lapa.ninja/') Consultant
+      .column.col-3.col-sm-6
+        .yeo-footer-content
+          h4 Clients
+          ul.nav
+            li.nav-item
+              a(href='https://www.lapa.ninja/') Lapa Ninja
+            li.nav-item
+              a(href='https://www.lapa.ninja/') Noty IM
+            li.nav-item
+              a(href='https://www.lapa.ninja/') Yeo Space
+      .column.col-3.col-sm-6
+        .yeo-footer-content
+          h4 Contact Us
+          ul.nav
+            li.nav-item
+              a(href='https://www.lapa.ninja/') tinh@lapa.ninja
+            li.nav-item
+              a(href='https://www.lapa.ninja/') Twitter
+            li.nav-item
+              a(href='https://www.lapa.ninja/') Github
+      .column.col-3.col-sm-6
+        .yeo-footer-content
+          h4 Copyright
+          ul.nav
+            li.nav-item
+              a(href='http://www.streamlineicons.com/?ref=lapaninja') Free Streamline Icons
+            li.nav-item
+              a(href='https://ui8.net/products/illustration-pack-vol-03?ref=lapaninja') Buy Illustration Pack by Nimart1

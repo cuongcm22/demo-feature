@@ -8,7 +8,7 @@ if (!fs.existsSync(csvDir)) {
     fs.mkdirSync(csvDir, { recursive: true });
 }
 
-const Device = require("../models/deviceSchema.js");
+const { Device } = require("../models/models");
 
 // Module
 const { exportFileCSV } = require('../modules/exportFileCSV');
@@ -33,7 +33,7 @@ function getStringDateTime() {
 
 module.exports.homePage = async (req, res, next) => {
     try {
-        res.render("./main", {
+        res.render("./contents/home/home.pug", {
             title: 'Home page',
             routes: {
                 'Home': '/',

@@ -2,27 +2,31 @@ include ../../main.pug
 link(href='/css/user/registerForm.css' rel='stylesheet')
 script(src="/javascript/user/registerForm.js") 
 
-.content
+.container
+  .content
     .wrapper
-        h2.mb-4 Đăng Ký
-        div#registerForm
-            .mb-3
-                label.form-label(for='username') Tên đăng nhập: (user.username)
-                input#username.form-control(type='text', name='username', required='' value="Nguyen Anh Tu")
-            .mb-3
-                label.form-label(for='password') Mật khẩu: (user.password | default = 12345)
-                input#password.form-control(type='password', name='password', required='' value="12345")
-            .mb-3
-                label.form-label(for='id_student') Mã sinh viên: (user.studentID)
-                input#id_student.form-control(type='text', name='studentID', required='' value="20E12345")
-            .mb-3
-                label.form-label(for='email') Email: (user.email)
-                input#email.form-control(type='email', name='email', required='' value="nguyenanhtu@gmail.com")
-            .mb-3
-                label.form-label(for='phoneNumber') Số điện thoại: (user.phone)
-                input#phoneNumber.form-control(type='tel', name='phone', pattern='[0-9]{10}' value="0987654321")
-                small.text-muted Vui lòng nhập số điện thoại gồm 10 chữ số.
-            button.btn.btn-primary(onclick='handleRegister(event)' style='width: 100%;') Đăng Ký
-            .text-center(style='margin-top: 50px; border: 1px solid #ccc; border-radius: 8px;')
-                a.btn(href='./login') Return login page
-
+      h2.mb-4 &Dstrok;&abreve;ng K&yacute;
+      form#registerForm(action='./register' method='post' enctype='application/json')
+        .mb-3
+          label.form-label(for='username') T&ecirc;n &dstrok;&abreve;ng nh&#x1EAD;p:
+          input#username.form-control(type='text' name='username' required='' value='abcsdsds')
+        .mb-3
+          label.form-label(for='password') M&#x1EAD;t kh&#x1EA9;u:
+          input#password.form-control(type='password' name='password' required='' value='12345')
+        .mb-3
+          label.form-label(for='email') Email:
+          input#email.form-control(type='email' name='email' required='' value='abc@gmail.com')
+        .mb-3
+          label.form-label(for='phone') S&#x1ED1; &dstrok;i&#x1EC7;n tho&#x1EA1;i:
+          input#phone.form-control(type='tel' name='phone' pattern='[0-9]{10}' required='' value='0335538651')
+          small.text-muted
+            | Vui l&ograve;ng nh&#x1EAD;p s&#x1ED1; &dstrok;i&#x1EC7;n tho&#x1EA1;i g&#x1ED3;m 10 ch&#x1EEF;
+            | s&#x1ED1;.
+        button.btn.btn-primary(type='submit' style='width: 100%')
+          | &Dstrok;&abreve;ng K&yacute;
+        .text-center(style='\
+        margin-top: 50px;\
+        border: 1px solid #ccc;\
+        border-radius: 8px;\
+        ')
+          a.btn(href='./login') Return login page
