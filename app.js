@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-
+const fileUpload = require('express-fileupload');
 // import .env
 const dotenv = require('dotenv')
 dotenv.config()
@@ -42,7 +42,7 @@ app.set('views', './views'); // Đặt thư mục chứa các mẫu Pug
 // Middleware cho bodyParser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
+app.use(fileUpload());
 // Color
 const colors = require('colors');
 

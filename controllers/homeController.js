@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose');
+const { stringify } = require('uuid');
 // Ensure public/csv directory exists, create it if not
 const csvDir = path.join(__dirname, '../assets/public/csv');
 if (!fs.existsSync(csvDir)) {
@@ -8,8 +9,10 @@ if (!fs.existsSync(csvDir)) {
 }
 
 const Device = require("../models/deviceSchema.js");
+
+// Module
 const { exportFileCSV } = require('../modules/exportFileCSV');
-const { stringify } = require('uuid');
+const { sendEmail } = require('../modules/sendEmail')
 
 function getStringDateTime() {
     const currentTime = Date.now();
@@ -95,6 +98,63 @@ module.exports.exportFileCSV = async (req, res, next) => {
                     res.status(500).send('An error occurred while processing the request.');
                 });
             })
+    } catch(err) {
+        console.log(err)
+        res.status(404)
+    }
+}
+
+module.exports.sendEmail = async (req, res, next) => {
+    try {
+        fs.readdir(csvDir, (err, files) => {
+            if (err) {
+                console.error(err);
+                res.status(500).json({ error: 'Internal Server Error' });
+                return;
+            }
+            const csvFiles = files.filter(file => file.endsWith('.csv'));
+            res.render("./contents/sendEmail.pug", {
+                title: 'Home page',
+                routes: {
+                    'Home': '/',
+                    'Detail': '/device/report',
+                    'Create': '/device/create',
+                    'Loan': '/device/loan',
+                    'Return': '/device/return'
+                },
+                filesnamecsv: csvFiles
+            });
+        });
+    } catch(err) {
+        console.log(err)
+        res.status(404)
+    }
+}
+
+module.exports.sendEmailUpload = async (req, res, next) => {
+    try {
+        const filesPathCSV = path.join(__dirname, '/assets/public', 'csv');
+        const { userEmail, csvFile } = req.body;
+
+        const dateTime = getStringDateTime()
+        const title = `List all device in system`
+        const text = `This is record device ${dateTime}
+            More infomation, please contact us!
+        `
+        console.log({userEmail, title, text, csvFile, csvDir});
+        const status = await sendEmail(userEmail, title, text, csvFile, filesPathCSV)
+        // if (status) {
+        //     res.send(
+        //         `<script>
+        //             alert('Gửi mail thành công, vui lòng kiểm tra hộp thư của bạn!')
+        //             window.location.assign(window.location.origin  + '/');
+        //         </script>`
+        //     );
+        // } else {
+        //     res.status(500).json({ error: 'Internal Server Error' });
+        // }
+        console.log(status);
+
     } catch(err) {
         console.log(err)
         res.status(404)
