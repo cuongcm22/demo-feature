@@ -130,33 +130,3 @@ module.exports.sendEmail = async (req, res, next) => {
         res.status(404)
     }
 }
-
-module.exports.sendEmailUpload = async (req, res, next) => {
-    try {
-        const filesPathCSV = path.join(__dirname, '/assets/public', 'csv');
-        const { userEmail, csvFile } = req.body;
-
-        const dateTime = getStringDateTime()
-        const title = `List all device in system`
-        const text = `This is record device ${dateTime}
-            More infomation, please contact us!
-        `
-        console.log({userEmail, title, text, csvFile, csvDir});
-        const status = await sendEmail(userEmail, title, text, csvFile, filesPathCSV)
-        // if (status) {
-        //     res.send(
-        //         `<script>
-        //             alert('Gửi mail thành công, vui lòng kiểm tra hộp thư của bạn!')
-        //             window.location.assign(window.location.origin  + '/');
-        //         </script>`
-        //     );
-        // } else {
-        //     res.status(500).json({ error: 'Internal Server Error' });
-        // }
-        console.log(status);
-
-    } catch(err) {
-        console.log(err)
-        res.status(404)
-    }
-}

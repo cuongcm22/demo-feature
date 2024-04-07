@@ -22,7 +22,7 @@ module.exports.sendMail = async (req, res, next) => {
     const mailOptions = {
         from: process.env.APP_EMAIL,
         to: userEmail,
-        subject: 'Report device',
+        subject: `Report device ${csvFile}`,
         text: `This is report data device from system
 More infomation, please contact us!        
         `,
