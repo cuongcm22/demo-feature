@@ -59,7 +59,7 @@ module.exports.showLoginForm = async (req, res, next) => {
             title: 'Home page',
             routes: {
                 'Home': '/',
-                'User': '/user/login',
+                'User': '/user',
                 'Register': '/user/register'
             }
         });
@@ -77,9 +77,10 @@ module.exports.login = async (req, res, next) => {
 
         username = username.toLowerCase()
         password = password.toLowerCase()
-        const expireTimeSession = 5000
+        // Lưu ý, cần phải đặt thời gian hết hạn token và cookie trùng nhau, tránh lỗi
+        const expireTimeSession = 50
         const accessToken = jwt.sign(req.body, process.env.ACCESS_TOKEN_SECRET, {
-            expiresIn: "3600s",
+            expiresIn: "50s",
         });
 
         await User.find({'username': username}).then(user => {

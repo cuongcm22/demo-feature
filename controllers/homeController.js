@@ -37,7 +37,7 @@ module.exports.homePage = async (req, res, next) => {
             title: 'Home page',
             routes: {
                 'Home': '/',
-                'User': '/user/login',
+                'User': '/user',
                 'Device': '/device/report',
                 'Record loan': '/device/loanrecord',
             }
@@ -118,9 +118,6 @@ module.exports.sendEmail = async (req, res, next) => {
                 routes: {
                     'Home': '/',
                     'Detail': '/device/report',
-                    'Create': '/device/create',
-                    'Loan': '/device/loan',
-                    'Return': '/device/return'
                 },
                 filesnamecsv: csvFiles
             });
