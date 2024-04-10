@@ -35,6 +35,13 @@ async function comparePassword(password, hashedPassword) {
     }
 }
 
+function handleAlertWithRedirectPage(alertString, redirect) {
+    return `<script>
+        alert('${alertString}')
+        window.location.assign(window.location.origin  + '${redirect}');
+    </script>`
+}
+
 module.exports.showBioPage = async (req, res, next) => {
     try {
         res.render("./contents/user/bioPage.pug", {
@@ -78,9 +85,9 @@ module.exports.login = async (req, res, next) => {
         username = username.toLowerCase()
         password = password.toLowerCase()
         // Lưu ý, cần phải đặt thời gian hết hạn token và cookie trùng nhau, tránh lỗi
-        const expireTimeSession = 50
+        const expireTimeSession = 3000
         const accessToken = jwt.sign(req.body, process.env.ACCESS_TOKEN_SECRET, {
-            expiresIn: "50s",
+            expiresIn: "3000s",
         });
 
         await User.find({'username': username}).then(user => {
@@ -143,4 +150,16 @@ module.exports.register = async (req, res, next) => {
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
+}
+
+module.exports.logOut = async (req, res, next) => {
+    const expireTimeSession = 1
+    const sessionId = `sessionId=''; Max-Age=${expireTimeSession}; HttpOnly; SameSite=Strict; Path=/`;
+    const sessionUserName = `sessionUserName=''; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;
+    const sessionToken = `token=''; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;
+
+    res.setHeader('Set-Cookie', [sessionId, sessionUserName, sessionToken]);
+
+    const handleReturn = handleAlertWithRedirectPage('Đăng xuất thành công!', '/')
+    res.send(handleReturn)
 }

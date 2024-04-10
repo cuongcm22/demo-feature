@@ -17,16 +17,19 @@ header.header
           button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarNav' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation')
             span.navbar-toggler-icon
         #navbarNav.collapse.navbar-collapse
-          .navbar-user.user-section
-            p Welcome back! 
-            span.user-name
           ul.navbar-nav.ms-auto
             each route, nameRoute in routes
               li.nav-item
                 a.nav-link(href=route) #{nameRoute}
-        .user-section
+          .navbar-user.user-section
+            p Welcome back! 
+            span.user-name
+            a.nav-link(href='/user/logout') Logout
+        .user-section.user-section_desktop
             img.user-icon(src='https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg' alt='User Icon')
             span.user-name
+            span 
+              a.nav-link(href='/user/logout') Logout
 // Bootstrap Bundle with Popper
 script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js')
 script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js')

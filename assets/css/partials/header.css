@@ -55,6 +55,13 @@ thead {
     margin-left: auto;
 }
 
+.user-section_desktop {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
 .user-icon {
     width: 30px;
     height: 30px;
@@ -92,3 +99,4 @@ thead {
         max-width: 130px;
     }
 }
+
