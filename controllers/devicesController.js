@@ -2,9 +2,17 @@ const path = require("path");
 const devicePathUpload = '/public/uploads/devices/'
 
 // Import device model
-const Supplier = require("../models/suppliersSchema.js")
-const Device = require("../models/devicesSchema.js");
-const LoanRecord = require("../models/loansSchema.js");
+
+const { 
+    Device,
+    Location,
+    Supplier,
+    User,
+    Loan,
+    Log,
+    DeviceType,
+    ActivityType
+ } = require('../models/models.js')
 
 function convertTimerToString(time) {
     const purchaseDate = new Date(time);
@@ -20,82 +28,98 @@ function convertTimerToString(time) {
     return formattedDate;
 }
 
-function responseAlert() {
+function handleAlertWithRedirectPage(alertString, redirect) {
     return `<script>
-        alert('Thiết bị đã được thêm vào thành công!')
-        window.location.assign(window.location.origin  + '/device/report');
+        alert('${alertString}')
+        window.location.assign(window.location.origin  + '${redirect}');
     </script>`
 }
 
-module.exports.reportDevice = async (req, res, next) => {
+module.exports.ShowReportDevicePage = async (req, res, next) => {
     console.log("Get device routers".blue.bold);
     try {
-        Device.find({}, { _id: 0, __v: 0 })
-            .then((devices) => {
-                const formattedDevices = devices.map((device) => {
-                    // Chuyển đổi purchaseDate
-                    const purchaseDate =
-                        device.purchaseDate instanceof Date
-                            ? device.purchaseDate.toLocaleDateString("en-GB")
-                            : device.purchaseDate;
-                    // Chuyển đổi warrantyExpiry
-                    const warrantyExpiry =
-                        device.warrantyExpiry instanceof Date
-                            ? device.warrantyExpiry.toLocaleDateString("en-GB")
-                            : device.warrantyExpiry;
-                    // Chuyển đổi createDate
-                    const createDate =
-                        device.createDate instanceof Date
-                            ? device.createDate.toLocaleDateString("en-GB")
-                            : device.createDate;
-                    // Chuyển đổi updateDate
-                    const updateDate =
-                        device.updateDate instanceof Date
-                            ? device.updateDate.toLocaleDateString("en-GB")
-                            : device.updateDate;
+        const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
+        const locations = await Location.find({}, 'name').then(locations => locations.map(location => location.name));
+        const suppliers = await Supplier.find({}, 'name').then(suppliers => suppliers.map(supplier => supplier.name));
 
-                    return {
-                        ...device._doc,
-                        purchaseDate,
-                        warrantyExpiry,
-                        createDate,
-                        updateDate,
-                    };
-                });
-
-                // console.log(formattedDevices);
-                // res.render("./contents/report/reportDevice", {
-                //     formattedDevices: JSON.stringify(formattedDevices)
-                // });
-                res.render("./contents/report/reportDevice.pug", {
-                    title: 'Home page',
-                    routes: {
-                        'Home': '/',
-                        'Detail': '/device/report',
-                        'Create': '/device/create',
-                        'Loan': '/device/loan',
-                        'Return': '/device/return'
-                    },
-                    formattedDevices: JSON.stringify(formattedDevices)
-                });
-            })
-            .catch((err) => {
-                console.error(err);
-                // Xử lý lỗi nếu có
+        await Device.aggregate([
+            {
+              $lookup: {
+                from: 'devicetypes',
+                localField: 'deviceType',
+                foreignField: '_id',
+                as: 'deviceType'
+              }
+            },
+            {
+              $unwind: '$deviceType'
+            },
+            {
+              $lookup: {
+                from: 'locations',
+                localField: 'location',
+                foreignField: '_id',
+                as: 'location'
+              }
+            },
+            {
+              $unwind: '$location'
+            },
+            {
+              $lookup: {
+                from: 'suppliers',
+                localField: 'supplier',
+                foreignField: '_id',
+                as: 'supplier'
+              }
+            },
+            {
+              $unwind: '$supplier'
+            },
+            {
+              $project: {
+                serialNumber: 1,
+                name: 1,
+                'deviceType.name': 1,
+                status: 1,
+                imageUrl: 1,
+                videoUrl: 1,
+                'location.name': 1,
+                'supplier.name': 1,
+                description: 1,
+                purchaseDate: 1,
+                warrantyExpiry: 1,
+                createDate: 1
+              }
+            }
+        ]).then((devices) => {
+            res.render("./contents/report/reportDevice.pug", {
+                title: 'Home page',
+                routes: {
+                    'Home': '/',
+                    'Detail': '/device/report',
+                    'Create': '/device/create',
+                    'Loan': '/device/loan',
+                    'Return': '/device/return'
+                },
+                formattedDevices: JSON.stringify(devices),
+                devicetypes: JSON.stringify(devicetypes),
+                locations: JSON.stringify(locations),
+                suppliers: JSON.stringify(suppliers)
             });
+        })
     } catch (error) {
         res.status(400).send(error);
     }
 };
 
-module.exports.createDevice = async (req, res, next) => {
+module.exports.showCreateDevicePage = async (req, res, next) => {
     console.log("Create device routers".blue.bold);
     try {
-        // Truy vấn tất cả các tài liệu từ bảng Supplier
-        const suppliers = await Supplier.find();
+        const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
+        const locations = await Location.find({}, 'name').then(locations => locations.map(location => location.name));
+        const suppliers = await Supplier.find({}, 'name').then(suppliers => suppliers.map(supplier => supplier.name));
 
-        // Lặp qua danh sách các tài liệu và trích xuất trường 'name' từ mỗi tài liệu
-        const supplierNames = suppliers.map(supplier => supplier.name)
         res.render("./contents/device/createDevice.pug", {
             title: 'Home page',
             routes: {
@@ -105,7 +129,9 @@ module.exports.createDevice = async (req, res, next) => {
                 'Loan': '/device/loan',
                 'Return': '/device/return'
             },
-            suppliers: supplierNames
+            devicetypes: devicetypes,
+            locations: locations,
+            suppliers: suppliers
         });
            
     } catch (error) {
@@ -115,52 +141,31 @@ module.exports.createDevice = async (req, res, next) => {
 
 module.exports.createDeviceDB = async (req, res, next) => {
     try {
-        console.log(req.body);
-        const device = new Device({
-            id: req.body.serialNumber,
-            name: req.body.deviceName,
-            type: req.body.deviceType,
-            status:
-                req.body.deviceStatus || Device.schema.path("status").default, // Sử dụng giá trị mặc định từ schema
-            initStatus:
-                req.body.deviceInitStatus ||
-                Device.schema.path("initStatus").default, // Sử dụng giá trị mặc định từ schema
-            imageUrl: req.body.localStorageDataImage,
-            videoUrl: req.body.localStorageDataVideo,
-            location: req.body.deviceLocation,
-            supplier: req.body.deviceSupplier,
-            history: req.body.deviceHistory,
-            purchaseDate: new Date(req.body.purchaseDate),
-            warrantyExpiry: new Date(req.body.warrantyExpiry),
-            createDate: Date.now(),
-            updateDate: Date.now(),
-        });
+        const deviceType = await DeviceType.find({name: req.body.deviceType})
+        const location = await Location.find({name: req.body.location});
+        const supplier = await Supplier.find({name: req.body.supplier});
+        const data = {
+            ...req.body,
+            deviceType: deviceType[0],
+            location: location[0],
+            supplier: supplier[0],
+            createDate: Date.now()
+        }
+
+        const device = new Device(data)
         await device
             .save()
             .then((result) => {
                 console.log(result);
-                console.log("Save device successfully!!!".bgBlue);
-                // res.status(201).json({
-                //     message: "New device has been create!",
-                //     data: result,
-                // });
-                res.send(
-                    `<script>
-                        alert('Thiết bị đã được thêm vào thành công!')
-                        window.location.assign(window.location.origin  + '/device/report');
-                    </script>`
-                )
+                console.log('Lưu thiết bị thành công'.blue.bold);
+                const handleReturn = handleAlertWithRedirectPage('Lưu thiết bị thành công!','/device/report')
+                res.send(handleReturn)
             })
             .catch((error) => {
+                console.log(error);
                 console.log('ID thiết bị đã tồn tại, vui lòng thử id khác'.red.bold);
-                res.send(`
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            alert('Đã xảy ra lỗi khi thêm thiết bị, có thể id thiết bị đã tồn tại, vui lòng thử lại!');
-                            window.location.assign(window.location.origin  + '/device/create');
-                        });
-                    </script>
-                `);
+                const handleReturn = handleAlertWithRedirectPage('Đã xảy ra lỗi khi thêm thiết bị, có thể id thiết bị đã tồn tại, vui lòng thử lại!','/device/create')
+                res.send(handleReturn);
             });
     } catch (error) {
         res.status(404);
@@ -171,19 +176,29 @@ module.exports.updateDeviceDB = async (req, res, next) => {
   console.log('Update device route'.yellow.bold)
   try {
     console.log(req.body);
+    const deviceType = await DeviceType.find({name: req.body.deviceType})
+    const location = await Location.find({name: req.body.location});
+    const supplier = await Supplier.find({name: req.body.supplier});
+    const data = {
+        ...req.body,
+        deviceType: deviceType[0],
+        location: location[0],
+        supplier: supplier[0]
+    }
+
     Device.findOneAndUpdate(
-      { id: req.body.id }, // Điều kiện tìm kiếm - ở đây sử dụng trường id để tìm kiếm thiết bị cần cập nhật
-      req.body, // Dữ liệu mới sẽ được cập nhật từ req.body
+      { serialNumber: req.body.serialNumber }, // Điều kiện tìm kiếm - ở đây sử dụng trường id để tìm kiếm thiết bị cần cập nhật
+      data, // Dữ liệu mới sẽ được cập nhật từ req.body
       { new: true, upsert: true } // Tùy chọn để trả về bản ghi mới sau khi cập nhật và tạo bản ghi mới nếu không tìm thấy
-    ).then(updatedDevice => {
-      console.log("Update device successfully!!!".bgYellow.bold);
-      res.status(200).redirect('/device/report')
-    }).catch(error => {
-      res.status(401).json({
+    ).then(updatedDevice => {console.log("Update device successfully!!!".bgYellow.bold);
+        const handleReturn = handleAlertWithRedirectPage('Cập nhật thiết bị thành công!','/device/report')
+        res.send(handleReturn)
+    })
+    .catch(error => {res.status(401).json({
         message: "Xảy ra lỗi khi cập nhật thiết bị",
         error: error
-      })
-    })
+      })})
+
   } catch (error) {
     res.status(401).json({
       message: error
@@ -193,27 +208,12 @@ module.exports.updateDeviceDB = async (req, res, next) => {
 
 module.exports.deleteDeviceDB = async (req, res, next) => {
     try {
-        // console.log(req.body);
-        LoanRecord.findOne({ deviceID: req.body.id, status: 'borrowed' })
-        .then(existingLoanRecord => {
-            if (existingLoanRecord) {
-                console.log(existingLoanRecord);
-                res.status(200).json({
-                    success: false,
-                    message: 'Delete device fail'
-                })
-            } else {
-                LoanRecord.deleteOne({ deviceID: req.body.id }).then(result => {
-                    console.log('Delete device in loanRecord table successfully!'.bgRed);
-                }).catch(err => console.log(`Đã xảy ra lỗi khi xóa thiết bị trong bảng loanRecord ${req.body.id}`.yellow))
-                Device.deleteOne({ id: req.body.id }).then(result => {
-                    console.log('Delete device successfully!'.bgRed)
-                }).catch(err => {console.log(`Đã xảy ra lỗi khi xóa thiết bị trong bảng device ${req.body.id}`.yellow)})
-                res.status(200).json({
-                    success: true,
-                    message: 'Deleted device'
-                })
-            }
+        Device.deleteOne({ serialNumber: req.body.serialNumber }).then(result => {
+            console.log('Delete device successfully!'.bgRed)
+        }).catch(err => {console.log(`Đã xảy ra lỗi khi xóa thiết bị trong bảng device ${req.body.id}`.yellow)})
+        res.status(200).json({
+            success: true,
+            message: 'Deleted device'
         })
     } catch (error) {
         res.status(401).json({
@@ -222,7 +222,7 @@ module.exports.deleteDeviceDB = async (req, res, next) => {
     }
 }
 
-module.exports.loanDevice = async (req, res, next) => {
+module.exports.ShowLoanDevicePage = async (req, res, next) => {
     try {
         await Device.aggregate([
             {
@@ -445,7 +445,7 @@ module.exports.loanRecord = async (req, res, next) => {
     }
 }
 
-module.exports.returnDevice = async (req, res, next) => {
+module.exports.showReturnDevicePage = async (req, res, next) => {
     try {
         const username = req.user.username;
         LoanRecord.find({ username: username, status: 'borrowed' }, { _id: 0, __v: 0, notes: 0 })

@@ -76,7 +76,7 @@ $(document).ready(function() {
         event.preventDefault();
         const formData = new FormData($(this).closest('form')[0]);
         formData.append('file', $(this)[0].files[0]);
-        
+        console.log(formData);
         // Show spinner
         $('#spinner1').show()
 

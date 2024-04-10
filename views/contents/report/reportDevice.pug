@@ -9,13 +9,13 @@ section.container
     table.table.table-striped
       thead
         tr
-          th(scope='col') T&ecirc;n Thi&#x1EBF;t b&#x1ECB;
-          th(scope='col') Lo&#x1EA1;i Thi&#x1EBF;t b&#x1ECB;
-          th(scope='col') Tr&#x1EA1;ng th&aacute;i
-          th(scope='col') V&#x1ECB; tr&iacute;
-          th(scope='col') Ng&agrave;y M&#x1B0;&#x1EE3;n
-          th(scope='col') Ng&agrave;y Tr&#x1EA3; (D&#x1EF1; ki&#x1EBF;n)
-          th(scope='col') Ch&#x1EE9;c n&abreve;ng
+          th(scope='col') Tên thiết bị
+          th(scope='col') Loại thiết bị;
+          th(scope='col') Trạng thái
+          th(scope='col') Vị trí
+          th(scope='col') Ngày mua
+          th(scope='col') Ngày hết hạn (dự kiến)
+          th(scope='col') Chức năng
       tbody#deviceLoanTableBody
         // JavaScript will populate table rows from mockdata
   .mb-3
@@ -67,5 +67,8 @@ script.
   var mockData = {
   devices: !{formattedDevices}
   };
+  var devicetypes = !{devicetypes}
+  var locations = !{locations}
+  var suppliers = !{suppliers}
 
 script(src="/javascript/report/reportDevice.js") 

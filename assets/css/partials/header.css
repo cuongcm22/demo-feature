@@ -82,3 +82,13 @@ thead {
         display: none;
     }
 }
+
+#logo-page-primary {
+    max-width: 170px;
+}
+
+@media (max-width: 670.98px) {
+    #logo-page-primary {
+        max-width: 130px;
+    }
+}

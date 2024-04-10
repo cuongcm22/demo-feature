@@ -3,17 +3,21 @@ const mongoose = require('mongoose');
 
 const deviceSchema = new mongoose.Schema({
   _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
+  serialNumber: { type: String, unique: true, required: true},
   name: { type: String, required: true },
-  description: { type: String },
   deviceType: { type: mongoose.Schema.Types.ObjectId, ref: 'DeviceType', required: true },
-  manufacturer: { type: mongoose.Schema.Types.ObjectId, ref: 'Manufacturer', required: true },
-  serialNumber: { type: String, required: true },
-  purchaseDate: { type: Date, required: true },
   status: { type: String, enum: ['Active', 'Repair', 'Damaged'], required: true },
+  imageUrl: { type: String },  
+  videoUrl: { type: String },
   location: { type: mongoose.Schema.Types.ObjectId, ref: 'Location', required: true },
+  supplier: { type: mongoose.Schema.Types.ObjectId, ref: 'Supplier', required: true },
+  description: { type: String },
+  purchaseDate: { type: Date, required: true },
+  warrantyExpiry: { type: Date, require: true},
+  createDate: { type: Date, require: true},
   assignedUser: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   loans: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Loan' }],
-  logs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Log' }]
+  logs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Log' }],
 });
 
 module.exports = mongoose.model('Device', deviceSchema);

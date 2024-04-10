@@ -13,30 +13,29 @@ section.container
   .form-container
     form#deviceRegistrationForm(action='./add' method='post' enctype='application/json')
       .mb-3
-        label.form-label(for='deviceName') T&ecirc;n thi&#x1EBF;t b&#x1ECB;: (devices.name)
-        input#deviceName.form-control(value='Tivi Sam sung' type='text' name='deviceName' required='')
-      .mb-3
-        label.form-label(for='deviceType') Lo&#x1EA1;i thi&#x1EBF;t b&#x1ECB;: (devices.type)
-        input#deviceType.form-control(value='Tivi' type='text' name='deviceType' required='')
-      .mb-3
-        label.form-label(for='serialNumber') S&#x1ED1; Serial: (devices._id)
+        label.form-label(for='serialNumber') S&#x1ED1; Serial: (devices.serialNumber)
         input#serialNumber.form-control(value='TV000001' type='text' name='serialNumber' required='')
       .mb-3
         #qr-reader(style='max-width: 100%;')
         #qr-reader-results
-        
       .mb-3
-        label.form-label(for='deviceStatus') Tr&#x1EA1;ng th&aacute;i thi&#x1EBF;t b&#x1ECB;: (devices.status)
-        select#deviceStatus.form-select(name='deviceStatus' required='')
-          option(value='' disabled='' selected='') --Ch&#x1ECD;n--
-          option(value='new' selected='') M&#x1EDB;i
-          option(value='likeNew') H&agrave;ng &dstrok;&atilde; qua s&#x1EED; d&#x1EE5;ng
+        label.form-label(for='deviceName') T&ecirc;n thi&#x1EBF;t b&#x1ECB;: (devices.name)
+        input#deviceName.form-control(value='Tivi Sam sung' type='text' name='name' required='')
       .mb-3
-        label.form-label(for='deviceInitStatus') Tr&#x1EA1;ng th&aacute;i: (devices.initStatus)
-        select#deviceInitStatus.form-select(name='deviceInitStatus' required='')
+        label.form-label(for='deviceType') Lo&#x1EA1;i thi&#x1EBF;t b&#x1ECB;: (devices.deviceType)
+        //- input#deviceType.form-control(value='Tivi' type='text' name='deviceType' required='')
+        select#deviceType.form-select(name='deviceType' required='')
           option(value='' disabled='' selected='') --Ch&#x1ECD;n--
-          option(value='used') &Dstrok;&atilde; m&#x1B0;&#x1EE3;n
-          option(value='notused' selected='') Ch&#x1B0;a m&#x1B0;&#x1EE3;n
+          each devicetype in devicetypes
+            option(value=devicetype) #{devicetype}
+
+      .mb-3
+        label.form-label(for='status') Tr&#x1EA1;ng th&aacute;i thi&#x1EBF;t b&#x1ECB;: (devices.status)
+        select#status.form-select(name='status' required='')
+          option(value='' disabled='' selected='') --Ch&#x1ECD;n--
+          option(value='Active') Hoạt động
+          option(value='Repair') Đang sữa chữa
+          option(value='Damaged') Bị hư hại
       .mb-3
         label.form-label(for='imageSelect') Ch&#x1ECD;n &#x1EA3;nh thi&#x1EBF;t b&#x1ECB;:
         select#imageSelect.form-select(onchange='convertToBase64AndLog()') Ch&#x1ECD;n &#x1EA3;nh thi&#x1EBF;t b&#x1ECB;:
@@ -44,8 +43,6 @@ section.container
           option(value='/public/images/tivi1.jpg') &#x1EA2;nh 1
           option(value='/public/images/tivi2.jpg') &#x1EA2;nh 2
           option(value='/public/images/tivi3.jpg') &#x1EA2;nh 3
-      //-   select#imageSelect.form-select(onchange='changeImage(this)')
-      //-     option(value='' disabled='' selected='') --Ch&#x1ECD;n &#x1EA3;nh--
 
       .mb-3
         label.form-label(for='deviceUrlImg') &#x1EA2;nh thi&#x1EBF;t b&#x1ECB;: (devices.imageUrl)
@@ -68,24 +65,27 @@ section.container
       
       .mb-3
         label.form-label(for='deviceLocation') V&#x1ECB; tr&iacute;: (devices.location)
-        input#deviceLocation.form-control(value='P0E2' type='text' name='deviceLocation' required='')
+        select#deviceLocation.form-select(name='location' required='')
+          option(value='' disabled='' selected='') --Ch&#x1ECD;n--
+          each location in locations 
+            option(value=location) #{location}
       .mb-3
-        label.form-label(for='deviceSupplier') Select Supplier
-        select#deviceSelect.form-select(name='deviceSupplier')
-          option(value='' selected='' disabled='') Select Device
-          each supplier in suppliers
+        label.form-label(for='deviceSupplier') V&#x1ECB; tr&iacute;: (devices.supplier)
+        select#deviceSupplier.form-select(name='supplier' required='')
+          option(value='' disabled='' selected='') --Ch&#x1ECD;n--
+          each supplier in suppliers 
             option(value=supplier) #{supplier}
       .mb-3
-        label.form-label(for='deviceHistory') L&#x1B0;u &yacute; l&#x1ECB;ch s&#x1EED; m&#x1B0;&#x1EE3;n tr&#x1EA3; thi&#x1EBF;t b&#x1ECB;: (devices.history)
-        input#deviceHistory.form-control(type='text' name='deviceHistory')
+        label.form-label(for='descriptionDevice') Ghi chú: (devices.description)
+        input#descriptionDevice.form-control(value='Thiết bị mới mua về không hư hỏng' type='text' name='description')
       .mb-3
         label.form-label(for='purchaseDate') Ng&agrave;y mua thi&#x1EBF;t b&#x1ECB;: (device.purchaseDate)
         input#purchaseDate.form-control(type='date' name='purchaseDate' required='')
       .mb-3
         label.form-label(for='warrantyExpiry') Ng&agrave;y h&#x1EBF;t h&#x1EA1;n: (device.warrantyExpiry)
         input#warrantyExpiry.form-control(type='date' name='warrantyExpiry' required='')
-      input#localStorageDataImage(type='hidden' name='localStorageDataImage')
-      input#localStorageDataVideo(type='hidden' name='localStorageDataVideo')
+      input#localStorageDataImage(type='hidden' name='imageUrl')
+      input#localStorageDataVideo(type='hidden' name='videoUrl')
       button.btn.btn-primary(type='submit') &Dstrok;&abreve;ng k&yacute;
 
 script(src='https://unpkg.com/html5-qrcode')

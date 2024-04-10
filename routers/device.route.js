@@ -11,12 +11,12 @@ router.post('/delete', devicesController.deleteDeviceDB);
 router.get('/report', devicesController.ShowReportDevicePage);
 
 // Routes requiring authentication
-router.get('/loan', authenToken.authenToken, devicesController.loanDevice);
-router.post('/loan', authenToken.authenToken, devicesController.loanDeviceDB);
-router.get('/return', authenToken.authenToken, devicesController.returnDevice);
-router.post('/return', authenToken.authenToken, devicesController.returnDeviceDB);
+// router.get('/loan', authenToken.authenToken, devicesController.ShowLoanDevicePage);
+// router.post('/loan', authenToken.authenToken, devicesController.loanDeviceDB);
+// router.get('/return', authenToken.authenToken, devicesController.showReturnDevicePage);
+// router.post('/return', authenToken.authenToken, devicesController.returnDeviceDB);
 
 // Non-authenticated route
-router.get('/loanrecord', devicesController.loanRecord);
+// router.get('/loanrecord', devicesController.loanRecord);
 
 module.exports = router;

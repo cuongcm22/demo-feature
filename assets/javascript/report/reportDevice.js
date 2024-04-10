@@ -1,3 +1,24 @@
+function forLoopArrayTypeReturnOpt(arrayType, key) {
+    var stringOption = '';
+    arrayType.forEach(element => {
+        var stringTemp = `<option value="${element}" ${element === key ? 'selected' : ''}>${element}</option>`
+        stringOption += stringTemp
+    });
+
+    return stringOption
+}
+
+
+function convertDateTime(isoDateString) {
+    const dateObject = new Date(isoDateString);
+
+    const day = String(dateObject.getDate()).padStart(2, '0');
+    const month = String(dateObject.getMonth() + 1).padStart(2, '0'); // Months are zero based
+    const year = dateObject.getFullYear();
+
+    const formattedDate = `${day}/${month}/${year}`;
+    return formattedDate
+}
 
 // Function to populate device loan table
 function populateTable(devices) {
@@ -7,15 +28,15 @@ function populateTable(devices) {
         var row = document.createElement("tr");
         row.innerHTML = `
 <td>${device.name}</td>
-<td>${device.type}</td>
-<td>${device.initStatus === 'used' ? 'Đã mượn' : 'Chưa mượn'}</td>
-<td>${device.location}</td>
-<td>${device.purchaseDate}</td>
-<td>${device.warrantyExpiry}</td>
+<td>${device.deviceType.name}</td>
+<td>${device.status}</td>
+<td>${device.location.name}</td>
+<td>${convertDateTime(device.purchaseDate)}</td>
+<td>${convertDateTime(device.warrantyExpiry)}</td>
 <td>
 <span class="btn badge bg-success" onclick="detailDevice(event, ${index})">Detail</span>
 <span class="btn badge bg-warning" onclick="updateDevice(event, ${index})">Update</span>
-<span class="btn badge bg-danger" onclick="deleteDevice(event, ${index}, '${device.id}')">Delete</span>
+<span class="btn badge bg-danger" onclick="deleteDevice(event, ${index}, '${device.serialNumber}')">Delete</span>
 </td>
 `;
         tableBody.appendChild(row);
@@ -53,18 +74,14 @@ function populateModal(deviceInfo) {
 <div class="device-info">
 <h2>Thông tin thiết bị</h2>
 <ul>
+<li><strong>ID:</strong> ${deviceInfo.serialNumber}</li>
 <li><strong>Tên:</strong> ${deviceInfo.name}</li>
-<li><strong>Loại:</strong> ${deviceInfo.type}</li>
-<li><strong>ID:</strong> ${deviceInfo.id}</li>
+<li><strong>Loại:</strong> ${deviceInfo.deviceType.name}</li>
 <li><strong>Tình trạng:</strong> ${deviceInfo.status}</li>
-<li><strong>Tình trạng ban đầu:</strong> ${deviceInfo.initStatus}</li>
-<li><strong>Vị trí:</strong> ${deviceInfo.location}</li>
-<li><strong>Nhà cung cấp:</strong> ${deviceInfo.supplier}</li>
-<li><strong>Lịch sử:</strong> ${deviceInfo.history}</li>
-<li><strong>Ngày mua:</strong> ${deviceInfo.purchaseDate}</li>
-<li><strong>Hết hạn bảo hành:</strong> ${deviceInfo.warrantyExpiry}</li>
-<li><strong>Ngày mượn:</strong> ${deviceInfo.createDate}</li>
-<li><strong>Ngày trả:</strong> ${deviceInfo.updateDate}</li>
+<li><strong>Vị trí:</strong> ${deviceInfo.location.name}</li>
+<li><strong>Mô tả:</strong> ${deviceInfo.description}</li>
+<li><strong>Ngày mua:</strong> ${convertDateTime(deviceInfo.purchaseDate)}</li>
+<li><strong>Hết hạn bảo hành:</strong> ${convertDateTime(deviceInfo.warrantyExpiry)}</li>
 </ul>
 </div>
 </div>
@@ -96,38 +113,30 @@ function updateDevice(event, index) {
 
 function updateRenderDevice(deviceInfo) {
     const modalBody = document.getElementById('modalBody');
-    var purchaseDateParts = deviceInfo.purchaseDate.split('/'); // Split the date string into parts
+    var purchaseDateParts = convertDateTime(deviceInfo.purchaseDate).split('/'); // Split the date string into parts
     var purchaseDate = purchaseDateParts[2] + '-' + purchaseDateParts[1] + '-' + purchaseDateParts[0];
-    var warrantyExpiryParts = deviceInfo.warrantyExpiry.split('/'); // Split the date string into parts
+    var warrantyExpiryParts = convertDateTime(deviceInfo.warrantyExpiry).split('/'); // Split the date string into parts
     var warrantyExpiry = warrantyExpiryParts[2] + '-' + warrantyExpiryParts[1] + '-' + warrantyExpiryParts[0];
-    var createDateParts = deviceInfo.createDate.split('/'); // Split the date string into parts
-    var createDate = createDateParts[2] + '-' + createDateParts[1] + '-' + createDateParts[0];
-    var updateDateParts = deviceInfo.updateDate.split('/'); // Split the date string into parts
-    var updateDate = updateDateParts[2] + '-' + updateDateParts[1] + '-' + updateDateParts[0];
     modalBody.innerHTML = `
-<h1>Update Device</h1>
 <form action="/device/update" method="post" enctype="application/json" id="updateDeviceForm">
+<div class="mb-3 center">
+    <h1>Update Device</h1>
+</div>
 <div class="mb-3">
-<input value="${deviceInfo.id}" name="id" hidden>
-<label for="name" class="form-label">Name</label>
+<input value="${deviceInfo.serialNumber}" name="serialNumber" hidden>
+<label for="name" class="form-label">Tên thiết bị</label>
 <input value="${deviceInfo.name}" type="text" class="form-control" id="name" name="name" placeholder="Enter device name">
 </div>
 <div class="mb-3">
-<label for="type" class="form-label">Type</label>
-<input value="${deviceInfo.type}" type="text" class="form-control" id="type" name="type" placeholder="Enter device type">
+<label for="type" class="form-label">Loại thiết bị</label>
+<select class="form-select" id="deviceType" name="deviceType" required>
+    ${forLoopArrayTypeReturnOpt(devicetypes, deviceInfo.deviceType.name)}
+</select>
 </div>
 <div class="mb-3">
 <label for="deviceStatus" class="form-label">Trạng thái thiết bị: (devices.status)</label>
 <select class="form-select" id="deviceStatus" name="status" required>
-    <option value="new" ${deviceInfo.status === 'new' ? 'selected' : ''}>Mới</option>
-    <option value="likenew" ${deviceInfo.status === 'likenew' ? 'selected' : ''}>Hàng đã qua sử dụng</option>
-</select>
-</div>
-<div class="mb-3">
-<label for="deviceInitStatus" class="form-label">Trạng thái: (devices.initStatus)</label>
-<select class="form-select" id="deviceInitStatus" name="initStatus" required>
-    <option value="used" ${deviceInfo.initStatus === 'used' ? 'selected' : ''}>Đã mượn</option>
-    <option value="notused" ${deviceInfo.initStatus === 'notused' ? 'selected' : ''}>Chưa mượn</option>
+    ${forLoopArrayTypeReturnOpt(['Active', 'Repair', 'Damaged'], deviceInfo.status)}
 </select>
 </div>
 <div class="mb-3"><label class="form-label" for="deviceUrlImg">&#x1EA2;nh thi&#x1EBF;t b&#x1ECB;: (devices.imageUrl)</label><input class="form-control" id="deviceUrlImg" type="file" />
@@ -135,22 +144,26 @@ function updateRenderDevice(deviceInfo) {
         <div class="spinner-border text-primary" id="spinner1" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
-        <img class="img-fluid" id="imageRender" style="max-width: 100%" src="${deviceInfo.imageUrl}" alt="" /></div>
+        <img class="img-fluid" id="imageRender" style="max-width: 100%" src="${deviceInfo.imageUrl}" alt="" ${!deviceInfo.imageUrl ? 'hidden' : ''}/></div>
 </div>
 <div class="mb-3"><label class="form-label" for="deviceVideo">Video thi&#x1EBF;t b&#x1ECB;: (devices.videoUrl)</label><input class="form-control" id="deviceVideo" type="file" accept="video/*" />
     <div class="warrper center-video">
         <div class="spinner-border text-primary" id="spinner2" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
-        <video src="${deviceInfo.videoUrl}" class="img-fluid" id="videoRender" controls="" style="max-width: 100%"><!-- Nếu trình duyệt không hỗ trợ video, thông báo sẽ hiển thị ở đây-->Tr&igrave;nh duy&#x1EC7;t c&#x1EE7;a b&#x1EA1;n kh&ocirc;ng h&#x1ED7; tr&#x1EE3; ph&aacute;t video.</video></div>
+        <video src="${deviceInfo.videoUrl}" class="img-fluid" id="videoRender" controls="" style="max-width: 100%" ${!deviceInfo.videoUrl ? 'hidden' : ''}><!-- Nếu trình duyệt không hỗ trợ video, thông báo sẽ hiển thị ở đây-->Tr&igrave;nh duy&#x1EC7;t c&#x1EE7;a b&#x1EA1;n kh&ocirc;ng h&#x1ED7; tr&#x1EE3; ph&aacute;t video.</video></div>
 </div>
 <div class="mb-3">
 <label for="location" class="form-label">Location</label>
-<input value="${deviceInfo.location}" type="text" class="form-control" id="location" name="location" placeholder="Enter device location">
+<select class="form-select" id="location" name="location" required>
+    ${forLoopArrayTypeReturnOpt(locations, deviceInfo.location.name)}
+</select>
 </div>
 <div class="mb-3">
 <label for="supplier" class="form-label">Supplier</label>
-<input value="${deviceInfo.supplier}" type="text" class="form-control" id="supplier" name="supplier" placeholder="Enter device supplier">
+<select class="form-select" id="supplier" name="supplier" required>
+    ${forLoopArrayTypeReturnOpt(suppliers, deviceInfo.supplier.name)}
+</select>
 </div>
 <div class="mb-3">
 <label for="purchaseDate" class="form-label">Purchase Date</label>
@@ -160,16 +173,8 @@ function updateRenderDevice(deviceInfo) {
 <label for="warrantyExpire" class="form-label">Warranty Expire</label>
 <input value="${warrantyExpiry}" type="date" class="form-control" name="warrantyExpiry" id="warrantyExpire">
 </div>
-<div class="mb-3">
-<label for="createDate" class="form-label">Loan Date</label>
-<input value="${createDate}" type="date" class="form-control" name="createDate" id="createDate">
-</div>
-<div class="mb-3">
-<label for="updateDate" class="form-label">Return Date</label>
-<input value="${updateDate}" type="date" class="form-control" name="updateDate" id="updateDate">
-</div>
-<input id="localStorageDataImage" type="hidden" name="imageUrl" />
-<input id="localStorageDataVideo" type="hidden" name="videoUrl" />
+<input id="localStorageDataImage" type="hidden" name="imageUrl" value="${deviceInfo.imageUrl}" />
+<input id="localStorageDataVideo" type="hidden" name="videoUrl" value="${deviceInfo.videoUrl}"/>
 <button type="submit" class="btn btn-primary">Update</button>
 </form>
 `
@@ -188,9 +193,9 @@ async function deleteDevice(event, index, id) {
     }
 }
 
-function handleDelete(idDevice, index) {
+function handleDelete(serialNumber, index) {
     axios.post('/device/delete', {
-        id: `${idDevice}`
+        serialNumber: `${serialNumber}`
     }).then(res => {
         console.log(res)
         if (!res.data.success) {
@@ -257,6 +262,7 @@ function renderImageVideo() {
                 try {
                     localStorage.setItem('imageUrl', response.data);
                     document.getElementById('localStorageDataImage').value = localStorage.getItem('imageUrl');
+                    document.getElementById('imageRender').hidden = false;
                     // Hide spinner regardless of response status
                     $('#spinner1').hide()
                 } catch (e) {
@@ -286,6 +292,7 @@ function renderImageVideo() {
                 try {
                     localStorage.setItem('videoUrl', response.data);
                     document.getElementById('localStorageDataVideo').value = localStorage.getItem('videoUrl');
+                    document.getElementById('videoRender').hidden = false;
                     $('#spinner2').hide()
                 } catch (e) {
                     console.error('LocalStorage error: ', e);
