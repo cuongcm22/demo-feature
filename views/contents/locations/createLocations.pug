@@ -1,0 +1,17 @@
+
+include ../../main.pug
+.container
+  h1 Add Location
+  form#locationForm(method='post' action='/locations/add')
+    .mb-3
+      label.form-label(for='name') Name
+      input#name.form-control(type='text' name='name' required='')
+    .mb-3
+      label.form-label(for='description') Description
+      textarea#description.form-control(name='description' rows='3')
+    .mb-3
+      label.form-label(for='address') Address
+      input#address.form-control(type='text' name='address' required='')
+    button.btn.btn-primary(type='submit') Submit
+
+script(src="/javascript/locations/createlocations.js")

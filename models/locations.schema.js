@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const locationSchema = new mongoose.Schema({
   _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
-  name: { type: String, required: true },
+  name: { type: String, unique: true, required: true },
   description: { type: String },
   address: { type: String, required: true }
 });
