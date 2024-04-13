@@ -84,8 +84,8 @@ $(document).ready(function () {
             <td>${supplier.phone}</td>
             <td>${supplier.email}</td>
             <td>
-              <button class="btn btn-primary" onclick="showSupplierDetails(${startIndex + index})">Update</button>
-              <button class="btn btn-danger" onclick="deleteSupplier(${startIndex + index}, '${supplier.name}')">Delete</button>
+              <button class="btn badge bg-primary" onclick="showSupplierDetails(${startIndex + index})">Sửa</button>
+              <button class="btn badge bg-danger" onclick="deleteSupplier(${startIndex + index}, '${supplier.name}')">Xóa</button>
             </td>
           </tr>
         `;

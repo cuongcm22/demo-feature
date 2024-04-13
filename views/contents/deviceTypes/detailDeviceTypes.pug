@@ -5,11 +5,15 @@ include ../../main.pug
   table.table.table-striped
     thead
       tr
+        th STT
         th Tên
         th Mô tả
         th Chức năng
     tbody#deviceTypesTableBody
       // Data will be filled dynamically
+  .d-flex.align-items-center.justify-content-center
+    nav(aria-label='Page navigation')
+      ul#pagination.pagination
 // Modal for displaying device type details
 #deviceTypeModal.modal.fade(tabindex='-1' aria-labelledby='deviceTypeModalLabel' aria-hidden='true')
   .modal-dialog.modal-dialog-centered
