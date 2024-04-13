@@ -10,8 +10,7 @@ const {
     User,
     Loan,
     Log,
-    DeviceType,
-    ActivityType
+    DeviceType
  } = require('../models/models.js')
 
 function convertTimerToString(time) {

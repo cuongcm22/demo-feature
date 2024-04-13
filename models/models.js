@@ -6,7 +6,6 @@ const User = require('./users.schema');
 const Loan = require('./loans.schema');
 const Log = require('./logs.schema');
 const DeviceType = require('./deviceTypes.schema');
-const ActivityType = require('./activityTypes.schema');
 
 module.exports = {
   Device,
@@ -15,6 +14,5 @@ module.exports = {
   User,
   Loan,
   Log,
-  DeviceType,
-  ActivityType
+  DeviceType
 };

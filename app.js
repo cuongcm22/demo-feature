@@ -110,10 +110,28 @@ const colors = require('colors');
 const homeRouter = require('./routers/home.route')
 const deviceRouter = require('./routers/device.route')
 const userRouter = require('./routers/user.route')
+const supplierRouter = require('./routers/suppliers.route')
 
 app.use("/", homeRouter)
 app.use("/device", deviceRouter);
 app.use("/user", userRouter)
+
+// Route demo
+app.get("/demo", (req, res) => {
+  res.render("./contents/demo/formValidate.pug", {
+    title: 'Home page',
+    routes: {
+        'Home': '/',
+        'Detail': '/device/report',
+        'Create': '/device/create',
+        'Loan': '/device/loan',
+        'Return': '/device/return'
+    }
+});
+})
+
+
+app.use("/suppliers", supplierRouter)
 
 // Kết nối tới cổng máy chủ
 const PORT = process.env.PORT || 3200; // Sử dụng cổng mặc định 3100 nếu không được chỉ định
