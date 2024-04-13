@@ -4,6 +4,7 @@ include ../../main.pug
   table.table.table-striped
     thead
       tr
+        th STT
         th Tên
         th Địa chỉ
         th Số điện thoại
@@ -11,6 +12,9 @@ include ../../main.pug
         th Chức năng
         // New column for actions
     tbody#supplierTableBody
+
+  nav(aria-label='Page navigation')
+    ul#pagination.pagination
       // Data will be dynamically inserted here
 // Modal for displaying supplier details
 #supplierModal.modal.fade(tabindex='-1' aria-labelledby='supplierModalLabel' aria-hidden='true')

@@ -63,7 +63,7 @@ app.use("/devicetypes", deviceTypesRouter)
 
 // Route demo
 app.get("/demo", (req, res) => {
-  res.render("./contents/demo/formValidate.pug", {
+  res.render("./contents/demo/paginationTemplate.pug", {
     title: 'Home page',
     routes: {
         'Home': '/',
