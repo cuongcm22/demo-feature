@@ -59,7 +59,7 @@ app.use("/device", deviceRouter);
 app.use("/user", userRouter)
 app.use("/suppliers", supplierRouter)
 app.use("/locations", locationRouter)
-app.use("/devicetype", deviceTypesRouter)
+app.use("/devicetypes", deviceTypesRouter)
 
 // Route demo
 app.get("/demo", (req, res) => {

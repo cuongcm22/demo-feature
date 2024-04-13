@@ -2,14 +2,14 @@ const express = require('express');
 const router = express.Router();
 const deviceTypesController = require("../controllers/deviceTypesController");
 
-// Show page create Locations
-router.get('/create', deviceTypesController.showCreateLocationsPage);
-router.post('/add', deviceTypesController.addLocations);
+// Show page create DeviceTypes
+router.get('/create', deviceTypesController.showCreateDeviceTypesPage);
+router.post('/add', deviceTypesController.addDeviceTypes);
 
-// Show detail Locations page
-router.get('/detail', deviceTypesController.showDetailLocationsPage);
-// Route update Locations
-router.post('/update', deviceTypesController.updateLocations);
+// Show detail DeviceTypes page
+router.get('/detail', deviceTypesController.showDetailDeviceTypesPage);
+// Route update DeviceTypes
+router.post('/update', deviceTypesController.updateDeviceTypes);
 // Delete supplier
-router.post('/delete', deviceTypesController.deleteLocations);
+router.post('/delete', deviceTypesController.deleteDeviceTypes);
 module.exports = router;
