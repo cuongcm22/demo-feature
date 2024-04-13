@@ -86,10 +86,10 @@ function renderTable(page) {
               <td>
                 <button class="btn badge bg-primary" onclick="showModal('${
                     location.name
-                }')">Update</button>
+                }')">Sửa</button>
                 <button class="btn badge bg-danger" onclick="deleteLocations('${
                     location.name
-                }')">Delete</button>
+                }')">Xóa</button>
               </td>
             </tr>
           `;
