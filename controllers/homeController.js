@@ -8,7 +8,15 @@ if (!fs.existsSync(csvDir)) {
     fs.mkdirSync(csvDir, { recursive: true });
 }
 
-const { Device } = require("../models/models");
+const { 
+    Device,
+    Location,
+    Supplier,
+    User,
+    Loan,
+    Log,
+    DeviceType
+ } = require('../models/models.js')
 
 // Module
 const { exportFileCSV } = require('../modules/exportFileCSV');
@@ -60,47 +68,71 @@ module.exports.errorPage = async (req, res, next) => {
     }
 }
 
+module.exports.showExportFileCSV = async (req, res, next) => {
+    try {
+        res.render("./contents/exportCSV.pug", {
+            title: 'Home page',
+            routes: {
+                'Home': '/',
+                'Detail': '/device/report'
+            },
+            typesCSV: {
+                'Supplier': 'Suppliers table',
+                'Location': 'Locations table',
+                'DeviceType': 'Device Types table',
+            }
+        });
+    } catch(err) {
+        console.log(err)
+        res.status(404)
+    }
+}
+
 module.exports.exportFileCSV = async (req, res, next) => {
     try {
-        Device.find({}, { _id: 0, __v: 0, imageUrl: 0, videoUrl: 0, createDate: 0, updateDate: 0 })
-            .then((devices) => {
-                 // Convert the array of devices to a JSON object
-                const devicesJson = devices.map(device => {
-                    // Chuyển đổi purchaseDate
-                    const purchaseDate =
-                        device.purchaseDate instanceof Date
-                            ? device.purchaseDate.toLocaleDateString("en-GB")
-                            : device.purchaseDate;
-                    // Chuyển đổi warrantyExpiry
-                    const warrantyExpiry =
-                        device.warrantyExpiry instanceof Date
-                            ? device.warrantyExpiry.toLocaleDateString("en-GB")
-                            : device.warrantyExpiry;
-                    return {
-                        ...device._doc,
-                        purchaseDate,
-                        warrantyExpiry
-                    };
-                });
+        console.log(req.body);
+        
+        const suppliers = await Supplier.find({}, 'name').then(suppliers => suppliers.map(supplier => supplier.name));
 
-                const data = devicesJson;
+        // Device.find({}, { _id: 0, __v: 0, imageUrl: 0, videoUrl: 0, createDate: 0, updateDate: 0 })
+        //     .then((devices) => {
+        //          // Convert the array of devices to a JSON object
+        //         const devicesJson = devices.map(device => {
+        //             // Chuyển đổi purchaseDate
+        //             const purchaseDate =
+        //                 device.purchaseDate instanceof Date
+        //                     ? device.purchaseDate.toLocaleDateString("en-GB")
+        //                     : device.purchaseDate;
+        //             // Chuyển đổi warrantyExpiry
+        //             const warrantyExpiry =
+        //                 device.warrantyExpiry instanceof Date
+        //                     ? device.warrantyExpiry.toLocaleDateString("en-GB")
+        //                     : device.warrantyExpiry;
+        //             return {
+        //                 ...device._doc,
+        //                 purchaseDate,
+        //                 warrantyExpiry
+        //             };
+        //         });
 
-                const outputPath = csvDir;
+        //         const data = devicesJson;
 
-                const dateTime = getStringDateTime()
-                const title = 'Report device ' + dateTime
+        //         const outputPath = csvDir;
 
-                exportFileCSV(title, data, outputPath)
-                .then((filePath) => {
-                    console.log('CSV file saved at:', filePath);
-                    // Return path of CSV file to client
-                    res.download(filePath);
-                })
-                .catch((err) => {
-                    console.error('Error saving CSV file:', err);
-                    res.status(500).send('An error occurred while processing the request.');
-                });
-            })
+        //         const dateTime = getStringDateTime()
+        //         const title = 'Report device ' + dateTime
+
+        //         exportFileCSV(title, data, outputPath)
+        //         .then((filePath) => {
+        //             console.log('CSV file saved at:', filePath);
+        //             // Return path of CSV file to client
+        //             res.download(filePath);
+        //         })
+        //         .catch((err) => {
+        //             console.error('Error saving CSV file:', err);
+        //             res.status(500).send('An error occurred while processing the request.');
+        //         });
+        //     })
     } catch(err) {
         console.log(err)
         res.status(404)
