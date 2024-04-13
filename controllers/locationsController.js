@@ -15,10 +15,8 @@ module.exports.showCreateLocationsPage = async (req, res, next) => {
             title: 'Home page',
             routes: {
                 'Home': '/',
-                'Detail': '/device/report',
-                'Create': '/device/create',
-                'Loan': '/device/loan',
-                'Return': '/device/return'
+                'Create Location': '/locations/create',
+                'Update Location': '/locations/detail'
             }
         });
     } catch (error) {
@@ -47,10 +45,8 @@ module.exports.showDetailLocationsPage = async (req, res, next) => {
             title: 'Home page',
             routes: {
                 'Home': '/',
-                'Detail': '/device/report',
-                'Create': '/device/create',
-                'Loan': '/device/loan',
-                'Return': '/device/return'
+                'Create Location': '/locations/create',
+                'Update Location': '/locations/detail'
             },
             locations: JSON.stringify(locations),
         });

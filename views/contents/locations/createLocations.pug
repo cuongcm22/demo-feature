@@ -1,17 +1,17 @@
 
 include ../../main.pug
 .container
-  h1 Add Location
+  h1 Thêm vị trí
   form#locationForm(method='post' action='/locations/add')
     .mb-3
-      label.form-label(for='name') Name
+      label.form-label(for='name') Tên vị trí
       input#name.form-control(type='text' name='name' required='')
     .mb-3
-      label.form-label(for='description') Description
+      label.form-label(for='description') Mô tả
       textarea#description.form-control(name='description' rows='3')
     .mb-3
-      label.form-label(for='address') Address
+      label.form-label(for='address') Địa chỉ
       input#address.form-control(type='text' name='address' required='')
-    button.btn.btn-primary(type='submit') Submit
+    button.btn.btn-primary(type='submit') Tạo mới
 
 script(src="/javascript/locations/createlocations.js")

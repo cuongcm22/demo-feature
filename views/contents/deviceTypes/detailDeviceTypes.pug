@@ -1,13 +1,13 @@
 include ../../main.pug
 
 .container.mt-5
-  h2 Device Types
+  h2 Bảng loại thiết bị
   table.table.table-striped
     thead
       tr
-        th Name
-        th Description
-        th Action
+        th Tên
+        th Mô tả
+        th Chức năng
     tbody#deviceTypesTableBody
       // Data will be filled dynamically
 // Modal for displaying device type details
@@ -15,7 +15,7 @@ include ../../main.pug
   .modal-dialog.modal-dialog-centered
     .modal-content
       .modal-header
-        h5#deviceTypeModalLabel.modal-title Device Type Details
+        h5#deviceTypeModalLabel.modal-title Thông tin thiết bị
         button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
       .modal-body
         // Form for device type details

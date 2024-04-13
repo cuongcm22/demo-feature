@@ -37,8 +37,8 @@ function renderDeviceTypesTable() {
         const row = `<tr>
     <td>${deviceType.name}</td>
     <td>${deviceType.description}</td>
-    <td><button type="button" class="btn btn-primary" onclick="showDeviceTypeDetails(${index})">Detail</button></td>
-    <td><button type="button" class="btn btn-danger" onclick="deleteDeviceType(${index}, '${deviceType.name}')">Delete</button></td>
+    <td><button type="button" class="btn btn-primary" onclick="showDeviceTypeDetails(${index})">Sửa</button></td>
+    <td><button type="button" class="btn btn-danger" onclick="deleteDeviceType(${index}, '${deviceType.name}')">Xóa</button></td>
     </tr>`;
         tableBody.innerHTML += row;
     });
@@ -50,11 +50,11 @@ function showDeviceTypeDetails(index) {
     modalBody.innerHTML = `<form id="deviceTypeForm" action="/devicetypes/update" method="post">
     <div class="mb-3">
     <input name="nameholder" type="text" class="form-control" hidden readonly="" value="${deviceType.name}" required>
-    <label for="nameInput" class="form-label">Name</label>
+    <label for="nameInput" class="form-label">Tên</label>
     <input name="name" type="text" class="form-control" id="nameInput" value="${deviceType.name}" required>
     </div>
     <div class="mb-3">
-    <label for="descriptionInput" class="form-label">Description</label>
+    <label for="descriptionInput" class="form-label">Mô tả</label>
     <textarea name="description" class="form-control" id="descriptionInput">${deviceType.description}</textarea>
     </div>
     <button class="btn btn-primary" type="submit">Submit</button>

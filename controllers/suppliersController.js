@@ -15,10 +15,8 @@ module.exports.showCreateSuppliersPage = async (req, res, next) => {
             title: 'Home page',
             routes: {
                 'Home': '/',
-                'Detail': '/device/report',
-                'Create': '/device/create',
-                'Loan': '/device/loan',
-                'Return': '/device/return'
+                'Create Supplier': '/suppliers/create',
+                'Update Supplier': '/suppliers/detail'
             }
         });
     } catch (error) {
@@ -47,10 +45,8 @@ module.exports.showDetailSuppliersPage = async (req, res, next) => {
             title: 'Home page',
             routes: {
                 'Home': '/',
-                'Detail': '/device/report',
-                'Create': '/device/create',
-                'Loan': '/device/loan',
-                'Return': '/device/return'
+                'Create Supplier': '/suppliers/create',
+                'Update Supplier': '/suppliers/detail'
             },
             suppliers: JSON.stringify(suppliers),
         });

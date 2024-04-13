@@ -42,8 +42,8 @@ $(document).ready(function () {
                 <td>${supplier.address}</td>
                 <td>${supplier.phone}</td>
                 <td>${supplier.email}</td>
-                <td><button class="btn btn-primary" onclick="showSupplierDetails(${index})">Details</button></td>
-                <td><button class="btn btn-danger" onclick="deleteSupplier(${index}, '${supplier.name}')">Delete</button></td>
+                <td><button class="btn btn-primary" onclick="showSupplierDetails(${index})">Cập nhật</button></td>
+                <td><button class="btn btn-danger" onclick="deleteSupplier(${index}, '${supplier.name}')">Xóa</button></td>
             </tr>
         `;
         supplierTableBody.append(row);

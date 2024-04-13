@@ -15,10 +15,8 @@ module.exports.showCreateDeviceTypesPage = async (req, res, next) => {
             title: 'Home page',
             routes: {
                 'Home': '/',
-                'Detail': '/device/report',
-                'Create': '/device/create',
-                'Loan': '/device/loan',
-                'Return': '/device/return'
+                'Create Device Types': '/devicetypes/create',
+                'Update Device Types': '/devicetypes/detail'
             }
         });
     } catch (error) {
@@ -47,10 +45,8 @@ module.exports.showDetailDeviceTypesPage = async (req, res, next) => {
             title: 'Home page',
             routes: {
                 'Home': '/',
-                'Detail': '/device/report',
-                'Create': '/device/create',
-                'Loan': '/device/loan',
-                'Return': '/device/return'
+                'Create Device Types': '/devicetypes/create',
+                'Update Device Types': '/devicetypes/detail'
             },
             deviceTypes: JSON.stringify(deviceTypes),
         });

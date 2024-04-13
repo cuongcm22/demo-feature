@@ -40,6 +40,9 @@ module.exports.homePage = async (req, res, next) => {
                 'User': '/user',
                 'Device': '/device/report',
                 'Record loan': '/device/loanrecord',
+                'Suppliers': '/suppliers/detail',
+                'Locations': '/locations/detail',
+                'Device Types': '/devicetypes/detail',
             }
         });
     } catch(err) {

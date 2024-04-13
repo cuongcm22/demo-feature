@@ -1,14 +1,14 @@
 include ../../main.pug
 
 .container.mt-5
-  h2 Location Information
+  h2 Thông tin vị trí
   table.table.mt-3
     thead
       tr
-        th Name
-        th Description
-        th Address
-        th Action
+        th Tên
+        th Mô tả
+        th Địa chỉ
+        th Chức năng
     tbody#locationTableBody
       // Location data will be inserted here
 // Supplier Modal
@@ -16,20 +16,20 @@ include ../../main.pug
   .modal-dialog
     .modal-content
       .modal-header
-        h5#supplierModalLabel.modal-title Supplier Information
+        h5#supplierModalLabel.modal-title Thông tin vị trí
         button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
       .modal-body
         // Form for supplier information
         form#supplierForm(method='post' action='/locations/update')
             input#locationName-holder.form-control(type='text' name='nameholder' hidden readonly="")
             .mb-3
-                label.form-label(for='locationName') Location Name
+                label.form-label(for='locationName') Tên vị trí
                 input#locationName.form-control(type='text' name='name')
             .mb-3
-                label.form-label(for='locationDescription') Location Description
+                label.form-label(for='locationDescription') Mô tả
                 input#locationDescription.form-control(type='text' name='description')
             .mb-3
-                label.form-label(for='locationAddress') Location Address
+                label.form-label(for='locationAddress') Địa chỉ
                 input#locationAddress.form-control(type='text' name='address')
             // Add more fields for location information as needed
             button.btn.btn-primary(type='submit') Submit

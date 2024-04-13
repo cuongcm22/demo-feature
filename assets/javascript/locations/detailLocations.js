@@ -42,9 +42,9 @@ $(document).ready(function () {
                 <td>${location.description}</td>
                 <td>${location.address}</td>
                 <td>
-                    <button type="button" class="btn btn-primary" onclick="showModal('${location.name}')">Detail</button>
+                    <button type="button" class="btn btn-primary" onclick="showModal('${location.name}')">Sửa</button>
                 </td>
-                <td><button class="btn btn-danger" onclick="deleteLocations('${location.name}')">Delete</button></td>
+                <td><button class="btn btn-danger" onclick="deleteLocations('${location.name}')">Xóa</button></td>
             </tr>
         `;
         locationTableBody.append(row);
