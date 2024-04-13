@@ -90,49 +90,46 @@ module.exports.showExportFileCSV = async (req, res, next) => {
 
 module.exports.exportFileCSV = async (req, res, next) => {
     try {
-        console.log(req.body);
+        async function getObjectList(req) {
+            let csvFileName = ''; // Initialize csvFileName variable
+
+            if (req.body) {
+                if (req.body.csvFile == 'Supplier') {
+                    const suppliers = await Supplier.find({}, { _id: 0, __v: 0 }).then(suppliers => suppliers.map(supplier => {return {...supplier._doc}}));
+                    csvFileName = 'suppliers'; // Set corresponding CSV file name
+                    return { data: suppliers, fileName: csvFileName }; // Return data and file name
+                }
+                else if (req.body.csvFile == 'Location') {
+                    const locations = await Location.find({}, { _id: 0, __v: 0 }).then(locations => locations.map(location => {return {...location._doc}}));
+                    csvFileName = 'locations'; // Set corresponding CSV file name
+                    return { data: locations, fileName: csvFileName }; // Return data and file name
+                }
+                else if (req.body.csvFile == 'DeviceType') {
+                    const deviceTypes = await DeviceType.find({}, { _id: 0, __v: 0 }).then(devicetypes => devicetypes.map(devicetype => {return {...devicetype._doc}}));
+                    csvFileName = 'deviceTypes'; // Set corresponding CSV file name
+                    return { data: deviceTypes, fileName: csvFileName }; // Return data and file name
+                }
+            }
+
+            return { data: null, fileName: null }; // Return null if req.body is invalid or csvFile is not valid
+        }
+
+        let { data, fileName } = await getObjectList(req); // Await getObjectList to get the data and file name
+        const outputPath = csvDir;
+        console.log(typeof data);
+        console.log(data);
         
-        const suppliers = await Supplier.find({}, 'name').then(suppliers => suppliers.map(supplier => supplier.name));
+        exportFileCSV(fileName, data, outputPath)
+            .then((filePath) => {
+                console.log('CSV file saved at:', filePath);
+                // Return path of CSV file to client
+                res.download(filePath);
+            })
+            .catch((err) => {
+                console.error('Error saving CSV file:', err);
+                res.status(500).send('An error occurred while processing the request.');
+            });
 
-        // Device.find({}, { _id: 0, __v: 0, imageUrl: 0, videoUrl: 0, createDate: 0, updateDate: 0 })
-        //     .then((devices) => {
-        //          // Convert the array of devices to a JSON object
-        //         const devicesJson = devices.map(device => {
-        //             // Chuyển đổi purchaseDate
-        //             const purchaseDate =
-        //                 device.purchaseDate instanceof Date
-        //                     ? device.purchaseDate.toLocaleDateString("en-GB")
-        //                     : device.purchaseDate;
-        //             // Chuyển đổi warrantyExpiry
-        //             const warrantyExpiry =
-        //                 device.warrantyExpiry instanceof Date
-        //                     ? device.warrantyExpiry.toLocaleDateString("en-GB")
-        //                     : device.warrantyExpiry;
-        //             return {
-        //                 ...device._doc,
-        //                 purchaseDate,
-        //                 warrantyExpiry
-        //             };
-        //         });
-
-        //         const data = devicesJson;
-
-        //         const outputPath = csvDir;
-
-        //         const dateTime = getStringDateTime()
-        //         const title = 'Report device ' + dateTime
-
-        //         exportFileCSV(title, data, outputPath)
-        //         .then((filePath) => {
-        //             console.log('CSV file saved at:', filePath);
-        //             // Return path of CSV file to client
-        //             res.download(filePath);
-        //         })
-        //         .catch((err) => {
-        //             console.error('Error saving CSV file:', err);
-        //             res.status(500).send('An error occurred while processing the request.');
-        //         });
-        //     })
     } catch(err) {
         console.log(err)
         res.status(404)
