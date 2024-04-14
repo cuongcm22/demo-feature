@@ -112,8 +112,8 @@ $(document).ready(function () {
     renderPagination();
 
     // Sự kiện tìm kiếm khi nhập vào ô tìm kiếm
-    $("#searchInput").on("input", searchFunction);
-    //   $('#searchButton').on('click', searchFunction);
+    // $("#searchInput").on("input", searchFunction);
+    $('#searchButton').on('click', searchFunction);
     const tempMockData = mockData;
     $(".switchRetrieveAllData").change(function () {
         // Check if the checkbox is checked

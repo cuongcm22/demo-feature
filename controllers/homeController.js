@@ -42,7 +42,7 @@ function getStringDateTime() {
 module.exports.homePage = async (req, res, next) => {
     try {
         res.render("./contents/home/home.pug", {
-            title: 'Home page',
+            title: 'Trang chủ',
             routes: {
                 'Trang chủ': '/',
                 'User': '/user',
