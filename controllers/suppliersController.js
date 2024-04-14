@@ -39,7 +39,9 @@ module.exports.addSuppliers = async (req, res, next) => {
 }
 
 module.exports.showDetailSuppliersPage = async (req, res, next) => {
-    const suppliers = await Supplier.find();
+    const suppliers = await Supplier.find({})
+        .sort({ _id: -1 }) // Sắp xếp theo _id giảm dần để lấy 20 phần tử cuối cùng
+        .limit(20) 
     try {
         res.render("./contents/suppliers/detailSuppliers.pug", {
             title: 'Home page',
@@ -50,6 +52,18 @@ module.exports.showDetailSuppliersPage = async (req, res, next) => {
             },
             suppliers: JSON.stringify(suppliers),
         });
+    } catch (error) {
+        res.status(404)
+    }
+}
+
+module.exports.retrieveAllSuppliersTable = async (req, res, next) => {
+    const suppliers = await Supplier.find();
+    try {
+        res.status(200).json({
+            success: 'true',
+            data: suppliers
+        })
     } catch (error) {
         res.status(404)
     }
