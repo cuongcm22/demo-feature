@@ -44,13 +44,13 @@ module.exports.homePage = async (req, res, next) => {
         res.render("./contents/home/home.pug", {
             title: 'Home page',
             routes: {
-                'Home': '/',
+                'Trang chủ': '/',
                 'User': '/user',
-                'Device': '/device/report',
+                'Thiết bị': '/device/report',
                 'Record loan': '/device/loanrecord',
-                'Suppliers': '/suppliers/detail',
-                'Locations': '/locations/detail',
-                'Device Types': '/devicetypes/detail',
+                'Nhà cung cấp': '/suppliers/detail',
+                'Vị trí': '/locations/detail',
+                'Loại thiết bị': '/devicetypes/detail',
             }
         });
     } catch(err) {
@@ -73,8 +73,7 @@ module.exports.showExportFileCSV = async (req, res, next) => {
         res.render("./contents/exportCSV.pug", {
             title: 'Home page',
             routes: {
-                'Home': '/',
-                'Detail': '/device/report'
+                'Trang chủ': '/'
             },
             typesCSV: {
                 'Supplier': 'Suppliers table',
@@ -146,10 +145,9 @@ module.exports.sendEmail = async (req, res, next) => {
             }
             const csvFiles = files.filter(file => file.endsWith('.csv'));
             res.render("./contents/sendEmail.pug", {
-                title: 'Home page',
+                title: 'Gửi mail',
                 routes: {
-                    'Home': '/',
-                    'Detail': '/device/report',
+                    'Trang chủ': '/'
                 },
                 filesnamecsv: csvFiles
             });

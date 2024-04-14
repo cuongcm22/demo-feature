@@ -12,12 +12,12 @@ function handleAlertWithRedirectPage(alertString, redirect) {
 module.exports.showCreateLocationsPage = async (req, res, next) => {
     try {
         res.render("./contents/locations/createLocations.pug", {
-            title: 'Home page',
+            title: 'Vị trí',
             routes: {
-                'Home': '/',
-                'Create Location': '/locations/create',
-                'Update Location': '/locations/detail'
-            }
+                'Trang chủ': '/',
+                'Tạo vị trí': '/locations/create',
+                'Sửa vị trí': '/locations/detail'
+            },
         });
     } catch (error) {
         res.status(404)
@@ -44,11 +44,11 @@ module.exports.showDetailLocationsPage = async (req, res, next) => {
         .limit(20) 
     try {
         res.render("./contents/locations/detailLocations.pug", {
-            title: 'Home page',
+            title: 'Vị trí',
             routes: {
-                'Home': '/',
-                'Create Location': '/locations/create',
-                'Update Location': '/locations/detail'
+                'Trang chủ': '/',
+                'Tạo vị trí': '/locations/create',
+                'Sửa vị trí': '/locations/detail'
             },
             locations: JSON.stringify(locations),
         });

@@ -12,11 +12,11 @@ function handleAlertWithRedirectPage(alertString, redirect) {
 module.exports.showCreateSuppliersPage = async (req, res, next) => {
     try {
         res.render("./contents/suppliers/createSuppliers.pug", {
-            title: 'Home page',
+            title: 'Nhà cung cấp',
             routes: {
-                'Home': '/',
-                'Create Supplier': '/suppliers/create',
-                'Update Supplier': '/suppliers/detail'
+                'Trang chủ': '/',
+                'Tạo nhà cung cấp': '/suppliers/create',
+                'Sửa nhà cung cấp': '/suppliers/detail'
             }
         });
     } catch (error) {
@@ -44,11 +44,11 @@ module.exports.showDetailSuppliersPage = async (req, res, next) => {
         .limit(20) 
     try {
         res.render("./contents/suppliers/detailSuppliers.pug", {
-            title: 'Home page',
+            title: 'Nhà cung cấp',
             routes: {
-                'Home': '/',
-                'Create Supplier': '/suppliers/create',
-                'Update Supplier': '/suppliers/detail'
+                'Trang chủ': '/',
+                'Tạo nhà cung cấp': '/suppliers/create',
+                'Sửa nhà cung cấp': '/suppliers/detail'
             },
             suppliers: JSON.stringify(suppliers),
         });

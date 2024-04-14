@@ -12,11 +12,11 @@ function handleAlertWithRedirectPage(alertString, redirect) {
 module.exports.showCreateDeviceTypesPage = async (req, res, next) => {
     try {
         res.render("./contents/deviceTypes/createDeviceTypes.pug", {
-            title: 'Home page',
+            title: 'Loại thiết bị',
             routes: {
-                'Home': '/',
-                'Create Device Types': '/devicetypes/create',
-                'Update Device Types': '/devicetypes/detail'
+                'Trang chủ': '/',
+                'Tạo loại thiết bị': '/devicetypes/create',
+                'Sủa loại thiết bị': '/devicetypes/detail'
             }
         });
     } catch (error) {
@@ -44,11 +44,11 @@ module.exports.showDetailDeviceTypesPage = async (req, res, next) => {
         .limit(20) 
     try {
         res.render("./contents/deviceTypes/detailDeviceTypes.pug", {
-            title: 'Home page',
+            title: 'Loại thiết bị',
             routes: {
-                'Home': '/',
-                'Create Device Types': '/devicetypes/create',
-                'Update Device Types': '/devicetypes/detail'
+                'Trang chủ': '/',
+                'Tạo loại thiết bị': '/devicetypes/create',
+                'Sủa loại thiết bị': '/devicetypes/detail'
             },
             deviceTypes: JSON.stringify(deviceTypes),
         });

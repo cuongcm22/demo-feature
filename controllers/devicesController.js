@@ -93,13 +93,13 @@ module.exports.ShowReportDevicePage = async (req, res, next) => {
             }
         ]).then((devices) => {
             res.render("./contents/report/reportDevice.pug", {
-                title: 'Home page',
+                title: 'Thiết bị',
                 routes: {
-                    'Home': '/',
-                    'Detail': '/device/report',
-                    'Create': '/device/create',
-                    'Loan': '/device/loan',
-                    'Return': '/device/return'
+                    'Trang chủ': '/',
+                    'Thông tin thiết bị': '/device/report',
+                    'Tạo thiết bị': '/device/create',
+                    'Mượn thiết bị': '/device/loan',
+                    'Trả thiết bị': '/device/return'
                 },
                 formattedDevices: JSON.stringify(devices),
                 devicetypes: JSON.stringify(devicetypes),
@@ -120,13 +120,13 @@ module.exports.showCreateDevicePage = async (req, res, next) => {
         const suppliers = await Supplier.find({}, 'name').then(suppliers => suppliers.map(supplier => supplier.name));
 
         res.render("./contents/device/createDevice.pug", {
-            title: 'Home page',
+            title: 'Thiết bị',
             routes: {
-                'Home': '/',
-                'Detail': '/device/report',
-                'Create': '/device/create',
-                'Loan': '/device/loan',
-                'Return': '/device/return'
+                'Trang chủ': '/',
+                'Thông tin thiết bị': '/device/report',
+                'Tạo thiết bị': '/device/create',
+                'Mượn thiết bị': '/device/loan',
+                'Trả thiết bị': '/device/return'
             },
             devicetypes: devicetypes,
             locations: locations,
@@ -262,13 +262,13 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
             console.log(results);
             // Xử lý kết quả ở đây
             res.render("./contents/device/loanDevice.pug", {
-                title: 'Home page',
+                title: 'Thiết bị',
                 routes: {
-                    'Home': '/',
-                    'Detail': '/device/report',
-                    'Create': '/device/create',
-                    'Loan': '/device/loan',
-                    'Return': '/device/return'
+                    'Trang chủ': '/',
+                    'Thông tin thiết bị': '/device/report',
+                    'Tạo thiết bị': '/device/create',
+                    'Mượn thiết bị': '/device/loan',
+                    'Trả thiết bị': '/device/return'
                 },
                 data: JSON.stringify(results)
             });
