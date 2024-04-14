@@ -66,32 +66,65 @@ function populateModal(deviceInfo) {
 <div class="row">
 <div class="col-md-6">
 <div class="video-container">
-<h2>Hình ảnh</h2>
-<img style="max-width: 100%;" id="deviceImage" src="${deviceInfo.imageUrl ? deviceInfo.imageUrl : '/public/images/image_placeholder.jpg'}" alt="Tivi Image">
-</div>
-</div>
-<div class="col-md-6">
-<div class="device-info">
-<h2>Thông tin thiết bị</h2>
-<ul>
-<li><strong>ID:</strong> ${deviceInfo.serialNumber}</li>
-<li><strong>Tên:</strong> ${deviceInfo.name}</li>
-<li><strong>Loại:</strong> ${deviceInfo.deviceType.name}</li>
-<li><strong>Tình trạng:</strong> ${deviceInfo.status}</li>
-<li><strong>Vị trí:</strong> ${deviceInfo.location.name}</li>
-<li><strong>Mô tả:</strong> ${deviceInfo.description}</li>
-<li><strong>Ngày mua:</strong> ${convertDateTime(deviceInfo.purchaseDate)}</li>
-<li><strong>Hết hạn bảo hành:</strong> ${convertDateTime(deviceInfo.warrantyExpiry)}</li>
-</ul>
-</div>
-</div>
-<div class="col-md-12 text-center">
+<h2>Hình ảnh và video</h2>
+<img style="width: 100%; height: 220px; object-fit: contain;" id="deviceImage" src="${deviceInfo.imageUrl ? deviceInfo.imageUrl : '/public/images/image_placeholder.jpg'}" alt="Tivi Image">
 ${deviceInfo.videoUrl ? `
-<video style="max-width: 100%;" id="deviceVideo" controls style="display: none;">
+<video style="width: 100%; height: 220px; object-fit: contain;" id="deviceVideo" controls style="display: none;">
 <source src="${deviceInfo.videoUrl}" type="video/mp4">
 Your browser does not support the video tag.
 </video>
 ` : ''}
+</div>
+</div>
+<div class="col-md-6">
+<div class="device-info">
+<div class="container">
+<div class="row">
+  <div class="col">
+    <h2>Thông tin thiết bị</h2>
+    <table class="table">
+      <tbody>
+        <tr>
+          <th scope="row">ID:</th>
+          <td>${deviceInfo.serialNumber}</td>
+        </tr>
+        <tr>
+          <th scope="row">Tên:</th>
+          <td>${deviceInfo.name}</td>
+        </tr>
+        <tr>
+          <th scope="row">Loại:</th>
+          <td>${deviceInfo.deviceType.name}</td>
+        </tr>
+        <tr>
+          <th scope="row">Tình trạng:</th>
+          <td>${deviceInfo.status}</td>
+        </tr>
+        <tr>
+          <th scope="row">Vị trí:</th>
+          <td>${deviceInfo.location.name}</td>
+        </tr>
+        <tr>
+          <th scope="row">Mô tả:</th>
+          <td>${deviceInfo.description}</td>
+        </tr>
+        <tr>
+          <th scope="row">Ngày mua:</th>
+          <td>${convertDateTime(deviceInfo.purchaseDate)}</td>
+        </tr>
+        <tr>
+          <th scope="row">Hết hạn bảo hành:</th>
+          <td>${convertDateTime(deviceInfo.warrantyExpiry)}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-md-12 text-center">
+
 </div>
 </div>
 `;
