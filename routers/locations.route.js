@@ -8,6 +8,8 @@ router.post('/add', locationsController.addLocations);
 
 // Show detail Locations page
 router.get('/detail', locationsController.showDetailLocationsPage);
+// Retrieve all locations
+router.get('/retrieve', locationsController.retrieveAllLocationsTable);
 // Route update Locations
 router.post('/update', locationsController.updateLocations);
 // Delete supplier

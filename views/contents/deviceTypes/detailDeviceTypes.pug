@@ -4,6 +4,12 @@ include ../../main.pug
   h2 Bảng loại thiết bị
   .form-group.search-box
     input#searchInput.form-control(type='text' placeholder='Search...')
+
+  .form-check.form-switch
+    .mt-3
+      input#flexSwitchCheckDefault.switchRetrieveAllData.form-check-input(type='checkbox' role='switch')
+      label.form-check-label(for='flexSwitchCheckDefault') Hiển thị tất cả
+
   table.table.table-striped
     thead
       tr
@@ -13,6 +19,9 @@ include ../../main.pug
         th Chức năng
     tbody#deviceTypesTableBody
       // Data will be filled dynamically
+      .warrper.text-center
+        #spinner.spinner-border.text-primary(role='status')
+          span.visually-hidden Loading...
   .d-flex.align-items-center.justify-content-center
     nav(aria-label='Page navigation')
       ul#pagination.pagination

@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    $("#spinner").hide();
     const tableBody = $("#deviceTypesTableBody");
     const pagination = $("#pagination");
     const itemsPerPage = 5;
@@ -107,8 +108,39 @@ $(document).ready(function () {
         renderPagination();
     }
 
-    $('#searchInput').on('input', searchFunction);
-
     renderTable(currentPage);
     renderPagination();
+
+    // Sự kiện tìm kiếm khi nhập vào ô tìm kiếm
+    $("#searchInput").on("input", searchFunction);
+    //   $('#searchButton').on('click', searchFunction);
+    const tempMockData = mockData;
+    $(".switchRetrieveAllData").change(function () {
+        // Check if the checkbox is checked
+        if ($(this).is(":checked")) {
+            // If checked, do something
+            retrieveDeviceTypesData();
+        } else {
+            // If not checked, do something else
+            mockData = tempMockData;
+            searchFunction();
+        }
+    });
+
+    function retrieveDeviceTypesData(callback) {
+        $("#spinner").show();
+        $.ajax({
+            url: "/devicetypes/retrieve",
+            method: "GET",
+            success: function (data) {
+                mockData = data.data;
+                $("#spinner").hide();
+                searchFunction();
+            },
+            error: function (xhr, status, error) {
+                // Xử lý lỗi
+                console.error("Error:", status, error);
+            },
+        });
+    }
 });

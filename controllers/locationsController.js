@@ -39,7 +39,9 @@ module.exports.addLocations = async (req, res, next) => {
 }
 
 module.exports.showDetailLocationsPage = async (req, res, next) => {
-    const locations = await Location.find();
+    const locations = await Location.find()
+        .sort({ _id: -1 }) // Sắp xếp theo _id giảm dần để lấy 20 phần tử cuối cùng
+        .limit(20) 
     try {
         res.render("./contents/locations/detailLocations.pug", {
             title: 'Home page',
@@ -50,6 +52,18 @@ module.exports.showDetailLocationsPage = async (req, res, next) => {
             },
             locations: JSON.stringify(locations),
         });
+    } catch (error) {
+        res.status(404)
+    }
+}
+
+module.exports.retrieveAllLocationsTable = async (req, res, next) => {
+    const locations = await Location.find();
+    try {
+        res.status(200).json({
+            success: 'true',
+            data: locations
+        })
     } catch (error) {
         res.status(404)
     }

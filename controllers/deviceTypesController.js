@@ -39,7 +39,9 @@ module.exports.addDeviceTypes = async (req, res, next) => {
 }
 
 module.exports.showDetailDeviceTypesPage = async (req, res, next) => {
-    const deviceTypes = await DeviceType.find();
+    const deviceTypes = await DeviceType.find()
+        .sort({ _id: -1 }) // Sắp xếp theo _id giảm dần để lấy 20 phần tử cuối cùng
+        .limit(20) 
     try {
         res.render("./contents/deviceTypes/detailDeviceTypes.pug", {
             title: 'Home page',
@@ -50,6 +52,18 @@ module.exports.showDetailDeviceTypesPage = async (req, res, next) => {
             },
             deviceTypes: JSON.stringify(deviceTypes),
         });
+    } catch (error) {
+        res.status(404)
+    }
+}
+
+module.exports.retrieveAllDeviceTypesTable = async (req, res, next) => {
+    const deviceTypes = await DeviceType.find();
+    try {
+        res.status(200).json({
+            success: 'true',
+            data: deviceTypes
+        })
     } catch (error) {
         res.status(404)
     }

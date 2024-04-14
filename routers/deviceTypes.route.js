@@ -8,6 +8,8 @@ router.post('/add', deviceTypesController.addDeviceTypes);
 
 // Show detail DeviceTypes page
 router.get('/detail', deviceTypesController.showDetailDeviceTypesPage);
+// Retrieve all deviceTypes
+router.get('/retrieve', deviceTypesController.retrieveAllDeviceTypesTable);
 // Route update DeviceTypes
 router.post('/update', deviceTypesController.updateDeviceTypes);
 // Delete supplier
