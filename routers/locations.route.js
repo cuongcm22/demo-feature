@@ -1,17 +1,18 @@
 const express = require('express');
 const router = express.Router();
+const authenToken = require("../modules/authServer");
 const locationsController = require("../controllers/locationsController");
 
 // Show page create Locations
-router.get('/create', locationsController.showCreateLocationsPage);
-router.post('/add', locationsController.addLocations);
+router.get('/create', authenToken.authenToken, locationsController.showCreateLocationsPage);
+router.post('/add', authenToken.authenToken, locationsController.addLocations);
 
 // Show detail Locations page
-router.get('/detail', locationsController.showDetailLocationsPage);
+router.get('/detail', authenToken.authenToken, locationsController.showDetailLocationsPage);
 // Retrieve all locations
-router.get('/retrieve', locationsController.retrieveAllLocationsTable);
+router.get('/retrieve', authenToken.authenToken, locationsController.retrieveAllLocationsTable);
 // Route update Locations
-router.post('/update', locationsController.updateLocations);
+router.post('/update', authenToken.authenToken, locationsController.updateLocations);
 // Delete supplier
-router.post('/delete', locationsController.deleteLocations);
+router.post('/delete', authenToken.authenToken, locationsController.deleteLocations);
 module.exports = router;

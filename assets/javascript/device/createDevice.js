@@ -62,6 +62,9 @@ function renderVideo(input) {
 }
 
 $(document).ready(function() {
+    // Select 2
+    $('.js-example-theme-single').select2({width: 'resolve'});
+    // 
     $('#spinner1').hide();
     $('#spinner2').hide();
 

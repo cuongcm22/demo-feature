@@ -80,9 +80,9 @@ module.exports.showLoginForm = async (req, res, next) => {
 module.exports.login = async (req, res, next) => {
     try {
 
-        var { username, password } = req.body
+        var { email, password } = req.body
 
-        username = username.toLowerCase()
+        email = email.toLowerCase()
         password = password.toLowerCase()
         // Lưu ý, cần phải đặt thời gian hết hạn token và cookie trùng nhau, tránh lỗi
         const expireTimeSession = 3000
@@ -90,11 +90,11 @@ module.exports.login = async (req, res, next) => {
             expiresIn: "3000s",
         });
 
-        await User.find({'username': username}).then(user => {
-            console.log(`User ${username} just login!`.bgBlue);
+        await User.find({'email': email}).then(user => {
+            console.log(`User ${user.name} just login!`.bgBlue);
 
             const sessionId = `sessionId=${req.sessionID}; Max-Age=${expireTimeSession}; HttpOnly; SameSite=Strict; Path=/`;
-            const sessionUserName = `sessionUserName=${username}; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;
+            const sessionUserName = `sessionUserName=${user.name}; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;
             const sessionToken = `token=${accessToken}; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;
 
             res.setHeader('Set-Cookie', [sessionId, sessionUserName, sessionToken]);

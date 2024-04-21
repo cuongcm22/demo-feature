@@ -1,17 +1,18 @@
 const express = require('express');
 const router = express.Router();
+const authenToken = require("../modules/authServer");
 const deviceTypesController = require("../controllers/deviceTypesController");
 
 // Show page create DeviceTypes
-router.get('/create', deviceTypesController.showCreateDeviceTypesPage);
-router.post('/add', deviceTypesController.addDeviceTypes);
+router.get('/create', authenToken.authenToken, deviceTypesController.showCreateDeviceTypesPage);
+router.post('/add', authenToken.authenToken, deviceTypesController.addDeviceTypes);
 
 // Show detail DeviceTypes page
-router.get('/detail', deviceTypesController.showDetailDeviceTypesPage);
+router.get('/detail', authenToken.authenToken, deviceTypesController.showDetailDeviceTypesPage);
 // Retrieve all deviceTypes
-router.get('/retrieve', deviceTypesController.retrieveAllDeviceTypesTable);
+router.get('/retrieve', authenToken.authenToken, deviceTypesController.retrieveAllDeviceTypesTable);
 // Route update DeviceTypes
-router.post('/update', deviceTypesController.updateDeviceTypes);
+router.post('/update', authenToken.authenToken, deviceTypesController.updateDeviceTypes);
 // Delete supplier
-router.post('/delete', deviceTypesController.deleteDeviceTypes);
+router.post('/delete', authenToken.authenToken, deviceTypesController.deleteDeviceTypes);
 module.exports = router;

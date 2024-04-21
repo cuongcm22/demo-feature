@@ -11,13 +11,15 @@ function handleAlertWithRedirectPage(alertString, redirect) {
 
 module.exports.showCreateSuppliersPage = async (req, res, next) => {
     try {
+        const suppliers = await Supplier.find({}, 'name').then(supplier => supplier.map(supplier => supplier.name));
         res.render("./contents/suppliers/createSuppliers.pug", {
             title: 'Nhà cung cấp',
             routes: {
                 'Trang chủ': '/',
                 'Tạo nhà cung cấp': '/suppliers/create',
                 'Sửa nhà cung cấp': '/suppliers/detail'
-            }
+            },
+            suppliers: JSON.stringify(suppliers),
         });
     } catch (error) {
         res.status(404)

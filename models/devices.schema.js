@@ -13,6 +13,7 @@ const deviceSchema = new mongoose.Schema({
   location: { type: mongoose.Schema.Types.ObjectId, ref: 'Location', required: true },
   supplier: { type: mongoose.Schema.Types.ObjectId, ref: 'Supplier', required: true },
   description: { type: String },
+  price: { type: String },
   purchaseDate: { type: Date, required: true },
   warrantyExpiry: { type: Date, require: true},
   createDate: { type: Date, require: true},

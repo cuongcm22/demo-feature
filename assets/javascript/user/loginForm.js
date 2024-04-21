@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 async function handleLogin(event) {
     await axios.post('/user/login', {
-        username: document.querySelector('#username').value,
+        email: document.querySelector('#email').value,
         password: document.querySelector('#password').value,
     }).then(result => {
         console.log(result)

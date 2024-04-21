@@ -1,17 +1,18 @@
 const express = require('express');
 const router = express.Router();
+const authenToken = require("../modules/authServer");
 const suppliersController = require("../controllers/suppliersController");
 
 // Show page create suppliers
-router.get('/create', suppliersController.showCreateSuppliersPage);
-router.post('/add', suppliersController.addSuppliers);
+router.get('/create', authenToken.authenToken, suppliersController.showCreateSuppliersPage);
+router.post('/add', authenToken.authenToken, suppliersController.addSuppliers);
 
 // Show detail suppliers page
-router.get('/detail', suppliersController.showDetailSuppliersPage);
+router.get('/detail', authenToken.authenToken, suppliersController.showDetailSuppliersPage);
 // Retrieve all suppliers 
-router.get('/retrieve', suppliersController.retrieveAllSuppliersTable);
+router.get('/retrieve', authenToken.authenToken, suppliersController.retrieveAllSuppliersTable);
 // Route update suppliers
-router.post('/update', suppliersController.updateSuppliers);
+router.post('/update', authenToken.authenToken, suppliersController.updateSuppliers);
 // Delete supplier
-router.post('/delete', suppliersController.deleteSuppliers);
+router.post('/delete', authenToken.authenToken, suppliersController.deleteSuppliers);
 module.exports = router;
