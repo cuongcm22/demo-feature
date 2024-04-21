@@ -7,6 +7,7 @@ const deviceSchema = new mongoose.Schema({
   name: { type: String, required: true },
   deviceType: { type: mongoose.Schema.Types.ObjectId, ref: 'DeviceType', required: true },
   status: { type: String, enum: ['Active', 'Repair', 'Damaged'], required: true },
+  initStatus: { type: String, enum: ['used', 'notUsed'], required: true },
   imageUrl: { type: String },  
   videoUrl: { type: String },
   location: { type: mongoose.Schema.Types.ObjectId, ref: 'Location', required: true },

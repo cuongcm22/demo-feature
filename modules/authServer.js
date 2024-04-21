@@ -1,6 +1,15 @@
 const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
 
+
+function handleAlertWithRedirectPage(alertString, redirect) {
+    return `<script>
+        alert('${alertString}')
+        window.location.assign(window.location.origin  + '${redirect}');
+    </script>`
+}
+
+
 module.exports.authenToken = async (req, res, next) => {
     try {
         const cookies = req.headers.cookie;
@@ -11,7 +20,8 @@ module.exports.authenToken = async (req, res, next) => {
         jwt.verify(sessionToken, process.env.ACCESS_TOKEN_SECRET, (err, decodedData) => {
             console.log(err, decodedData);
             if (err) {
-                res.status(401).redirect("/user/login") //Nếu token không hợp lệ hoặc hết hạn sẽ thông báo lỗi 403 tức người dùng không có quyền truy cập vào route này
+                const handleReturn = handleAlertWithRedirectPage('Bạn cần đăng nhập để thực hiện chức năng này.','/user/login')
+                res.send(handleReturn)
             } else {
                 
                 // Check time stamp token (lưu ý trong product cần loại bỏ phần check time stamp)

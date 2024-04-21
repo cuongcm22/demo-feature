@@ -145,6 +145,7 @@ module.exports.createDeviceDB = async (req, res, next) => {
         const supplier = await Supplier.find({name: req.body.supplier});
         const data = {
             ...req.body,
+            initStatus: 'notUsed',
             deviceType: deviceType[0],
             location: location[0],
             supplier: supplier[0],
@@ -223,61 +224,30 @@ module.exports.deleteDeviceDB = async (req, res, next) => {
 
 module.exports.ShowLoanDevicePage = async (req, res, next) => {
     try {
-        await Device.aggregate([
-            {
-                $lookup: {
-                    from: "loanrecords", // Tên bảng trong database
-                    localField: "id",
-                    foreignField: "deviceID",
-                    as: "loanRecords"
-                }
+        const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
+        
+        // Lấy danh sách tất cả các thiết bị và populate tên loại thiết bị
+        const devices = await Device.find({initStatus: 'notUsed'})
+            // Phương thức populate() của Mongoose được sử dụng để thực hiện việc populate (nạp dữ liệu) từ một collection khác (trong trường hợp này là DeviceType)
+            .populate('deviceType', 'name');
+
+        // Chuyển đổi cấu trúc của deviceType thành object chỉ chứa trường name
+        const formattedDevices = devices.map(device => ({
+            ...device.toObject(),
+            deviceType: device.deviceType.name
+        }));
+
+        res.render("./contents/device/loanDevice.pug", {
+            title: 'Thiết bị',
+            routes: {
+                'Trang chủ': '/',
+                'Thông tin thiết bị': '/device/report',
+                'Tạo thiết bị': '/device/create',
+                'Mượn thiết bị': '/device/loan',
+                'Trả thiết bị': '/device/return'
             },
-            {
-                $unwind: {
-                    path: "$loanRecords",
-                    preserveNullAndEmptyArrays: true
-                }
-            },
-            {
-                $match: {
-                    $or: [
-                        { "loanRecords": { $exists: false } }, // Trường hợp không có bản ghi trong loanrecords
-                        { "loanRecords.status": "notborrowed" }// Trường hợp có bản ghi với status là notborrowed
-                        // { "loanRecords.deviceID": "$id", "loanRecords.status": "notborrowed" }// Trường hợp có bản ghi với status là notborrowed
-                    ]
-                }
-            },
-            {
-                $project: {
-                    _id: 0,
-                    deviceID: "$id",
-                    deviceName: "$name",
-                    deviceImage: "$imageUrl",
-                    deviceVideo: "$videoUrl",
-                    deviceLocation: "$location",
-                    deviceSupplier: "$supplier",
-                }
-            }
-        ]).then(results => {
-            console.log(results);
-            // Xử lý kết quả ở đây
-            res.render("./contents/device/loanDevice.pug", {
-                title: 'Thiết bị',
-                routes: {
-                    'Trang chủ': '/',
-                    'Thông tin thiết bị': '/device/report',
-                    'Tạo thiết bị': '/device/create',
-                    'Mượn thiết bị': '/device/loan',
-                    'Trả thiết bị': '/device/return'
-                },
-                data: JSON.stringify(results)
-            });
-        }).catch(err => {
-            console.error(err);
-            // Xử lý lỗi ở đây
-            res.status(400).json({
-                message: err
-            })
+            data: JSON.stringify(formattedDevices),
+            deviceTypes: JSON.stringify(devicetypes)
         });
 
     } catch (error) {
@@ -291,93 +261,32 @@ module.exports.loanDeviceDB = async (req, res, next) => {
     try {
         // using inherited variable from authenServer
         const username = req.user.username;
-        console.log(req.body);
-        // Kiểm tra xem có bản ghi nào với device id và trạng thái borrowed
-        LoanRecord.findOne({ deviceID: req.body.deviceId, status: 'borrowed' })
-        .then(existingLoanRecord => {
-            if (existingLoanRecord) {
-                // Nếu đã tồn tại bản ghi, có người dùng đã mượn thiết bị
-                console.log('This device is already borrowed by another user:', existingLoanRecord);
-                // Thực hiện các hành động phù hợp, ví dụ: trả về thông báo lỗi
-                // res.status(400).send('This device is already borrowed by another user');
-                res.send(
-                    `<script>
-                        alert('Thiết bị này đã có người mượn, vui lòng mượn thiết bị khác!')
-                        window.location.assign(window.location.origin  + '/device/loan');
-                    </script>`
-                )
-            } else {
-                // Nếu không tìm thấy bản ghi, chưa có người dùng nào mượn thiết bị
-
-                // Tiếp tục với việc cập nhật hoặc tạo mới bản ghi
-                // ... Tiếp tục với code trong phần trước ...
-                // Tìm bản ghi LoanRecord dựa trên username và deviceID
-                LoanRecord.findOneAndUpdate(
-                    { deviceID: req.body.deviceId }, // Điều kiện tìm kiếm
-                    { $set: { 
-                        username: username,
-                        borrowedAt: new Date(req.body.loanDate),
-                        returnedAt: new Date(req.body.returnDate),
-                        status: 'borrowed',
-                        updated_at: Date.now()
-                    } }, // Dữ liệu cập nhật
-                    { upsert: true, new: true } // Tạo mới nếu không tìm thấy
-                )
-                .then(loanRecord => {
-                    if (loanRecord) {
-                        // Nếu bản ghi đã tồn tại, cập nhật thông tin
-                        console.log('Updated loan record:', loanRecord);
-                        res.status(200).send(
-                            `<script>
-                                alert('Mượn thiết bị thành công!')
-                                window.location.assign(window.location.origin  + '/');
-                            </script>`
-                        )
-                    } else {
-                        // Nếu bản ghi không tồn tại, tạo mới bản ghi
-                        const loanRecordData = {
-                            username: username,
-                            deviceID: req.body.deviceId,
-                            borrowedAt: new Date(req.body.loanDate),
-                            returnedAt: new Date(req.body.returnDate),
-                            status: 'borrowed',
-                            created_at: Date.now(),
-                            updated_at: Date.now()
-                        };
-
-                        // Tạo một bản ghi mới của LoanRecord và lưu vào cơ sở dữ liệu
-                        const newLoanRecord = new LoanRecord(loanRecordData);
-                        newLoanRecord.save()
-                        .then(savedRecord => {
-                            console.log('Loan record saved:', savedRecord);
-                            // Thực hiện các thao tác tiếp theo nếu cần
-                            res.status(200).send(
-                                `<script>
-                                    alert('Mượn thiết bị thành công!')
-                                    window.location.assign(window.location.origin  + '/');
-                                </script>`
-                            )
-                        })
-                        .catch(error => {
-                            console.error('Error saving loan record:', error);
-                            // Xử lý lỗi nếu có
-                            res.status(400).json({
-                                message: error
-                            })
-                        });
-                    }
-                })
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            // Xử lý lỗi nếu có lỗi xảy ra trong quá trình thực hiện truy vấn
-            res.status(500).send('Internal Server Error');
-        });
+        const { deviceId } = req.body;
         
+        const userObjectId = await User.findOne({ name: username });
+        // const deviceObjectId = await Device.findOne({ serialNumber: deviceId });
+        const deviceObjectId = Device.findOneAndUpdate(
+            { serialNumber: deviceId },
+            { $set: { initStatus: 'used' } },
+            { new: true }
+          ).then(device => device.map(device => device._id))
+        
+        const newLoan = new Loan({
+            device: deviceObjectId._id,
+            borrower: userObjectId._id,
+            borrowedAt: new Date(),
+            transactionStatus: 'Borrowed'
+        });
 
+        newLoan.save()
+        .then(result => {
+            res.status(200).json({
+                success: true
+            })
+        })
     } catch (error) {
         res.status(401).json({
+            success: false,
             message: error
         })
     }

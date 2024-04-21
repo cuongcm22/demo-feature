@@ -11,8 +11,8 @@ router.post('/delete', devicesController.deleteDeviceDB);
 router.get('/report', devicesController.ShowReportDevicePage);
 
 // Routes requiring authentication
-// router.get('/loan', authenToken.authenToken, devicesController.ShowLoanDevicePage);
-// router.post('/loan', authenToken.authenToken, devicesController.loanDeviceDB);
+router.get('/loan', devicesController.ShowLoanDevicePage);
+router.post('/loan', authenToken.authenToken, devicesController.loanDeviceDB);
 // router.get('/return', authenToken.authenToken, devicesController.showReturnDevicePage);
 // router.post('/return', authenToken.authenToken, devicesController.returnDeviceDB);
 

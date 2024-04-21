@@ -146,7 +146,8 @@ module.exports.register = async (req, res, next) => {
         // Save the new user to the database
         const savedUser = await newUser.save();
 
-        res.status(201).json(savedUser); // Return the saved user in the response
+        const handleReturn = handleAlertWithRedirectPage('Đăng kí thành công!', '/user/login')
+        res.send(handleReturn)
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
