@@ -91,10 +91,10 @@ module.exports.login = async (req, res, next) => {
         });
 
         await User.find({'email': email}).then(user => {
-            console.log(`User ${user.name} just login!`.bgBlue);
+            console.log(`User ${user[0].name} just login!`.bgBlue);
 
             const sessionId = `sessionId=${req.sessionID}; Max-Age=${expireTimeSession}; HttpOnly; SameSite=Strict; Path=/`;
-            const sessionUserName = `sessionUserName=${user.name}; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;
+            const sessionUserName = `sessionUserName=${user[0].name}; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;
             const sessionToken = `token=${accessToken}; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;
 
             res.setHeader('Set-Cookie', [sessionId, sessionUserName, sessionToken]);

@@ -32,8 +32,14 @@ module.exports.addSuppliers = async (req, res, next) => {
         await supplier
             .save()
             .then(result => {
-                const handleResult = handleAlertWithRedirectPage('Thêm mới thành công!','/suppliers/detail')
-                res.send(handleResult)
+                res.status(200).json({
+                    success: true
+                })
+            })
+            .catch(error => {
+                res.status(200).json({
+                    success: false
+                })
             })
     } catch (error) {
         res.status(404)

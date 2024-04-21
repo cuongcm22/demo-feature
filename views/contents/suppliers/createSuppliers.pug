@@ -1,29 +1,64 @@
 include ../../main.pug
 
-.container.my-5
-  h2#supplierModalLabel.modal-title Thêm mới nhà cung cấp
-  form#supplierForm(action="/suppliers/add", method="post", enctype='application/json')
-    .mb-3.position-relative
+//- .container.my-5
+//-   h2#supplierModalLabel.modal-title Thêm mới nhà cung cấp
+//-   form#supplierForm()
+//-     .mb-3.position-relative
+//-       label.form-label(for='name') T&ecirc;n nh&agrave; cung c&#x1EA5;p
+//-       .input-group
+//-         input#name.form-control(type='text' name='name' placeholder='Enter name' required='required')
+//-         button#checkBtn.btn.btn-success(type='button') Ki&#x1EC3;m tra
+//-       span#nameCheck
+//-       // For displaying validation result
+//-       #associatedFields
+//-       // For displaying associated supplier names
+
+//-     .mb-3
+//-       label(for="address", class="form-label") Địa chỉ
+//-       input#address.form-control(type="text", name="address", placeholder="Enter address", required)
+//-       div.invalid-feedback Please enter an address.
+//-     .mb-3
+//-       label(for="phone", class="form-label") Số điện thoại
+//-       input#phone.form-control(type="tel", name="phone", placeholder="Enter phone number", required)
+//-       div.invalid-feedback Please enter a valid 10-digit phone number.
+//-     .mb-3
+//-       label(for="email", class="form-label") Địa chỉ email
+//-       input#email.form-control(type="email", name="email", placeholder="Enter email", required)
+//-       div.invalid-feedback Please enter a valid email address in the format abc@example.com.
+//-     button#btn-submit.btn.btn-primary() Tạo mới
+.container
+  h1.mt-5 Supplier Form
+  form#supplierForm.row.g-3.needs-validation(novalidate='')
+    .col-md-6
       label.form-label(for='name') T&ecirc;n nh&agrave; cung c&#x1EA5;p
-      .input-group
+      .input-group.has-validation
         input#name.form-control(type='text' name='name' placeholder='Enter name' required='required')
-        button#checkBtn.btn.btn-primary(type='button') Ki&#x1EC3;m tra
+        button#checkBtn.btn.btn-success(type='button') Ki&#x1EC3;m tra
+        .invalid-feedback
+          | Please enter a name.
       span#nameCheck
-    .mb-3
-      label(for="address", class="form-label") Địa chỉ
-      input#address.form-control(type="text", name="address", placeholder="Enter address", required)
-      div.invalid-feedback Please enter an address.
-    .mb-3
-      label(for="phone", class="form-label") Số điện thoại
-      input#phone.form-control(type="tel", name="phone", placeholder="Enter phone number", required)
-      div.invalid-feedback Please enter a valid 10-digit phone number.
-    .mb-3
-      label(for="email", class="form-label") Địa chỉ email
-      input#email.form-control(type="email", name="email", placeholder="Enter email", required)
-      div.invalid-feedback Please enter a valid email address in the format abc@example.com.
-    button.btn.btn-primary(type="submit") Tạo mới
+      // For displaying validation result
+      #associatedFields
+      // For displaying associated supplier names
+    .col-md-6
+      label.form-label(for='address') &Dstrok;&#x1ECB;a ch&#x1EC9;
+      input#address.form-control(type='text' name='address' placeholder='Enter address' required='required')
+      .invalid-feedback
+        | Please enter an address.
+    .col-md-6
+      label.form-label(for='phone') S&#x1ED1; &dstrok;i&#x1EC7;n tho&#x1EA1;i
+      input#phone.form-control(type='tel' name='phone' placeholder='Enter phone number' required='required')
+      .invalid-feedback
+        | Please enter a valid phone number.
+    .col-md-6
+      label.form-label(for='email') &Dstrok;&#x1ECB;a ch&#x1EC9; email
+      input#email.form-control(type='email' name='email' placeholder='Enter email' required='required')
+      .invalid-feedback
+        | Please enter a valid email address.
+    .col-12
+      button#btn-submit.btn.btn-primary() T&#x1EA1;o m&#x1EDB;i
 
 script.
-  var suppliers = !{suppliers}
+  const suppliers = !{suppliers}
 script(src="/javascript/suppliers/createSuppliers.js")
       
