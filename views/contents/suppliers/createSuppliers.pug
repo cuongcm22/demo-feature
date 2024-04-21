@@ -1,31 +1,5 @@
 include ../../main.pug
 
-//- .container.my-5
-//-   h2#supplierModalLabel.modal-title Thêm mới nhà cung cấp
-//-   form#supplierForm()
-//-     .mb-3.position-relative
-//-       label.form-label(for='name') T&ecirc;n nh&agrave; cung c&#x1EA5;p
-//-       .input-group
-//-         input#name.form-control(type='text' name='name' placeholder='Enter name' required='required')
-//-         button#checkBtn.btn.btn-success(type='button') Ki&#x1EC3;m tra
-//-       span#nameCheck
-//-       // For displaying validation result
-//-       #associatedFields
-//-       // For displaying associated supplier names
-
-//-     .mb-3
-//-       label(for="address", class="form-label") Địa chỉ
-//-       input#address.form-control(type="text", name="address", placeholder="Enter address", required)
-//-       div.invalid-feedback Please enter an address.
-//-     .mb-3
-//-       label(for="phone", class="form-label") Số điện thoại
-//-       input#phone.form-control(type="tel", name="phone", placeholder="Enter phone number", required)
-//-       div.invalid-feedback Please enter a valid 10-digit phone number.
-//-     .mb-3
-//-       label(for="email", class="form-label") Địa chỉ email
-//-       input#email.form-control(type="email", name="email", placeholder="Enter email", required)
-//-       div.invalid-feedback Please enter a valid email address in the format abc@example.com.
-//-     button#btn-submit.btn.btn-primary() Tạo mới
 .container
   h1.mt-5 Supplier Form
   form#supplierForm.row.g-3.needs-validation(novalidate='')

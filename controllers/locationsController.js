@@ -11,6 +11,7 @@ function handleAlertWithRedirectPage(alertString, redirect) {
 
 module.exports.showCreateLocationsPage = async (req, res, next) => {
     try {
+        const locations = await Location.find({}, 'name').then(location => location.map(location => location.name));
         res.render("./contents/locations/createLocations.pug", {
             title: 'Vị trí',
             routes: {
@@ -18,6 +19,7 @@ module.exports.showCreateLocationsPage = async (req, res, next) => {
                 'Tạo vị trí': '/locations/create',
                 'Sửa vị trí': '/locations/detail'
             },
+            locations: JSON.stringify(locations)
         });
     } catch (error) {
         res.status(404)
@@ -30,8 +32,14 @@ module.exports.addLocations = async (req, res, next) => {
         await location
             .save()
             .then(result => {
-                const handleResult = handleAlertWithRedirectPage('Thêm mới thành công!','/locations/detail')
-                res.send(handleResult)
+                res.status(200).json({
+                    success: true
+                })
+            })
+            .catch(error => {
+                res.status(200).json({
+                    success: false
+                })
             })
     } catch (error) {
         res.status(404)

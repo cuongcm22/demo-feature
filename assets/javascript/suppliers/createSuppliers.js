@@ -139,7 +139,6 @@ function submitForm() {
                 alert('Thêm mới không thành công!')
                 window.location.assign(window.location.origin  + '/suppliers/create');
             }
-            
         })
         .catch((error) => {
             // Handle error
