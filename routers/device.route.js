@@ -13,8 +13,8 @@ router.get('/report', devicesController.ShowReportDevicePage);
 // Routes requiring authentication
 router.get('/loan', devicesController.ShowLoanDevicePage);
 router.post('/loan', authenToken.authenToken, devicesController.loanDeviceDB);
-// router.get('/return', authenToken.authenToken, devicesController.showReturnDevicePage);
-// router.post('/return', authenToken.authenToken, devicesController.returnDeviceDB);
+router.get('/return', authenToken.authenToken, devicesController.ShowReturnDevicePage);
+router.post('/return', authenToken.authenToken, devicesController.returnDeviceDB);
 
 // Non-authenticated route
 // router.get('/loanrecord', devicesController.loanRecord);

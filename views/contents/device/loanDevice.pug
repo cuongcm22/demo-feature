@@ -11,106 +11,37 @@ style.
   .deviceTypeList > li:hover {
     cursor: pointer;
   }
-.container-fluid
-  .row
-    #sidebar.col-md-3.sidebar
-      h3.d-md-none Filter by Device Type
-      .dropdown.d-md-none
-        button#dropdownMenuButton.btn.btn-secondary.dropdown-toggle(type='button' data-bs-toggle='dropdown' aria-expanded='false')
-          | Filter by Device Type
-        ul#deviceTypeList.dropdown-menu(aria-labelledby='dropdownMenuButton')
-          // Device types will be inserted here dynamically
-      .d-none.d-md-block
-        ul#deviceTypeList.deviceTypeList.list-group
-          // Device types will be inserted here dynamically
-    .col-md-9
-      .container
-        #deviceContainer.row.row-cols-1.row-cols-md-2.row-cols-lg-3.g-2
-          // Device cards will be inserted here dynamically
 
+.container-fluid
+  .content 
+    h2 Mượn thiết bị
+    .row
+      #sidebar.col-md-3.sidebar
+        .dropdown.d-md-none
+          button#dropdownMenuButton.btn.btn-secondary.dropdown-toggle(type='button' data-bs-toggle='dropdown' aria-expanded='false')
+            | Filter by Device Type
+          ul#deviceTypeList.dropdown-menu(aria-labelledby='dropdownMenuButton')
+            // Device types will be inserted here dynamically
+        .d-none.d-md-block
+          ul#deviceTypeList.deviceTypeList.list-group
+            // Device types will be inserted here dynamically
+      .col-md-9
+        .container
+          #deviceContainer.row.row-cols-1.row-cols-md-2.row-cols-lg-3.g-2
+            // Device cards will be inserted here dynamically
+
+// Modal
+#exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h5#exampleModalLabel.modal-title Modal title
+        button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+      #modalBody.modal-body
+        // Modal content will be inserted here dynamically
+    
 script.
   const mockData = !{data}
   const deviceTypes = !{deviceTypes}
 
-script.
-  // Function to create device card
-  function createDeviceCard(device) {
-  const card = document.createElement('div');
-  card.classList.add('col');
-  card.innerHTML = `
-  <div class="card h-100">
-  <img src="${device.imageUrl}" class="card-img-top" alt="Device Image">
-  <div class="card-body">
-  <h5 class="card-title">${device.name}</h5>
-  <p class="card-text">Status: ${device.status}</p>
-  <p class="card-text">Description: ${device.description}</p>
-  <p class="card-text">Purchase Date: ${new Date(device.purchaseDate).toLocaleDateString()}</p>
-  <p class="card-text">Warranty Expiry: ${new Date(device.warrantyExpiry).toLocaleDateString()}</p>
-  <button class="btn btn-primary loan-btn" onclick="confirmLoan('${device.serialNumber}')">Loan</button>
-  </div>
-  </div>
-  `;
-  return card;
-  }
-  // Function to render device cards
-  function renderDeviceCards(data) {
-  const container = document.getElementById('deviceContainer');
-  container.innerHTML = '';
-  data.forEach(device => {
-  const card = createDeviceCard(device);
-  container.appendChild(card);
-  });
-  }
-  // Function to create sidebar with device types
-  function createDeviceTypeList(types) {
-  const list = document.querySelectorAll('#deviceTypeList');
-  list.forEach(i => {
-  i.innerHTML = '';
-  types.forEach(type => {
-  const listItem = document.createElement('li');
-  listItem.classList.add('list-group-item');
-  listItem.textContent = type;
-  listItem.addEventListener('click', () => filterDevicesByType(type));
-  i.appendChild(listItem);
-  });
-  })
-  }
-  // Filter devices based on selected device type
-  function filterDevicesByType(type) {
-  if (type === 'all') {
-  renderDeviceCards(mockData);
-  } else {
-  const filteredDevices = mockData.filter(device => device.deviceType === type);
-  renderDeviceCards(filteredDevices);
-  }
-  }
-  // Render all device types and devices on page load
-  window.onload = function() {
-  createDeviceTypeList(['All', ...deviceTypes]); // Include 'all' option
-  renderDeviceCards(mockData);
-  };
-
-  // Function to confirm loan
-  function confirmLoan(deviceId) {
-    const confirmed = confirm('Are you sure you want to loan this device?');
-    if (confirmed) {
-      // Send device ID to loan route
-      axios.post('/device/loan', { deviceId })
-        .then(response => {
-          if (response.data.success) {
-            alert('Mượn thiết bị thành công!');
-
-            const deviceToDelete = mockData.find(device => device.serialNumber == deviceId);
-            const index = mockData.indexOf(deviceToDelete);
-            mockData.splice(index, 1);
-
-            renderDeviceCards(mockData);
-          } else {
-            alert('Mượn thiết bị không thành công, vui lòng liên hệ admin để giải quyết vấn đề.');
-          }
-        })
-        .catch(error => {
-          console.log(error)
-        });
-    }
-  }
+script(src="/javascript/device/loanDevice.js") 

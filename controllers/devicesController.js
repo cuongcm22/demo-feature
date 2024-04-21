@@ -27,6 +27,20 @@ function convertTimerToString(time) {
     return formattedDate;
 }
 
+function convertDatetoString(dateString) {
+    // Parse the input date string
+    const initialDate = new Date(dateString);
+    
+    // Add 4 days to the initial date
+    const adjustedDate = new Date(initialDate.getTime() + (4 * 24 * 60 * 60 * 1000)); // Adding 4 days
+    
+    // Format the adjusted date to ISO 8601 format
+    const isoDateString = adjustedDate.toISOString();
+    
+    // Return the ISO 8601 formatted date string
+    return isoDateString;
+}
+
 function handleAlertWithRedirectPage(alertString, redirect) {
     return `<script>
         alert('${alertString}')
@@ -229,12 +243,16 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
         // Lấy danh sách tất cả các thiết bị và populate tên loại thiết bị
         const devices = await Device.find({initStatus: 'notUsed'})
             // Phương thức populate() của Mongoose được sử dụng để thực hiện việc populate (nạp dữ liệu) từ một collection khác (trong trường hợp này là DeviceType)
-            .populate('deviceType', 'name');
+            .populate('deviceType', 'name')
+            .populate('location', 'name')
+            .populate('supplier', 'name')
 
         // Chuyển đổi cấu trúc của deviceType thành object chỉ chứa trường name
         const formattedDevices = devices.map(device => ({
             ...device.toObject(),
-            deviceType: device.deviceType.name
+            deviceType: device.deviceType.name,
+            location: device.location.name,
+            supplier: device.supplier.name
         }));
 
         res.render("./contents/device/loanDevice.pug", {
@@ -259,38 +277,138 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
 
 module.exports.loanDeviceDB = async (req, res, next) => {
     try {
-        // using inherited variable from authenServer
-        const username = req.user.username;
-        const { deviceId } = req.body;
-        
-        const userObjectId = await User.findOne({ name: username });
-        // const deviceObjectId = await Device.findOne({ serialNumber: deviceId });
-        const deviceObjectId = Device.findOneAndUpdate(
+        // Using inherited variable from authenServer
+        const userId = req.user.username;
+        const user = await User.findOne({ name: userId });
+        const { deviceId, expectedReturnDate } = req.body;
+        const adjustedDateString = convertDatetoString(expectedReturnDate);
+
+        // Find device by serial number and update initStatus to 'used'
+        const device = await Device.findOneAndUpdate(
             { serialNumber: deviceId },
             { $set: { initStatus: 'used' } },
             { new: true }
-          ).then(device => device.map(device => device._id))
-        
+        );
+
+        if (!device) {
+            return res.status(404).json({ success: false, message: 'Device not found' });
+        }
+
+        // Create new loan object
         const newLoan = new Loan({
-            device: deviceObjectId._id,
-            borrower: userObjectId._id,
+            device: device._id,
+            borrower: user._id,
             borrowedAt: new Date(),
+            expectedReturnDate: adjustedDateString,
             transactionStatus: 'Borrowed'
         });
 
-        newLoan.save()
-        .then(result => {
-            res.status(200).json({
-                success: true
-            })
-        })
+        // Save the new loan
+        await newLoan.save();
+
+        // Send success response
+        res.status(200).json({ success: true });
     } catch (error) {
-        res.status(401).json({
-            success: false,
+        // Handle errors
+        console.error('Error loaning device:', error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+}
+
+
+module.exports.ShowReturnDevicePage = async (req, res, next) => {
+    try {
+        console.log('Return route!'.red);
+        const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
+        
+        const userId = req.user.username;
+        const userObjectId = await User.findOne({ name: userId });
+        const loans = await Loan.find({ borrower: userObjectId });
+        // Array to store device information
+        const devices = [];
+
+        // Iterate through each loan and fetch device information
+        for (const loan of loans) {
+            // Find device information based on loan's device ID
+            const device = await Device.findById(loan.device);
+
+            // If device is found, push it to the devices array
+            if (device) {
+                devices.push(device);
+            }
+        }
+
+        // Return array of device information
+        console.log(devices);
+        res.render("./contents/device/loanDevice.pug", {
+            title: 'Thiết bị',
+            routes: {
+                'Trang chủ': '/',
+                'Thông tin thiết bị': '/device/return',
+                'Tạo thiết bị': '/device/create',
+                'Mượn thiết bị': '/device/loan',
+                'Trả thiết bị': '/device/return'
+            },
+            data: JSON.stringify(devices),
+            deviceTypes: JSON.stringify(devicetypes)
+        });
+        // LoanRecord.find({ username: username, status: 'borrowed' }, { _id: 0, __v: 0, notes: 0 })
+        // .then(records => {
+        //     console.log(`Records with username ${username}`, records);
+        //     const deviceIDs = records.map(record => record.deviceID);
+        //     console.log(deviceIDs);
+        //     res.render("./contents/device/returnDevice.pug", {
+        //         title: 'Home page',
+        //         routes: {
+        //             'Home': '/',
+        //             'Detail': '/device/report',
+        //             'Create': '/device/create',
+        //             'Loan': '/device/loan',
+        //             'Return': '/device/return'
+        //         },
+        //         data: JSON.stringify(deviceIDs)
+        //     });
+        // })
+        // .catch(error => {
+        //     console.error('Error fetching records:', error);
+        //     res.status(401).json({
+        //         message: 'Cant find device'
+        //     })
+        // });
+    } catch (error) {
+        
+    }
+}
+
+module.exports.returnDeviceDB = async (req, res, next) => {
+    try {
+        const username = req.user.username;
+        const { deviceId, returnDate } = req.body
+        // Thực hiện câu lệnh truy vấn để cập nhật bản ghi trong bảng LoanRecord
+        LoanRecord.findOneAndUpdate(
+            { username: username, deviceID: deviceId }, // Điều kiện tìm kiếm
+            { $set: { status: 'notborrowed', updated_at: new Date(returnDate) } }, // Dữ liệu cập nhật
+            { new: true } // Tùy chọn để trả về bản ghi đã được cập nhật
+        )
+        .then(updatedRecord => {
+            console.log('Updated record:', updatedRecord);
+            res.status(200).send(
+                `<script>
+                    alert('Trả thiết bị thành công!')
+                    window.location.assign(window.location.origin  + '/');
+                </script>`
+            )
+        })
+        .catch(error => {
+            console.error('Error updating record:', error);
+        });
+    } catch (error) {
+        res.status(400).json({
             message: error
         })
     }
 }
+
 
 module.exports.loanRecord = async (req, res, next) => {
     try {
@@ -350,65 +468,5 @@ module.exports.loanRecord = async (req, res, next) => {
         res.status(400).json(
             {success: false}
         )
-    }
-}
-
-module.exports.showReturnDevicePage = async (req, res, next) => {
-    try {
-        const username = req.user.username;
-        LoanRecord.find({ username: username, status: 'borrowed' }, { _id: 0, __v: 0, notes: 0 })
-        .then(records => {
-            console.log(`Records with username ${username}`, records);
-            const deviceIDs = records.map(record => record.deviceID);
-            console.log(deviceIDs);
-            res.render("./contents/device/returnDevice.pug", {
-                title: 'Home page',
-                routes: {
-                    'Home': '/',
-                    'Detail': '/device/report',
-                    'Create': '/device/create',
-                    'Loan': '/device/loan',
-                    'Return': '/device/return'
-                },
-                data: JSON.stringify(deviceIDs)
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching records:', error);
-            res.status(401).json({
-                message: 'Cant find device'
-            })
-        });
-    } catch (error) {
-        
-    }
-}
-
-module.exports.returnDeviceDB = async (req, res, next) => {
-    try {
-        const username = req.user.username;
-        const { deviceId, returnDate } = req.body
-        // Thực hiện câu lệnh truy vấn để cập nhật bản ghi trong bảng LoanRecord
-        LoanRecord.findOneAndUpdate(
-            { username: username, deviceID: deviceId }, // Điều kiện tìm kiếm
-            { $set: { status: 'notborrowed', updated_at: new Date(returnDate) } }, // Dữ liệu cập nhật
-            { new: true } // Tùy chọn để trả về bản ghi đã được cập nhật
-        )
-        .then(updatedRecord => {
-            console.log('Updated record:', updatedRecord);
-            res.status(200).send(
-                `<script>
-                    alert('Trả thiết bị thành công!')
-                    window.location.assign(window.location.origin  + '/');
-                </script>`
-            )
-        })
-        .catch(error => {
-            console.error('Error updating record:', error);
-        });
-    } catch (error) {
-        res.status(400).json({
-            message: error
-        })
     }
 }

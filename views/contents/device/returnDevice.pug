@@ -1,24 +1,47 @@
 include ../../main.pug
-link(href='/css/device/returnDevice.css' rel='stylesheet')
-  
-section.container
-  h2.text-center.mb-4 Tr&#x1EA3; Thi&#x1EBF;t b&#x1ECB;
-  .form-container
-    form#returnDeviceForm(action='/device/return' method='post' enctype='multipart/json')
-      .mb-3
-        label.form-label(for='deviceSelect') Ch&#x1ECD;n Thi&#x1EBF;t b&#x1ECB;:
-        select#deviceSelect.form-select(name='deviceId' required='')
-          option(value='' disabled='' selected='') --Ch&#x1ECD;n thi&#x1EBF;t b&#x1ECB;--
-          // JavaScript will populate options from mockdata
-      .mb-3
-        label.form-label(for='returnDate') Ng&agrave;y Tr&#x1EA3;:
-        input#returnDate.form-control(type='date' name='returnDate' required='')
-      button.btn.btn-primary(type='submit') Tr&#x1EA3; Thi&#x1EBF;t b&#x1ECB;
-script.
-  // Mock data for device names
-  var mockData = {
-  devices: !{data}
-  };
-  
+//- link(href='/css/device/loanDevice.css' rel='stylesheet')
+style.
+  /* Custom styles */
+  .card {
+  margin-bottom: 20px;
+  }
+  .row-cols-1 > * {
+  margin-bottom: 10px; /* Adjust margin between rows */
+  }
+  .deviceTypeList > li:hover {
+    cursor: pointer;
+  }
 
-script(src="/javascript/device/returnDevice.js") 
+.container-fluid
+  .content 
+    h2 Mượn thiết bị
+    .row
+      #sidebar.col-md-3.sidebar
+        .dropdown.d-md-none
+          button#dropdownMenuButton.btn.btn-secondary.dropdown-toggle(type='button' data-bs-toggle='dropdown' aria-expanded='false')
+            | Filter by Device Type
+          ul#deviceTypeList.dropdown-menu(aria-labelledby='dropdownMenuButton')
+            // Device types will be inserted here dynamically
+        .d-none.d-md-block
+          ul#deviceTypeList.deviceTypeList.list-group
+            // Device types will be inserted here dynamically
+      .col-md-9
+        .container
+          #deviceContainer.row.row-cols-1.row-cols-md-2.row-cols-lg-3.g-2
+            // Device cards will be inserted here dynamically
+
+// Modal
+#exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h5#exampleModalLabel.modal-title Modal title
+        button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+      #modalBody.modal-body
+        // Modal content will be inserted here dynamically
+    
+script.
+  const mockData = !{data}
+  const deviceTypes = !{deviceTypes}
+
+script(src="/javascript/device/loanDevice.js") 
