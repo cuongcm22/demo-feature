@@ -7,7 +7,7 @@ include ../../main.pug
       label.form-label(for='name') T&ecirc;n nh&agrave; cung c&#x1EA5;p
       .input-group.has-validation
         input#name.form-control(type='text' name='name' placeholder='Enter name' required='required')
-        button#checkBtn.btn.btn-success(type='button') Ki&#x1EC3;m tra
+        button#checkBtn.btn.btn-danger(type='button') Ki&#x1EC3;m tra
         .invalid-feedback
           | Please enter a name.
       span#nameCheck
@@ -30,7 +30,7 @@ include ../../main.pug
       .invalid-feedback
         | Please enter a valid email address.
     .col-12
-      button#btn-submit.btn.btn-primary() T&#x1EA1;o m&#x1EDB;i
+      button#btn-submit.btn.btn-primary.w-100() Thêm mới
 
 script.
   const suppliers = !{suppliers}

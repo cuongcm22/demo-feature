@@ -1,8 +1,5 @@
-const userSectionElement = document.querySelectorAll(".user-section")
-
-userSectionElement.forEach(userSection => {
-    userSection.hidden = true;
-});
+const userSectionElement = document.querySelectorAll("#userNameID")
+const btnLogout = document.getElementById('btnLogout')
 
 document.addEventListener("DOMContentLoaded", (event) => {
     // Accessing cookies using JavaScript
@@ -18,8 +15,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
     console.log("Cookie Data:", cookieData);
     if (cookieData.sessionUserName && cookieData.token) {
         userSectionElement.forEach(userSection => {
-            userSection.hidden = false;
-            userSection.querySelector('.user-name').innerText = cookieData.sessionUserName;
+            userSection.innerHTML = 'Welcome <strong>' + cookieData.sessionUserName + '</strong>';
         });
+    } else {
+        btnLogout.style.display = 'none';
     }
 });

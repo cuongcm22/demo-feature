@@ -11,21 +11,21 @@ include ../../main.pug
     .mt-3
       input#flexSwitchCheckDefault.switchRetrieveAllData.form-check-input(type='checkbox' role='switch')
       label.form-check-label(for='flexSwitchCheckDefault') Hiển thị tất cả
-
-  table.table.table-striped
-    thead
-      tr
-        th STT
-        th Tên
-        th Địa chỉ
-        th Số điện thoại
-        th Địa chỉ email
-        th Chức năng
-        // New column for actions
-    tbody#supplierTableBody
-      .warrper.text-center
-        #spinner.spinner-border.text-primary(role='status')
-          span.visually-hidden Loading...
+  .table-responsive
+    table.table.table-striped
+      thead
+        tr
+          th STT
+          th Tên
+          th Địa chỉ
+          th Số điện thoại
+          th Địa chỉ email
+          th Chức năng
+          // New column for actions
+      tbody#supplierTableBody
+        .warrper.text-center
+          #spinner.spinner-border.text-primary(role='status')
+            span.visually-hidden Loading...
   .d-flex.align-items-center.justify-content-center
     nav(aria-label='Page navigation')
       ul#pagination.pagination
@@ -52,7 +52,7 @@ include ../../main.pug
           .mb-3
             label.form-label(for='email') Địa chỉ email
             input#email.form-control(type='email' name='email')
-          button.btn.btn-primary(type='submit') Update
+          button.w-100.btn.btn-primary(type='submit') Sửa
 
 script.
   var mockData = !{suppliers};

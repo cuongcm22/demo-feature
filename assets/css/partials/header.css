@@ -84,10 +84,6 @@ thead {
     .navbar-collapse .navbar-user {
         display: flex;
     }
-
-    .user-section {
-        display: none;
-    }
 }
 
 #logo-page-primary {
