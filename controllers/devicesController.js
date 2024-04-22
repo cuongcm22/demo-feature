@@ -99,7 +99,8 @@ module.exports.ShowReportDevicePage = async (req, res, next) => {
                     'Thông tin thiết bị': '/device/report',
                     'Tạo thiết bị': '/device/create',
                     'Mượn thiết bị': '/device/loan',
-                    'Trả thiết bị': '/device/return'
+                    'Trả thiết bị': '/device/return',
+                    'Loan record': '/record/loanrecord'
                 },
                 formattedDevices: JSON.stringify(devices),
                 devicetypes: JSON.stringify(devicetypes),
@@ -126,7 +127,8 @@ module.exports.showCreateDevicePage = async (req, res, next) => {
                 'Thông tin thiết bị': '/device/report',
                 'Tạo thiết bị': '/device/create',
                 'Mượn thiết bị': '/device/loan',
-                'Trả thiết bị': '/device/return'
+                'Trả thiết bị': '/device/return',
+                'Loan record': '/record/loanrecord'
             },
             devicetypes: devicetypes,
             locations: locations,
@@ -247,7 +249,8 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
                 'Thông tin thiết bị': '/device/report',
                 'Tạo thiết bị': '/device/create',
                 'Mượn thiết bị': '/device/loan',
-                'Trả thiết bị': '/device/return'
+                'Trả thiết bị': '/device/return',
+                'Loan record': '/record/loanrecord'
             },
             data: JSON.stringify(formattedDevices),
             deviceTypes: JSON.stringify(devicetypes)
@@ -340,7 +343,8 @@ module.exports.ShowReturnDevicePage = async (req, res, next) => {
                 'Thông tin thiết bị': '/device/return',
                 'Tạo thiết bị': '/device/create',
                 'Mượn thiết bị': '/device/loan',
-                'Trả thiết bị': '/device/return'
+                'Trả thiết bị': '/device/return',
+                'Loan record': '/record/loanrecord'
             },
             data: JSON.stringify(formattedDevices),
             deviceTypes: JSON.stringify(devicetypes)

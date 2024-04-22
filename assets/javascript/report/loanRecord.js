@@ -84,9 +84,7 @@ $(document).ready(function () {
             url: "/record/loan/retrieveall",
             method: "GET",
             success: function (data) {
-                console.log(data);
                 mockData = data.data;
-                console.log(mockData);
                 $("#spinner").hide();
                 searchFunction();
             },

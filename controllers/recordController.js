@@ -50,11 +50,12 @@ module.exports.ShowLoanRecordPage = async (req, res, next) => {
             res.render("./contents/report/loanRecord.pug", {
                 title: 'Home page',
                 routes: {
-                    'Home': '/',
-                    'Detail': '/device/report',
-                    'Create': '/device/create',
-                    'Loan': '/device/loan',
-                    'Return': '/device/return'
+                    'Trang chủ': '/',
+                    'Thông tin thiết bị': '/device/report',
+                    'Tạo thiết bị': '/device/create',
+                    'Mượn thiết bị': '/device/loan',
+                    'Trả thiết bị': '/device/return',
+                    'Loan record': '/record/loanrecord'
                 },
                 data: JSON.stringify(formattedDevices)
             });
@@ -70,7 +71,6 @@ module.exports.ShowLoanRecordPage = async (req, res, next) => {
 }
 
 module.exports.retrieveAllLoanRecordTable = async (req, res, next) => {
-    console.log('Retreive Data');
     try {
         const loanRecord = await Loan.find({}, { _id: 0, __v: 0, notes: 0 })
         .populate('device', 'name')

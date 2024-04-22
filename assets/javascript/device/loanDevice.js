@@ -6,14 +6,15 @@ function createDeviceCard(device, index) {
     card.classList.add("col");
     card.innerHTML = `
     <div class="card h-100">
-    <img style="height: 200px; object-fit: cover" src="${device.imageUrl}" class="card-img-top" alt="Device Image">
+    <p class="idDevice" hidden>${device._id}</p>
+    <img style="height: 200px; object-fit: cover" src="${device.imageUrl ? device.imageUrl : '/public/images/image_placeholder.jpg'}" class="card-img-top" alt="Device Image">
     <div class="card-body">
     <h5 class="card-title">${device.name}</h5>
     <p class="card-text">Description: ${device.description}</p>
     <p class="card-text">Purchase Date: ${new Date(
         device.purchaseDate
     ).toLocaleDateString()}</p>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"  onclick="populateTable(${index})">Mượn thiết bị</button>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"  onclick="populateTable(event)">Mượn thiết bị</button>
     </div>
     </div>
     `;
@@ -60,8 +61,9 @@ window.onload = function () {
 };
 
 // Function to populate device loan table
-function populateTable(index) {
-    const device = mockData[index]
+function populateTable(event) {
+    const id = event.target.parentElement.parentElement.querySelector(".idDevice").textContent
+    const device = mockData.find(item => item._id === id);
     modalBody.innerHTML = `
     <h3 class="card-title">${device.name}</h3>
     <img style="width: 100%; height: 220px; object-fit: contain;" id="deviceImage" src="${device.imageUrl ? device.imageUrl : '/public/images/image_placeholder.jpg'}" alt="Tivi Image">
@@ -137,3 +139,75 @@ function confirmLoan(deviceId) {
         }
     }
 }
+
+$(document).ready(function () {
+    const deviceContainer = $("#deviceContainer");
+    const pagination = $("#pagination");
+    const itemsPerPage = 12;
+    let currentPage = 1;
+    let filteredData = mockData.slice(); // Create a copy of mockData for searching
+
+    // Function to render device cards
+    function renderDeviceCards(data) {
+        console.log('Clicked');
+        deviceContainer.html("");
+        data.forEach((device, index) => {
+            const card = createDeviceCard(device, index);
+            deviceContainer.append(card);
+        });
+    }
+
+    // Function to render pagination
+    function renderPagination() {
+        pagination.html("");
+        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+        for (let i = 1; i <= totalPages; i++) {
+            const li = $(`<li class="page-item"><a class="page-link" href="#">${i}</a></li>`);
+            li.click(() => {
+                currentPage = i;
+                renderDeviceCards(getCurrentPageData());
+                highlightCurrentPage();
+            });
+            pagination.append(li);
+        }
+        highlightCurrentPage();
+    }
+
+    // Function to highlight current page in pagination
+    function highlightCurrentPage() {
+        const pages = pagination.find(".page-item");
+        pages.removeClass("active");
+        pages.eq(currentPage - 1).addClass("active");
+    }
+
+    // Function to filter devices based on search input
+    function searchFunction() {
+        const input = $("#searchInput").val().trim().toLowerCase();
+        filteredData = mockData.filter(
+            (device) =>
+            device.name.toLowerCase().includes(input) ||
+            device.description.toLowerCase().includes(input) ||
+            device.purchaseDate.toLowerCase().includes(input) ||
+            device.deviceType.toLowerCase().includes(input) ||
+            device.location.toLowerCase().includes(input) ||
+            device.supplier.toLowerCase().includes(input)
+        );
+        currentPage = 1; // Reset to the first page after each search
+        renderDeviceCards(getCurrentPageData());
+        renderPagination();
+    }
+
+    // Function to get data for the current page
+    function getCurrentPageData() {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        return filteredData.slice(startIndex, endIndex);
+    }
+
+    // Event listener for search button click
+    $("#searchButton").on("click", searchFunction);
+
+    // Initial render
+    renderDeviceCards(getCurrentPageData());
+    renderPagination();
+});

@@ -13,22 +13,34 @@ style.
   }
 
 .container-fluid
-  .content 
-    h2 Mượn thiết bị
+  .content
+    h2 M&#x1B0;&#x1EE3;n thi&#x1EBF;t b&#x1ECB;
     .row
+      // Sidebar
       #sidebar.col-md-3.sidebar
+        // Dropdown for small screens
         .dropdown.d-md-none
-          button#dropdownMenuButton.btn.btn-secondary.dropdown-toggle(type='button' data-bs-toggle='dropdown' aria-expanded='false')
-            | Filter by Device Type
+          button#dropdownMenuButton.btn.btn-secondary.dropdown-toggle(type='button' data-bs-toggle='dropdown' aria-expanded='false') Filter by Device Type
           ul#deviceTypeList.dropdown-menu(aria-labelledby='dropdownMenuButton')
             // Device types will be inserted here dynamically
+        // Device type list
         .d-none.d-md-block
           ul#deviceTypeList.deviceTypeList.list-group
             // Device types will be inserted here dynamically
+      // Main content
       .col-md-9
+        // Search input
+        .input-group.mb-3
+          input#searchInput.form-control(type='text' placeholder='Search...' aria-label='Search')
+          button#searchButton.btn.btn-outline-success(type='button') T&igrave;m ki&#x1EBF;m
+        // Device cards container
         .container
-          #deviceContainer.row.row-cols-1.row-cols-md-2.row-cols-lg-3.g-2
+          #deviceContainer.row.row-cols-1.row-cols-md-2.row-cols-lg-3.g-2.mt-1
             // Device cards will be inserted here dynamically
+        // Pagination
+        nav(aria-label='Page navigation')
+          ul#pagination.pagination.justify-content-center
+
 
 // Modal
 #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
