@@ -279,7 +279,6 @@ module.exports.loanDeviceDB = async (req, res, next) => {
 
         // Kiểm tra đã có người mượn thiết bị trong bảng loan hay chưa
         if (loans.length > 0) {
-            console.log(loans);
             return res.status(200).json({ success: false, message: 'Device already loaned' });
         } else {
             const device = await Device.findOneAndUpdate(

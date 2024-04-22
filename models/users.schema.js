@@ -4,10 +4,11 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
   _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
   username: { type: String, required: true, unique: true },
+  fullname: { type: String, required: true },
   password: { type: String, required: true },
   email: { type: String, required: true },
   phone: { type: String, required: true },
-  role: { type: String, enum: ['admin', 'user'], required: true },
+  role: { type: String, enum: ['admin', 'moderator', 'guest'], required: true },
   createdAt: { type: Date, required: true }
 });
 

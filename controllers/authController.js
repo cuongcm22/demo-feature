@@ -139,7 +139,7 @@ module.exports.register = async (req, res, next) => {
         password: password,
         email: email,
         phone: phone,
-        role: 'user', // Assuming default role is 'user',
+        role: 'guest', // Assuming default role is 'user',
         createdAt: Date.now()
         });
 

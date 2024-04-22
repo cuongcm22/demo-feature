@@ -14,7 +14,7 @@ function createDeviceCard(device, index) {
     <p class="card-text">Purchase Date: ${new Date(
         device.purchaseDate
     ).toLocaleDateString()}</p>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"  onclick="populateTable(event)">Mượn thiết bị</button>
+    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal"  onclick="populateTable(event)">Trả thiết bị</button>
     </div>
     </div>
     `;
@@ -78,19 +78,9 @@ function populateTable(event) {
     <p class="card-text"><strong>Ngày mua:</strong> ${new Date(
         device.purchaseDate
     ).toLocaleDateString()}</p>
-    <div class="mb-3">
-    <label class="form-label" for="expectedReturnDate">Ngày trả dự kiến</label>
-    <input
-        class="form-control"
-        id="expectedReturnDate"
-        type="date"
-        name="expectedReturnDate"
-        required=""
-        />
-    </div>
     <div class="d-flex justify-content-end"> <!-- Flex container for buttons -->
       <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Hủy</button>
-      <button type="button" class="btn btn-primary" onclick="confirmLoan('${device.serialNumber}')">Mượn thiết bị</button>
+      <button type="button" class="btn btn-warning" onclick="confirmLoan('${device.serialNumber}')">Trả thiết bị</button>
     </div>
     `;
 }
