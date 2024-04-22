@@ -30,6 +30,7 @@ function populateTable(devices) {
 <td>${device.name}</td>
 <td>${device.deviceType.name}</td>
 <td>${device.status}</td>
+<td>${device.initStatus}</td>
 <td>${device.location.name}</td>
 <td>${convertDateTime(device.purchaseDate)}</td>
 <td>${convertDateTime(device.warrantyExpiry)}</td>

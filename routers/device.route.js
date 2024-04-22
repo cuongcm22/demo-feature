@@ -4,14 +4,14 @@ const authenToken = require("../modules/authServer");
 const devicesController = require("../controllers/devicesController");
 
 // Define routes with HTTP methods and corresponding controller functions
-router.get('/create', devicesController.showCreateDevicePage);
-router.post('/add', devicesController.createDeviceDB);
-router.post('/update', devicesController.updateDeviceDB);
-router.post('/delete', devicesController.deleteDeviceDB);
-router.get('/report', devicesController.ShowReportDevicePage);
+router.get('/create', authenToken.authenToken, devicesController.showCreateDevicePage);
+router.post('/add', authenToken.authenToken, devicesController.createDeviceDB);
+router.post('/update', authenToken.authenToken, devicesController.updateDeviceDB);
+router.post('/delete', authenToken.authenToken, devicesController.deleteDeviceDB);
+router.get('/report', authenToken.authenToken, devicesController.ShowReportDevicePage);
 
 // Routes requiring authentication
-router.get('/loan', devicesController.ShowLoanDevicePage);
+router.get('/loan', authenToken.authenToken, devicesController.ShowLoanDevicePage);
 router.post('/loan', authenToken.authenToken, devicesController.loanDeviceDB);
 router.get('/return', authenToken.authenToken, devicesController.ShowReturnDevicePage);
 router.post('/return', authenToken.authenToken, devicesController.returnDeviceDB);

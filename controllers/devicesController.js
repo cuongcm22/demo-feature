@@ -81,6 +81,7 @@ module.exports.ShowReportDevicePage = async (req, res, next) => {
                 name: 1,
                 'deviceType.name': 1,
                 status: 1,
+                initStatus: 1,
                 imageUrl: 1,
                 videoUrl: 1,
                 'location.name': 1,
