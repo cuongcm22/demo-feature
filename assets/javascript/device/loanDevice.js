@@ -1,3 +1,5 @@
+var modalBody = document.getElementById("modalBody");
+
 // Function to create device card
 function createDeviceCard(device, index) {
     const card = document.createElement("div");
@@ -42,7 +44,7 @@ function createDeviceTypeList(types) {
 }
 // Filter devices based on selected device type
 function filterDevicesByType(type) {
-    if (type === "all") {
+    if (type === "All") {
         renderDeviceCards(mockData);
     } else {
         const filteredDevices = mockData.filter(
@@ -59,7 +61,6 @@ window.onload = function () {
 
 // Function to populate device loan table
 function populateTable(index) {
-    var modalBody = document.getElementById("modalBody");
     const device = mockData[index]
     modalBody.innerHTML = `
     <h3 class="card-title">${device.name}</h3>
@@ -94,12 +95,17 @@ function populateTable(index) {
 
 // Function to confirm loan
 function confirmLoan(deviceId) {
+    // Get a reference to your modal
+    var cancelButton = document.querySelector('.btn-secondary[data-bs-dismiss="modal"]');
+
     const expectedReturnDate = document.getElementById("expectedReturnDate").value
     if (!expectedReturnDate) {
         alert("Vui lòng chọn ngày trả thiết bị!");
     } else {
-        const confirmed = confirm("Are you sure you want to loan this device?");
+        const confirmed = confirm("Xác nhận bạn muốn mượn thiết bị này?");
         if (confirmed) {
+            // Gửi sự kiện click tới nút "Hủy"
+            cancelButton.click();
             // Send device ID to loan route
             axios
                 .post("/device/loan", { 
@@ -107,16 +113,18 @@ function confirmLoan(deviceId) {
                     expectedReturnDate: expectedReturnDate
                  })
                 .then((response) => {
-                    if (response.data.success) {
+                    if (response.data.success == true) {
                         alert("Mượn thiết bị thành công!");
-    
+
                         const deviceToDelete = mockData.find(
                             (device) => device.serialNumber == deviceId
                         );
                         const index = mockData.indexOf(deviceToDelete);
                         mockData.splice(index, 1);
-    
+
                         renderDeviceCards(mockData);
+                    } else if (response.data.success == false) {
+                        alert("Thiết bị đã có người khác mượn!");
                     } else {
                         alert(
                             "Mượn thiết bị không thành công, vui lòng liên hệ admin để giải quyết vấn đề."

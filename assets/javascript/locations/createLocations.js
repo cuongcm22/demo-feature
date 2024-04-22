@@ -107,7 +107,6 @@ function submitLocationForm() {
     
     axios.post('/locations/add', formData)
         .then(function (response) {
-            console.log(response);
             // Handle success
             if (response.data.success) {
                 alert('Thêm mới thiết bị thành công!')

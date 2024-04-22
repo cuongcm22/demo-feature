@@ -1,6 +1,9 @@
 const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
 
+const {
+    User
+ } = require('../models/models.js')
 
 function handleAlertWithRedirectPage(alertString, redirect) {
     return `<script>
@@ -17,8 +20,8 @@ module.exports.authenToken = async (req, res, next) => {
         const cookiesArray = cookies.split("; ");
         const sessionToken = cookiesArray[2].split("=")[1];
         
-        jwt.verify(sessionToken, process.env.ACCESS_TOKEN_SECRET, (err, decodedData) => {
-            console.log(err, decodedData);
+        jwt.verify(sessionToken, process.env.ACCESS_TOKEN_SECRET, async (err, decodedData) => {
+            // console.log(err, decodedData);
             if (err) {
                 const handleReturn = handleAlertWithRedirectPage('Bạn cần đăng nhập để thực hiện chức năng này.','/user/login')
                 res.send(handleReturn)
@@ -31,11 +34,14 @@ module.exports.authenToken = async (req, res, next) => {
                     if (expirationTime < currentTime) {
                         console.log('Token đã hết hạn');
                     } else {
-                        req.user = decodedData
-                        console.log('Token còn hiệu lực đến:', expirationTime);
+                        // === Return userid ===
+                        // req.user = decodedData
+                        const userId = await User.findOne({ email: decodedData.email }).then(user => user.username);
+                        req.userId = userId
+                        // console.log('Token còn hiệu lực đến:', expirationTime);
                     }
                 } else {
-                    console.log('Token không chứa thông tin về thời gian hết hạn');
+                    // console.log('Token không chứa thông tin về thời gian hết hạn');
                 }
                 
                 next(); // Nếu không sẽ next, người dùng sẽ có thể truy cập vào route books

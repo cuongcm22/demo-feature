@@ -278,36 +278,47 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
 module.exports.loanDeviceDB = async (req, res, next) => {
     try {
         // Using inherited variable from authenServer
-        const userId = req.user.username;
-        const user = await User.findOne({ name: userId });
+        const username = req.userId;
+        const userId = await User.findOne({ username: username });
+
         const { deviceId, expectedReturnDate } = req.body;
         const adjustedDateString = convertDatetoString(expectedReturnDate);
+        
+        const device = await Device.findOne({ serialNumber: deviceId })
 
-        // Find device by serial number and update initStatus to 'used'
-        const device = await Device.findOneAndUpdate(
-            { serialNumber: deviceId },
-            { $set: { initStatus: 'used' } },
-            { new: true }
-        );
+        const loans = await Loan.find({ device: device, transactionStatus: 'Borrowed' })
 
-        if (!device) {
-            return res.status(404).json({ success: false, message: 'Device not found' });
+        // Kiểm tra đã có người mượn thiết bị trong bảng loan hay chưa
+        if (loans.length > 0) {
+            console.log(loans);
+            return res.status(200).json({ success: false, message: 'Device already loaned' });
+        } else {
+            const device = await Device.findOneAndUpdate(
+                { serialNumber: deviceId },
+                { $set: { initStatus: 'used' } },
+                { new: true }
+            )
+    
+            if (!device) {
+                return res.status(200).json({ success: false, message: 'Device not found' });
+            }    
+    
+            // Create new loan object
+            const newLoan = new Loan({
+                device: device._id,
+                borrower: userId,
+                borrowedAt: new Date(),
+                expectedReturnDate: adjustedDateString,
+                transactionStatus: 'Borrowed'
+            });
+    
+            // Save the new loan
+            await newLoan.save()
+    
+            // Send success response
+            res.status(200).json({ success: true });
         }
 
-        // Create new loan object
-        const newLoan = new Loan({
-            device: device._id,
-            borrower: user._id,
-            borrowedAt: new Date(),
-            expectedReturnDate: adjustedDateString,
-            transactionStatus: 'Borrowed'
-        });
-
-        // Save the new loan
-        await newLoan.save();
-
-        // Send success response
-        res.status(200).json({ success: true });
     } catch (error) {
         // Handle errors
         console.error('Error loaning device:', error);
@@ -315,32 +326,29 @@ module.exports.loanDeviceDB = async (req, res, next) => {
     }
 }
 
-
 module.exports.ShowReturnDevicePage = async (req, res, next) => {
     try {
-        console.log('Return route!'.red);
         const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
+
+        const username = req.userId;
+        const userId = await User.findOne({ username: username });
+
+        const loans = await Loan.find({ borrower: userId }).then(loans => loans.map(loan => loan.device));
         
-        const userId = req.user.username;
-        const userObjectId = await User.findOne({ name: userId });
-        const loans = await Loan.find({ borrower: userObjectId });
-        // Array to store device information
-        const devices = [];
+        // Tìm kiếm dựa trên mảng
+        const devices = await Device.find({ _id: { $in: loans } })
+                .populate('deviceType', 'name')
+                .populate('location', 'name')
+                .populate('supplier', 'name')
 
-        // Iterate through each loan and fetch device information
-        for (const loan of loans) {
-            // Find device information based on loan's device ID
-            const device = await Device.findById(loan.device);
+        const formattedDevices = devices.map(device => ({
+            ...device.toObject(),
+            deviceType: device.deviceType.name,
+            location: device.location.name,
+            supplier: device.supplier.name
+        }));
 
-            // If device is found, push it to the devices array
-            if (device) {
-                devices.push(device);
-            }
-        }
-
-        // Return array of device information
-        console.log(devices);
-        res.render("./contents/device/loanDevice.pug", {
+        res.render("./contents/device/returnDevice.pug", {
             title: 'Thiết bị',
             routes: {
                 'Trang chủ': '/',
@@ -349,59 +357,45 @@ module.exports.ShowReturnDevicePage = async (req, res, next) => {
                 'Mượn thiết bị': '/device/loan',
                 'Trả thiết bị': '/device/return'
             },
-            data: JSON.stringify(devices),
+            data: JSON.stringify(formattedDevices),
             deviceTypes: JSON.stringify(devicetypes)
         });
-        // LoanRecord.find({ username: username, status: 'borrowed' }, { _id: 0, __v: 0, notes: 0 })
-        // .then(records => {
-        //     console.log(`Records with username ${username}`, records);
-        //     const deviceIDs = records.map(record => record.deviceID);
-        //     console.log(deviceIDs);
-        //     res.render("./contents/device/returnDevice.pug", {
-        //         title: 'Home page',
-        //         routes: {
-        //             'Home': '/',
-        //             'Detail': '/device/report',
-        //             'Create': '/device/create',
-        //             'Loan': '/device/loan',
-        //             'Return': '/device/return'
-        //         },
-        //         data: JSON.stringify(deviceIDs)
-        //     });
-        // })
-        // .catch(error => {
-        //     console.error('Error fetching records:', error);
-        //     res.status(401).json({
-        //         message: 'Cant find device'
-        //     })
-        // });
     } catch (error) {
-        
+        res.status(500).json({ success: false, message: 'Internal server error' });
     }
 }
 
 module.exports.returnDeviceDB = async (req, res, next) => {
     try {
-        const username = req.user.username;
-        const { deviceId, returnDate } = req.body
-        // Thực hiện câu lệnh truy vấn để cập nhật bản ghi trong bảng LoanRecord
-        LoanRecord.findOneAndUpdate(
-            { username: username, deviceID: deviceId }, // Điều kiện tìm kiếm
-            { $set: { status: 'notborrowed', updated_at: new Date(returnDate) } }, // Dữ liệu cập nhật
-            { new: true } // Tùy chọn để trả về bản ghi đã được cập nhật
+        const username = req.userId;
+        const userId = await User.findOne({ username: username });
+
+        const { deviceId } = req.body
+        
+        const device = await Device.findOneAndUpdate(
+            { serialNumber: deviceId },
+            { $set: { initStatus: 'notUsed' } },
+            { new: true }
         )
-        .then(updatedRecord => {
-            console.log('Updated record:', updatedRecord);
-            res.status(200).send(
-                `<script>
-                    alert('Trả thiết bị thành công!')
-                    window.location.assign(window.location.origin  + '/');
-                </script>`
-            )
+        
+        if (!device) {
+            return res.status(200).json({ success: false, message: 'Device not found' });
+        }  
+
+        const loan = await Loan.findOneAndUpdate(
+            { borrower: userId },
+            { $set: { transactionStatus: 'Returned', actualReturnDate: new Date() } },
+            { new: true }
+        )
+
+        if (!loan) {
+            return res.status(200).json({ success: false, message: 'Loan not found' });
+        }  
+
+        res.status(200).json({
+            success: true
         })
-        .catch(error => {
-            console.error('Error updating record:', error);
-        });
+
     } catch (error) {
         res.status(400).json({
             message: error

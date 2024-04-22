@@ -91,10 +91,10 @@ module.exports.login = async (req, res, next) => {
         });
 
         await User.find({'email': email}).then(user => {
-            console.log(`User ${user[0].name} just login!`.bgBlue);
+            console.log(`User ${user[0].username} just login!`.bgBlue);
 
             const sessionId = `sessionId=${req.sessionID}; Max-Age=${expireTimeSession}; HttpOnly; SameSite=Strict; Path=/`;
-            const sessionUserName = `sessionUserName=${user[0].name}; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;
+            const sessionUserName = `sessionUserName=${user[0].username}; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;
             const sessionToken = `token=${accessToken}; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;
 
             res.setHeader('Set-Cookie', [sessionId, sessionUserName, sessionToken]);
@@ -135,7 +135,7 @@ module.exports.register = async (req, res, next) => {
     try {
         // Create a new user instance
         const newUser = new User({
-        name: username,
+        username: username,
         password: password,
         email: email,
         phone: phone,
