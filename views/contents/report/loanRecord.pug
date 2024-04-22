@@ -1,22 +1,163 @@
 include ../../main.pug
 link(href='/css/report/loanRecord.css' rel='stylesheet')
   
-.container.mt-4
-  h1 Loan Record table
-  .mb-3
-    input#searchInput.form-control(type='text' placeholder='Search by Username or Device ID')
-  table.table.table-striped.mt-4
+.container.mt-5
+  h1.text-center.mb-4 Loan Records
+  .row.mb-3
+    .input-group
+      input#searchInput.form-control(type='text' placeholder='Search...')
+      button#searchButton.btn.btn-outline-success Tìm kiếm
+  
+  .form-check.form-switch
+    .mt-3
+      input#flexSwitchCheckDefault.switchRetrieveAllData.form-check-input(type='checkbox' role='switch')
+      label.form-check-label(for='flexSwitchCheckDefault') Hiển thị tất cả
+  table.table.table-striped
     thead
       tr
+        th #
+        th Device
         th Username
-        th Device ID
         th Borrowed At
-        th Returned At
+        th Actual Return Date
         th Status
-        th Notes
-    tbody#dataBody
-      // Dữ liệu sẽ được thêm vào đây bằng JavaScript
+    tbody#loanTableBody
+      .warrper.text-center
+        #spinner.spinner-border.text-primary(role='status')
+              span.visually-hidden Loading...
+  nav
+    ul#pagination.pagination.justify-content-center
+
 script.
-  const mockData = !{data};
+  //- var mockData = !{data};
+  var mockData = [
+                {
+                    device: "Tablet samsung",
+                    username: "john_doe",
+                    borrowedAt: "22/04/2024",
+                    transactionStatus: "Borrowed",
+                },
+                {
+                    device: "Tablet apple",
+                    username: "huydapchai",
+                    borrowedAt: "22/04/2024",
+                    actualReturnDate: "22/04/2024",
+                    transactionStatus: "Returned",
+                },
+                {
+                    device: "Tablet apple",
+                    username: "john_doe",
+                    borrowedAt: "22/04/2024",
+                    transactionStatus: "Borrowed",
+                },
+                {
+                    device: "Tablet apple",
+                    username: "john_doe",
+                    borrowedAt: "22/04/2024",
+                    transactionStatus: "Borrowed",
+                },
+                {
+                    device: "Tablet apple",
+                    username: "john_doe",
+                    borrowedAt: "22/04/2024",
+                    transactionStatus: "Borrowed",
+                },
+                {
+                    device: "Tablet apple",
+                    username: "john_doe",
+                    borrowedAt: "22/04/2024",
+                    transactionStatus: "Borrowed",
+                },
+                {
+                    device: "Tablet apple",
+                    username: "john_doe",
+                    borrowedAt: "22/04/2024",
+                    transactionStatus: "Borrowed",
+                },
+                {
+                    device: "Tablet apple",
+                    username: "john_doe",
+                    borrowedAt: "22/04/2024",
+                    transactionStatus: "Borrowed",
+                },
+                {
+                    device: "Tablet apple",
+                    username: "john_doe",
+                    borrowedAt: "22/04/2024",
+                    transactionStatus: "Borrowed",
+                },
+                {
+                    device: "Tablet apple",
+                    username: "john_doe",
+                    borrowedAt: "22/04/2024",
+                    transactionStatus: "Borrowed",
+                },
+                {
+                    device: "Tablet apple",
+                    username: "john_doe",
+                    borrowedAt: "22/04/2024",
+                    transactionStatus: "Borrowed",
+                },
+                {
+                    device: "Tablet apple",
+                    username: "john_doe",
+                    borrowedAt: "22/04/2024",
+                    transactionStatus: "Borrowed",
+                },
+                {
+                    device: "Tablet apple",
+                    username: "john_doe",
+                    borrowedAt: "22/04/2024",
+                    transactionStatus: "Borrowed",
+                },
+                {
+                    device: "Tablet apple",
+                    username: "john_doe",
+                    borrowedAt: "22/04/2024",
+                    transactionStatus: "Borrowed",
+                },
+                {
+                    device: "Tablet apple",
+                    username: "john_doe",
+                    borrowedAt: "22/04/2024",
+                    transactionStatus: "Borrowed",
+                },
+                {
+                    device: "Tablet apple",
+                    username: "john_doe",
+                    borrowedAt: "22/04/2024",
+                    transactionStatus: "Borrowed",
+                },
+                {
+                    device: "Tablet apple",
+                    username: "john_doe",
+                    borrowedAt: "22/04/2024",
+                    transactionStatus: "Borrowed",
+                },
+                {
+                    device: "Tablet apple",
+                    username: "john_doe",
+                    borrowedAt: "22/04/2024",
+                    transactionStatus: "Borrowed",
+                },
+                {
+                    device: "Tablet apple",
+                    username: "john_doe",
+                    borrowedAt: "22/04/2024",
+                    transactionStatus: "Borrowed",
+                },
+                {
+                    device: "Tablet apple",
+                    username: "john_doe",
+                    borrowedAt: "22/04/2024",
+                    transactionStatus: "Borrowed",
+                },
+                {
+                    device: "Tablet apple",
+                    username: "john_doe",
+                    borrowedAt: "22/04/2024",
+                    transactionStatus: "Borrowed",
+                },
+            ];
 
 script(src="/javascript/report/loanRecord.js") 

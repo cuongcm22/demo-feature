@@ -16,7 +16,4 @@ router.post('/loan', authenToken.authenToken, devicesController.loanDeviceDB);
 router.get('/return', authenToken.authenToken, devicesController.ShowReturnDevicePage);
 router.post('/return', authenToken.authenToken, devicesController.returnDeviceDB);
 
-// Non-authenticated route
-// router.get('/loanrecord', devicesController.loanRecord);
-
 module.exports = router;

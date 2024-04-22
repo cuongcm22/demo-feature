@@ -53,6 +53,7 @@ const userRouter = require('./routers/user.route')
 const supplierRouter = require('./routers/suppliers.route')
 const locationRouter = require('./routers/locations.route')
 const deviceTypesRouter = require('./routers/deviceTypes.route')
+const recordRouter = require('./routers/record.route')
 
 app.use("/", homeRouter)
 app.use("/device", deviceRouter);
@@ -60,6 +61,7 @@ app.use("/user", userRouter)
 app.use("/suppliers", supplierRouter)
 app.use("/locations", locationRouter)
 app.use("/devicetypes", deviceTypesRouter)
+app.use("/record", recordRouter)
 
 // Route demo
 app.get("/demo", (req, res) => {

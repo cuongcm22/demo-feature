@@ -47,10 +47,10 @@ module.exports.homePage = async (req, res, next) => {
                 'Trang chủ': '/',
                 'User': '/user',
                 'Thiết bị': '/device/report',
-                'Record loan': '/device/loanrecord',
                 'Nhà cung cấp': '/suppliers/detail',
                 'Vị trí': '/locations/detail',
                 'Loại thiết bị': '/devicetypes/detail',
+                'Loan record': '/record/loanrecord',
             }
         });
     } catch(err) {

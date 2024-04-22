@@ -13,20 +13,6 @@ const {
     DeviceType
  } = require('../models/models.js')
 
-function convertTimerToString(time) {
-    const purchaseDate = new Date(time);
-
-    // Lấy ngày, tháng và năm từ purchaseDate
-    const day = purchaseDate.getDate().toString().padStart(2, "0"); // Chuyển ngày thành chuỗi và đảm bảo có ít nhất 2 chữ số, nếu không thêm số 0 vào trước
-    const month = (purchaseDate.getMonth() + 1).toString().padStart(2, "0"); // Chuyển tháng thành chuỗi và đảm bảo có ít nhất 2 chữ số, nếu không thêm số 0 vào trước
-    const year = purchaseDate.getFullYear();
-
-    // Tạo chuỗi mới với định dạng 'dd/mm/yyyy'
-    const formattedDate = `${day}/${month}/${year}`;
-
-    return formattedDate;
-}
-
 function convertDatetoString(dateString) {
     // Parse the input date string
     const initialDate = new Date(dateString);
@@ -189,7 +175,6 @@ module.exports.createDeviceDB = async (req, res, next) => {
 module.exports.updateDeviceDB = async (req, res, next) => {
   console.log('Update device route'.yellow.bold)
   try {
-    console.log(req.body);
     const deviceType = await DeviceType.find({name: req.body.deviceType})
     const location = await Location.find({name: req.body.location});
     const supplier = await Supplier.find({name: req.body.supplier});
@@ -400,67 +385,5 @@ module.exports.returnDeviceDB = async (req, res, next) => {
         res.status(400).json({
             message: error
         })
-    }
-}
-
-
-module.exports.loanRecord = async (req, res, next) => {
-    try {
-        // Thực hiện truy vấn để lấy ra tất cả dữ liệu trong bảng LoanRecord, loại trừ các trường _id, __v và notes
-        LoanRecord.find({}, { _id: 0, __v: 0, notes: 0 })
-        .then(records => {
-            console.log('All records:', records);
-
-            const formattedDevices = records.map((record) => {
-                // Chuyển đổi purchaseDate
-                const borrowedAt =
-                    record.borrowedAt instanceof Date
-                        ? record.borrowedAt.toLocaleDateString("en-GB")
-                        : record.borrowedAt;
-                // Chuyển đổi warrantyExpiry
-                const returnedAt =
-                    record.returnedAt instanceof Date
-                        ? record.returnedAt.toLocaleDateString("en-GB")
-                        : record.returnedAt;
-                // Chuyển đổi createDate
-                const created_at =
-                    record.created_at instanceof Date
-                        ? record.created_at.toLocaleDateString("en-GB")
-                        : record.created_at;
-                // Chuyển đổi updateDate
-                const updated_at =
-                    record.updated_at instanceof Date
-                        ? record.updated_at.toLocaleDateString("en-GB")
-                        : record.updated_at;
-
-                return {
-                    ...record._doc,
-                    borrowedAt,
-                    returnedAt,
-                    created_at,
-                    updated_at,
-                };
-            });
-            // console.log(formattedDevices);
-            // res.render("./contents/report/loanRecord", {data: JSON.stringify(formattedDevices)})
-            res.render("./contents/report/loanRecord.pug", {
-                title: 'Home page',
-                routes: {
-                    'Home': '/',
-                    'Detail': '/device/report',
-                    'Create': '/device/create',
-                    'Loan': '/device/loan',
-                    'Return': '/device/return'
-                },
-                data: JSON.stringify(formattedDevices)
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching records:', error);
-        });
-    } catch(error) {
-        res.status(400).json(
-            {success: false}
-        )
     }
 }
