@@ -11,6 +11,12 @@ function handleAlertWithRedirectPage(alertString, redirect) {
 
 module.exports.showCreateSuppliersPage = async (req, res, next) => {
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+
         const suppliers = await Supplier.find({}, 'name').then(supplier => supplier.map(supplier => supplier.name));
         res.render("./contents/suppliers/createSuppliers.pug", {
             title: 'Nhà cung cấp',
@@ -28,6 +34,12 @@ module.exports.showCreateSuppliersPage = async (req, res, next) => {
 
 module.exports.addSuppliers = async (req, res, next) => {
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+
         const supplier = new Supplier(req.body)
         await supplier
             .save()
@@ -47,10 +59,17 @@ module.exports.addSuppliers = async (req, res, next) => {
 }
 
 module.exports.showDetailSuppliersPage = async (req, res, next) => {
-    const suppliers = await Supplier.find({})
-        .sort({ _id: -1 }) // Sắp xếp theo _id giảm dần để lấy 20 phần tử cuối cùng
-        .limit(20) 
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+
+        const suppliers = await Supplier.find({})
+            .sort({ _id: -1 }) // Sắp xếp theo _id giảm dần để lấy 20 phần tử cuối cùng
+            .limit(20)
+
         res.render("./contents/suppliers/detailSuppliers.pug", {
             title: 'Nhà cung cấp',
             routes: {
@@ -66,8 +85,15 @@ module.exports.showDetailSuppliersPage = async (req, res, next) => {
 }
 
 module.exports.retrieveAllSuppliersTable = async (req, res, next) => {
-    const suppliers = await Supplier.find();
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+        
+        const suppliers = await Supplier.find();
+
         res.status(200).json({
             success: 'true',
             data: suppliers

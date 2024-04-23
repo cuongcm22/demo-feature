@@ -159,9 +159,15 @@ async function editUser(event) {
             
             if (response.data.success == true) {
                 
-                userInfoRow.innerHTML = `
-                    <span class="me-2 badge bg-warning text-dark">Moderator</span><span class="me-2 badge bg-success">Guest</span>
-                `
+                if (formData.role == 'moderator') {
+                    userInfoRow.innerHTML = `
+                        <span class="me-2 badge bg-warning text-dark">Moderator</span><span class="me-2 badge bg-success">Guest</span>
+                    `
+                } else {
+                    userInfoRow.innerHTML = `
+                        <span class="me-2 badge bg-success">Guest</span>
+                    `
+                }
 
                 cancelButton.click()
                 

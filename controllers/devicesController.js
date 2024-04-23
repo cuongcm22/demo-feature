@@ -36,7 +36,14 @@ function handleAlertWithRedirectPage(alertString, redirect) {
 
 module.exports.ShowReportDevicePage = async (req, res, next) => {
     console.log("Get device routers".blue.bold);
+
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+
         const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
         const locations = await Location.find({}, 'name').then(locations => locations.map(location => location.name));
         const suppliers = await Supplier.find({}, 'name').then(suppliers => suppliers.map(supplier => supplier.name));
@@ -117,6 +124,12 @@ module.exports.ShowReportDevicePage = async (req, res, next) => {
 module.exports.showCreateDevicePage = async (req, res, next) => {
     console.log("Create device routers".blue.bold);
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+
         const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
         const locations = await Location.find({}, 'name').then(locations => locations.map(location => location.name));
         const suppliers = await Supplier.find({}, 'name').then(suppliers => suppliers.map(supplier => supplier.name));
@@ -143,6 +156,12 @@ module.exports.showCreateDevicePage = async (req, res, next) => {
 
 module.exports.createDeviceDB = async (req, res, next) => {
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+
         const deviceType = await DeviceType.find({name: req.body.deviceType})
         const location = await Location.find({name: req.body.location});
         const supplier = await Supplier.find({name: req.body.supplier});
@@ -178,6 +197,12 @@ module.exports.createDeviceDB = async (req, res, next) => {
 module.exports.updateDeviceDB = async (req, res, next) => {
   console.log('Update device route'.yellow.bold)
   try {
+    const { role } = req.userId;
+
+    if (role != 'admin' && role != 'moderator') {
+        return res.redirect('/404')
+    }
+    
     const deviceType = await DeviceType.find({name: req.body.deviceType})
     const location = await Location.find({name: req.body.location});
     const supplier = await Supplier.find({name: req.body.supplier});
@@ -210,6 +235,12 @@ module.exports.updateDeviceDB = async (req, res, next) => {
 
 module.exports.deleteDeviceDB = async (req, res, next) => {
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+
         Device.deleteOne({ serialNumber: req.body.serialNumber }).then(result => {
             console.log('Delete device successfully!'.bgRed)
         }).catch(err => {console.log(`Đã xảy ra lỗi khi xóa thiết bị trong bảng device ${req.body.id}`.yellow)})
@@ -226,6 +257,12 @@ module.exports.deleteDeviceDB = async (req, res, next) => {
 
 module.exports.ShowLoanDevicePage = async (req, res, next) => {
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+
         const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
         
         // Lấy danh sách tất cả các thiết bị và populate tên loại thiết bị
@@ -266,6 +303,12 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
 
 module.exports.loanDeviceDB = async (req, res, next) => {
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+
         // Using inherited variable from authenServer
         const userId = req.userId;
 
@@ -315,6 +358,12 @@ module.exports.loanDeviceDB = async (req, res, next) => {
 
 module.exports.ShowReturnDevicePage = async (req, res, next) => {
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+
         const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
 
         const userId = req.userId;
@@ -354,6 +403,12 @@ module.exports.ShowReturnDevicePage = async (req, res, next) => {
 
 module.exports.returnDeviceDB = async (req, res, next) => {
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+        
         const userId = req.userId;
 
         const { deviceId } = req.body

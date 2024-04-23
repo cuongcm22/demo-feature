@@ -172,6 +172,10 @@ module.exports.logOut = async (req, res, next) => {
 
 module.exports.ShowManageUserPage = async (req, res, next) => {
     try {
+        const roleUserId = req.userId.role
+        if (roleUserId != 'admin') {
+            return res.redirect('/404')
+        }
 
         const users = await User.find({}, { _id: 0, __v: 0, password: 0 })
 
@@ -191,7 +195,12 @@ module.exports.ShowManageUserPage = async (req, res, next) => {
 
 module.exports.manageUserDB = async (req, res, next) => {
     try {
-        
+        const roleUserId = req.userId.role
+
+        if (roleUserId != 'admin') {
+            return res.redirect('/404')
+        }
+
         const { username, role } = req.body
         
         const updatedUser = await User.findOneAndUpdate({username: username}, 
@@ -199,8 +208,7 @@ module.exports.manageUserDB = async (req, res, next) => {
                 role: role
             }}
             , {
-            new: true,
-            runValidators: true
+            new: true
         });
 
         if (!updatedUser) {

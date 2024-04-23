@@ -16,6 +16,12 @@ const {
 
 module.exports.ShowLoanRecordPage = async (req, res, next) => {
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+
         // Thực hiện truy vấn để lấy ra tất cả dữ liệu trong bảng LoanRecord, loại trừ các trường _id, __v và notes
         Loan.find({}, { _id: 0, __v: 0, notes: 0 })
         .populate('device', 'name')
@@ -72,6 +78,12 @@ module.exports.ShowLoanRecordPage = async (req, res, next) => {
 
 module.exports.retrieveAllLoanRecordTable = async (req, res, next) => {
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+        
         const loanRecord = await Loan.find({}, { _id: 0, __v: 0, notes: 0 })
         .populate('device', 'name')
         .populate('borrower', 'username')

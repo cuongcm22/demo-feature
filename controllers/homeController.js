@@ -61,7 +61,11 @@ module.exports.homePage = async (req, res, next) => {
 
 module.exports.errorPage = async (req, res, next) => {
     try {
-        res.render("error404");
+        res.render("error404", {
+            title: 'Home page',
+            routes: {
+                'Trang chủ': '/'
+            }});
     } catch(err) {
         console.log(err)
         res.status(404)

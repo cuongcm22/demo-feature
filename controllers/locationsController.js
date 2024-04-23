@@ -11,6 +11,12 @@ function handleAlertWithRedirectPage(alertString, redirect) {
 
 module.exports.showCreateLocationsPage = async (req, res, next) => {
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+
         const locations = await Location.find({}, 'name').then(location => location.map(location => location.name));
         res.render("./contents/locations/createLocations.pug", {
             title: 'Vị trí',
@@ -28,6 +34,12 @@ module.exports.showCreateLocationsPage = async (req, res, next) => {
 
 module.exports.addLocations = async (req, res, next) => {
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+
         const location = new Location(req.body)
         await location
             .save()
@@ -47,10 +59,17 @@ module.exports.addLocations = async (req, res, next) => {
 }
 
 module.exports.showDetailLocationsPage = async (req, res, next) => {
-    const locations = await Location.find()
-        .sort({ _id: -1 }) // Sắp xếp theo _id giảm dần để lấy 20 phần tử cuối cùng
-        .limit(20) 
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+
+        const locations = await Location.find()
+            .sort({ _id: -1 }) // Sắp xếp theo _id giảm dần để lấy 20 phần tử cuối cùng
+            .limit(20) 
+
         res.render("./contents/locations/detailLocations.pug", {
             title: 'Vị trí',
             routes: {
@@ -66,8 +85,15 @@ module.exports.showDetailLocationsPage = async (req, res, next) => {
 }
 
 module.exports.retrieveAllLocationsTable = async (req, res, next) => {
-    const locations = await Location.find();
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+
+        const locations = await Location.find();
+
         res.status(200).json({
             success: 'true',
             data: locations
@@ -79,7 +105,12 @@ module.exports.retrieveAllLocationsTable = async (req, res, next) => {
 
 module.exports.updateLocations = async (req, res, next) => {
     try {
-        console.log(req.body);
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+
         // Tìm và cập nhật nhà cung cấp dựa trên name
         const updateLocation = await Location.findOneAndUpdate(
         { name: req.body.nameholder }, // Điều kiện tìm kiếm
@@ -103,6 +134,12 @@ module.exports.updateLocations = async (req, res, next) => {
 
 module.exports.deleteLocations = async (req, res, next) => {
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+        
         const deletedLocation = await Location.deleteOne({ name: req.body.locationName });
         res.status(200).json(
             success = true

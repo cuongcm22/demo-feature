@@ -11,6 +11,12 @@ function handleAlertWithRedirectPage(alertString, redirect) {
 
 module.exports.showCreateDeviceTypesPage = async (req, res, next) => {
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+
         res.render("./contents/deviceTypes/createDeviceTypes.pug", {
             title: 'Loại thiết bị',
             routes: {
@@ -26,6 +32,12 @@ module.exports.showCreateDeviceTypesPage = async (req, res, next) => {
 
 module.exports.addDeviceTypes = async (req, res, next) => {
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+
         const deviceType = new DeviceType(req.body)
         await deviceType
             .save()
@@ -39,10 +51,17 @@ module.exports.addDeviceTypes = async (req, res, next) => {
 }
 
 module.exports.showDetailDeviceTypesPage = async (req, res, next) => {
-    const deviceTypes = await DeviceType.find()
-        .sort({ _id: -1 }) // Sắp xếp theo _id giảm dần để lấy 20 phần tử cuối cùng
-        .limit(20) 
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+
+        const deviceTypes = await DeviceType.find()
+            .sort({ _id: -1 }) // Sắp xếp theo _id giảm dần để lấy 20 phần tử cuối cùng
+            .limit(20) 
+
         res.render("./contents/deviceTypes/detailDeviceTypes.pug", {
             title: 'Loại thiết bị',
             routes: {
@@ -58,8 +77,15 @@ module.exports.showDetailDeviceTypesPage = async (req, res, next) => {
 }
 
 module.exports.retrieveAllDeviceTypesTable = async (req, res, next) => {
-    const deviceTypes = await DeviceType.find();
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+
+        const deviceTypes = await DeviceType.find();
+        
         res.status(200).json({
             success: 'true',
             data: deviceTypes
@@ -71,7 +97,12 @@ module.exports.retrieveAllDeviceTypesTable = async (req, res, next) => {
 
 module.exports.updateDeviceTypes = async (req, res, next) => {
     try {
-        console.log(req.body);
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+
         // Tìm và cập nhật nhà cung cấp dựa trên name
         const updateDeviceTypes = await DeviceType.findOneAndUpdate(
         { name: req.body.nameholder }, // Điều kiện tìm kiếm
@@ -95,6 +126,12 @@ module.exports.updateDeviceTypes = async (req, res, next) => {
 
 module.exports.deleteDeviceTypes = async (req, res, next) => {
     try {
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/404')
+        }
+        
         const deleteDeviceType = await DeviceType.deleteOne({ name: req.body.deviceTypeName });
         res.status(200).json(
             success = true

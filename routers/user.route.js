@@ -23,7 +23,7 @@ router.post('/register', authController.register);
 router.get('/logout', authController.logOut);
 
 // Route quản lý người dùng
-router.get('/manage', authController.ShowManageUserPage);
-router.post('/update', authController.manageUserDB);
+router.get('/manage', authenToken.authenToken, authController.ShowManageUserPage);
+router.post('/update', authenToken.authenToken, authController.manageUserDB);
 
 module.exports = router;
