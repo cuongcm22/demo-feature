@@ -35,6 +35,7 @@ function renderTable(page) {
         "showingInfo"
     ).textContent = `Showing ${paginatedData.length} of ${filteredData.length} total Users`;
 }
+
 function renderPagination() {
     const pagination = document.getElementById("pagination");
     pagination.innerHTML = "";
@@ -87,6 +88,19 @@ function createPaginationEllipsis() {
     li.appendChild(span);
     return li;
 }
+function goToPage() {
+    const pageInput = document.getElementById('pageInput').value;
+    if (pageInput >= 1 && pageInput <= Math.ceil(filteredData.length / itemsPerPage)) {
+        currentPage = parseInt(pageInput);
+        renderTable(currentPage);
+        renderPagination();
+    } else {
+        alert('Trang không tồn tại');
+    }
+}
+
+window.goToPage = goToPage
+
 function searchFunction() {
     const input = document.getElementById("searchInput").value.toLowerCase();
     filteredData = mockData.filter(

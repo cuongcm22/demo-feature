@@ -137,19 +137,69 @@ $(document).ready(function () {
 
     // Function to render pagination
     function renderPagination() {
-        pagination.html("");
+        const pagination = document.getElementById("pagination");
+        pagination.innerHTML = "";
         const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-        for (let i = 1; i <= totalPages; i++) {
-            const li = $(`<li class="page-item"><a class="page-link" href="#">${i}</a></li>`);
-            li.click(() => {
-                currentPage = i;
-                renderDeviceCards(getCurrentPageData());
-                highlightCurrentPage();
-            });
-            pagination.append(li);
+        const maxVisiblePages = 5; // Maximum number of visible page links
+        const halfMaxVisiblePages = Math.floor(maxVisiblePages / 2);
+        let startPage = Math.max(1, currentPage - halfMaxVisiblePages);
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+        if (endPage - startPage + 1 < maxVisiblePages) {
+            startPage = Math.max(1, endPage - maxVisiblePages + 1);
         }
-        highlightCurrentPage();
+        if (currentPage > halfMaxVisiblePages + 1) {
+            pagination.appendChild(createPaginationLink(1, "First"));
+            pagination.appendChild(createPaginationEllipsis());
+        }
+        for (let i = startPage; i <= endPage; i++) {
+            pagination.appendChild(
+                createPaginationLink(i, i.toString(), i === currentPage)
+            );
+        }
+        if (totalPages - endPage > 1) {
+            pagination.appendChild(createPaginationEllipsis());
+            pagination.appendChild(createPaginationLink(totalPages, "Last"));
+        }
     }
+    function createPaginationLink(pageNumber, text, isActive = false) {
+        const li = document.createElement("li");
+        li.className = "page-item";
+        if (isActive) {
+            li.classList.add("active");
+        }
+        const a = document.createElement("a");
+        a.className = "page-link";
+        a.href = "#";
+        a.textContent = text;
+        a.addEventListener("click", () => {
+            currentPage = pageNumber;
+            renderDeviceCards(getCurrentPageData());
+            renderPagination();
+        });
+        li.appendChild(a);
+        return li;
+    }
+    function createPaginationEllipsis() {
+        const li = document.createElement("li");
+        li.className = "page-item disabled";
+        const span = document.createElement("span");
+        span.className = "page-link";
+        span.textContent = "...";
+        li.appendChild(span);
+        return li;
+    }
+    function goToPage() {
+        const pageInput = document.getElementById('pageInput').value;
+        if (pageInput >= 1 && pageInput <= Math.ceil(filteredData.length / itemsPerPage)) {
+            currentPage = parseInt(pageInput);
+            renderDeviceCards(getCurrentPageData());
+            renderPagination();
+        } else {
+            alert('Trang không tồn tại');
+        }
+    }
+    
+    window.goToPage = goToPage
 
     // Function to highlight current page in pagination
     function highlightCurrentPage() {

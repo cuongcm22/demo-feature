@@ -60,8 +60,15 @@ style.
           #deviceContainer.row.row-cols-1.row-cols-md-2.row-cols-lg-3.g-2.mt-1
             // Device cards will be inserted here dynamically
         // Pagination
-        nav(aria-label='Page navigation')
-          ul#pagination.pagination.justify-content-center
+        .d-flex.justify-content-between.align-items-center.mt-4
+          p#showingInfo.text-muted(style='@media (max-width: 768.98px) {\
+          display: none\
+          }') Showing 0 of 0 total Devices
+          nav(aria-label='Page navigation')
+            ul#pagination.pagination
+          .input-group(style='width: 100px;')
+            input#pageInput.form-control(type='number' min='1' max='1' value='1')
+            button.btn.btn-primary(onclick='goToPage()') Go
 
 
 // Modal
