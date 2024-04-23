@@ -35,7 +35,7 @@ $(document).ready(function () {
 
         document.getElementById(
             "showingInfo"
-        ).textContent = `Showing ${paginatedData.length} of ${filteredData.length} total Users`;
+        ).textContent = `Showing ${paginatedData.length} of ${filteredData.length} total Suppliers`;
     }
 
     function renderPagination() {
