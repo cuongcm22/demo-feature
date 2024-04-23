@@ -155,13 +155,36 @@ module.exports.register = async (req, res, next) => {
 }
 
 module.exports.logOut = async (req, res, next) => {
-    const expireTimeSession = 1
-    const sessionId = `sessionId=''; Max-Age=${expireTimeSession}; HttpOnly; SameSite=Strict; Path=/`;
-    const sessionUserName = `sessionUserName=''; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;
-    const sessionToken = `token=''; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;
+    try {
+        const expireTimeSession = 1
+        const sessionId = `sessionId=''; Max-Age=${expireTimeSession}; HttpOnly; SameSite=Strict; Path=/`;
+        const sessionUserName = `sessionUserName=''; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;
+        const sessionToken = `token=''; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;
+    
+        res.setHeader('Set-Cookie', [sessionId, sessionUserName, sessionToken]);
+    
+        const handleReturn = handleAlertWithRedirectPage('Đăng xuất thành công!', '/')
+        res.send(handleReturn)
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+}
 
-    res.setHeader('Set-Cookie', [sessionId, sessionUserName, sessionToken]);
+module.exports.ShowManageUserPage = async (req, res, next) => {
+    try {
 
-    const handleReturn = handleAlertWithRedirectPage('Đăng xuất thành công!', '/')
-    res.send(handleReturn)
+        const users = await User.find({}, { _id: 0, __v: 0, password: 0 })
+
+        res.render("./contents/admin/manageUser.pug", {
+            title: 'Home page',
+            routes: {
+                'Home': '/',
+                'Login': '/user/login',
+                'Register': '/user/register'
+            },
+            data: users
+        });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
 }

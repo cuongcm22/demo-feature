@@ -36,7 +36,7 @@ module.exports.authenToken = async (req, res, next) => {
                     } else {
                         // === Return userid ===
                         // req.user = decodedData
-                        const userId = await User.findOne({ email: decodedData.email });
+                        const userId = await User.findOne({ email: decodedData.email },{ _id: 0, __v: 0, password: 0 });
                         req.userId = userId
                         // console.log('Token còn hiệu lực đến:', expirationTime);
                     }

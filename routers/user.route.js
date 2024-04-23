@@ -19,7 +19,10 @@ router.get('/register', authController.showRegisterForm);
 // Route xử lý đăng ký
 router.post('/register', authController.register);
 
-//Route xử lý việc đăng xuất
+// Route xử lý việc đăng xuất
 router.get('/logout', authController.logOut);
+
+// Route quản lý người dùng
+router.get('/manage', authController.ShowManageUserPage);
 
 module.exports = router;
