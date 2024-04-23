@@ -12,20 +12,40 @@ style.
     cursor: pointer;
   }
 
+  .nav-bar-desktop > li:hover {
+    background: #0d6efd;
+    color: white;
+  }
+
+  .nav-bar-tablet-mobile > li {
+    background-color: rgb(33 37 41);
+    border: none;
+    color: white;
+  }
+
+  .nav-bar-tablet-mobile > li:hover {
+    background: rgb(69 78 87);
+  }
+
 .container-fluid
   .content
     h2 Trả thiết bị
     .row
       // Sidebar
       #sidebar.col-md-3.sidebar
-        // Dropdown for small screens
-        .dropdown.d-md-none
-          button#dropdownMenuButton.btn.btn-secondary.dropdown-toggle(type='button' data-bs-toggle='dropdown' aria-expanded='false') Filter by Device Type
-          ul#deviceTypeList.dropdown-menu(aria-labelledby='dropdownMenuButton')
-            // Device types will be inserted here dynamically
+        span.btn.btn-outline-success.d-md-none(type='button' data-bs-toggle='offcanvas' data-bs-target='#offcanvasExample' aria-controls='offcanvasExample')
+          | Chọn loại thiết bị
+        
+        #offcanvasExample.offcanvas.offcanvas-start(tabindex='-1' aria-labelledby='offcanvasExampleLabel')
+          .offcanvas-header.bg-dark.text-white
+            h5#offcanvasExampleLabel.offcanvas-title Dashee
+            button.btn-close.text-reset(type='button' data-bs-dismiss='offcanvas' aria-label='Close')
+          .offcanvas-body.bg-dark.text-white
+            ul.nav.nav-pills.flex-column.mb-auto.nav-group#deviceTypeList.deviceTypeList.list-group.nav-bar-tablet-mobile
+              // Device types will be inserted here dynamically
         // Device type list
         .d-none.d-md-block
-          ul#deviceTypeList.deviceTypeList.list-group
+          ul#deviceTypeList.deviceTypeList.list-group.nav-bar-desktop
             // Device types will be inserted here dynamically
       // Main content
       .col-md-9

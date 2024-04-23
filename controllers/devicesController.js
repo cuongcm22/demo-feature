@@ -318,7 +318,7 @@ module.exports.ShowReturnDevicePage = async (req, res, next) => {
         const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
 
         const userId = req.userId;
-
+        
         const loans = await Loan.find({ borrower: userId, transactionStatus: 'Borrowed' }).then(loans => loans.map(loan => loan.device));
         
         // Tìm kiếm dựa trên mảng
