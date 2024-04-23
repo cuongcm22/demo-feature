@@ -4,7 +4,6 @@ const itemsPerPage = 5;
 let currentPage = 1;
 let filteredData = mockData;
 function renderTable(page) {
-    console.log('Re-render');
     const tableBody = document.getElementById("user-table");
     tableBody.innerHTML = "";
     const startIndex = (page - 1) * itemsPerPage;

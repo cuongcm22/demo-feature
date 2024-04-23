@@ -1,3 +1,4 @@
+var updateCardCurrent;
 var modalBody = document.getElementById("modalBody");
 
 // Function to create device card
@@ -62,6 +63,7 @@ window.onload = function () {
 
 // Function to populate device loan table
 function populateTable(event) {
+    updateCardCurrent = event.target.parentElement.parentElement.parentElement
     const id = event.target.parentElement.parentElement.querySelector(".idDevice").textContent
     const device = mockData.find(item => item._id === id);
     modalBody.innerHTML = `
@@ -103,14 +105,7 @@ function confirmLoan(deviceId) {
                 if (response.data.success) {
                     alert("Trả thiết bị thành công!");
 
-                    // const deviceToDelete = mockData.find(
-                    //     (device) => device.serialNumber == deviceId
-                    // );
-                    // const index = mockData.indexOf(deviceToDelete);
-                    // mockData.splice(index, 1);
-
-                    // renderDeviceCards(mockData);
-                    window.location.assign(window.location.origin  + '/device/return');
+                    updateCardCurrent.style.display = 'none'
                 } else {
                     alert(
                         "Trả thiết bị không thành công, vui lòng liên hệ admin để giải quyết vấn đề."
