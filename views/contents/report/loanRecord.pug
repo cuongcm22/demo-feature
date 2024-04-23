@@ -26,8 +26,22 @@ link(href='/css/report/loanRecord.css' rel='stylesheet')
         .warrper.text-center
           #spinner.spinner-border.text-primary(role='status')
                 span.visually-hidden Loading...
-  nav
-    ul#pagination.pagination.justify-content-center
+                
+  .d-flex.justify-content-between.justify-content-center.align-items-center.mt-4.mb-4
+    style.
+      @media (max-width: 768.98px) {
+        #showingInfo {
+          display: none; 
+        }
+      }
+    p#showingInfo.text-muted() Showing 0 of 0 total Users
+
+    nav(aria-label='Page navigation')
+      ul#pagination.pagination(style='margin-bottom: unset')
+    .input-group(style='width: 100px;')
+      input#pageInput.form-control(type='number' min='1' max='1' value='1')
+      button.btn.btn-primary(onclick='goToPage()') Go
+      // Data will be dynamically inserted here
 
 script.
   var mockData = !{data};
