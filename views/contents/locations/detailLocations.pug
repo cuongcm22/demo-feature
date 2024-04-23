@@ -13,20 +13,20 @@ include ../../main.pug
     .mt-3
       input#flexSwitchCheckDefault.switchRetrieveAllData.form-check-input(type='checkbox' role='switch')
       label.form-check-label(for='flexSwitchCheckDefault') Hiển thị tất cả
-
-  table.table.mt-3.table-striped
-    thead
-      tr
-        th STT
-        th Tên
-        th Mô tả
-        th Địa chỉ
-        th Chức năng
-    tbody#locationTableBody
-      // Location data will be inserted here
-      .warrper.text-center
-        #spinner.spinner-border.text-primary(role='status')
-          span.visually-hidden Loading...
+  .table-responsive
+    table.table.mt-3.table-striped
+      thead
+        tr
+          th STT
+          th Tên
+          th Mô tả
+          th Địa chỉ
+          th Chức năng
+      tbody#locationTableBody
+        // Location data will be inserted here
+        .warrper.text-center
+          #spinner.spinner-border.text-primary(role='status')
+            span.visually-hidden Loading...
   .d-flex.align-items-center.justify-content-center
     nav(aria-label='Page navigation')
       ul#pagination.pagination

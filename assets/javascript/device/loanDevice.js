@@ -118,13 +118,7 @@ function confirmLoan(deviceId) {
                     if (response.data.success == true) {
                         alert("Mượn thiết bị thành công!");
 
-                        const deviceToDelete = mockData.find(
-                            (device) => device.serialNumber == deviceId
-                        );
-                        const index = mockData.indexOf(deviceToDelete);
-                        mockData.splice(index, 1);
-
-                        renderDeviceCards(mockData);
+                        window.location.assign(window.location.origin  + '/device/loan');
                     } else if (response.data.success == false) {
                         alert("Thiết bị đã có người khác mượn!");
                     } else {

@@ -234,7 +234,7 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
             .populate('deviceType', 'name')
             .populate('location', 'name')
             .populate('supplier', 'name')
-
+        
         // Chuyển đổi cấu trúc của deviceType thành object chỉ chứa trường name
         const formattedDevices = devices.map(device => ({
             ...device.toObject(),
@@ -267,8 +267,7 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
 module.exports.loanDeviceDB = async (req, res, next) => {
     try {
         // Using inherited variable from authenServer
-        const username = req.userId;
-        const userId = await User.findOne({ username: username });
+        const userId = req.userId;
 
         const { deviceId, expectedReturnDate } = req.body;
         const adjustedDateString = convertDatetoString(expectedReturnDate);
@@ -276,7 +275,7 @@ module.exports.loanDeviceDB = async (req, res, next) => {
         const device = await Device.findOne({ serialNumber: deviceId })
 
         const loans = await Loan.find({ device: device, transactionStatus: 'Borrowed' })
-
+        
         // Kiểm tra đã có người mượn thiết bị trong bảng loan hay chưa
         if (loans.length > 0) {
             return res.status(200).json({ success: false, message: 'Device already loaned' });
@@ -318,24 +317,23 @@ module.exports.ShowReturnDevicePage = async (req, res, next) => {
     try {
         const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
 
-        const username = req.userId;
-        const userId = await User.findOne({ username: username });
+        const userId = req.userId;
 
-        const loans = await Loan.find({ borrower: userId }).then(loans => loans.map(loan => loan.device));
+        const loans = await Loan.find({ borrower: userId, transactionStatus: 'Borrowed' }).then(loans => loans.map(loan => loan.device));
         
         // Tìm kiếm dựa trên mảng
         const devices = await Device.find({ _id: { $in: loans } })
                 .populate('deviceType', 'name')
                 .populate('location', 'name')
                 .populate('supplier', 'name')
-
+        
         const formattedDevices = devices.map(device => ({
             ...device.toObject(),
             deviceType: device.deviceType.name,
             location: device.location.name,
             supplier: device.supplier.name
         }));
-
+        
         res.render("./contents/device/returnDevice.pug", {
             title: 'Thiết bị',
             routes: {
@@ -356,8 +354,7 @@ module.exports.ShowReturnDevicePage = async (req, res, next) => {
 
 module.exports.returnDeviceDB = async (req, res, next) => {
     try {
-        const username = req.userId;
-        const userId = await User.findOne({ username: username });
+        const userId = req.userId;
 
         const { deviceId } = req.body
         
@@ -372,11 +369,11 @@ module.exports.returnDeviceDB = async (req, res, next) => {
         }  
 
         const loan = await Loan.findOneAndUpdate(
-            { borrower: userId },
+            { borrower: userId, device: device, transactionStatus: 'Borrowed' },
             { $set: { transactionStatus: 'Returned', actualReturnDate: new Date() } },
             { new: true }
         )
-
+        
         if (!loan) {
             return res.status(200).json({ success: false, message: 'Loan not found' });
         }  

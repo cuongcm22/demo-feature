@@ -81,16 +81,17 @@ module.exports.login = async (req, res, next) => {
     try {
 
         var { email, password } = req.body
-
+        console.log(email, password);
         email = email.toLowerCase()
         password = password.toLowerCase()
+        console.log(email, password);
         // Lưu ý, cần phải đặt thời gian hết hạn token và cookie trùng nhau, tránh lỗi
         const expireTimeSession = 3000
         const accessToken = jwt.sign(req.body, process.env.ACCESS_TOKEN_SECRET, {
             expiresIn: "3000s",
         });
 
-        await User.find({'email': email}).then(user => {
+        await User.find({email: email, password: password}).then(user => {
             console.log(`User ${user[0].username} just login!`.bgBlue);
 
             const sessionId = `sessionId=${req.sessionID}; Max-Age=${expireTimeSession}; HttpOnly; SameSite=Strict; Path=/`;
