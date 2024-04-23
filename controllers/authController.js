@@ -81,10 +81,10 @@ module.exports.login = async (req, res, next) => {
     try {
 
         var { email, password } = req.body
-        console.log(email, password);
+        
         email = email.toLowerCase()
         password = password.toLowerCase()
-        console.log(email, password);
+        
         // Lưu ý, cần phải đặt thời gian hết hạn token và cookie trùng nhau, tránh lỗi
         const expireTimeSession = 3000
         const accessToken = jwt.sign(req.body, process.env.ACCESS_TOKEN_SECRET, {
@@ -182,8 +182,37 @@ module.exports.ShowManageUserPage = async (req, res, next) => {
                 'Login': '/user/login',
                 'Register': '/user/register'
             },
-            data: users
+            data: JSON.stringify(users)
         });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+}
+
+module.exports.manageUserDB = async (req, res, next) => {
+    try {
+        
+        const { username, role } = req.body
+        
+        const updatedUser = await User.findOneAndUpdate({username: username}, 
+            {$set: {
+                role: role
+            }}
+            , {
+            new: true,
+            runValidators: true
+        });
+
+        if (!updatedUser) {
+            return res.status(404).json({ 
+                success: false,
+                message: "User not found" 
+            });
+        }
+
+        res.status(200).json({
+            success: true
+        })
     } catch (error) {
         res.status(400).json({ message: error.message });
     }

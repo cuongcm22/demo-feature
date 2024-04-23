@@ -1,380 +1,10 @@
-const mockData = [
-    {
-        username: "john_doe",
-        email: "john@example.com",
-        phone: "123-456-7890",
-        role: "guest",
-        createdAt: "2024-04-22T00:00:00.000Z",
-    },
-    {
-        username: "jane_smith",
-        email: "jane@example.com",
-        phone: "987-654-3210",
-        role: "guest",
-        createdAt: "2024-04-22T00:00:00.000Z",
-    },
-    {
-        username: "mike_jackson",
-        email: "mike@example.com",
-        phone: "555-555-5555",
-        role: "guest",
-        createdAt: "2024-04-22T00:00:00.000Z",
-    },
-    {
-        username: "sara_williams",
-        email: "sara@example.com",
-        phone: "111-222-3333",
-        role: "guest",
-        createdAt: "2024-04-22T00:00:00.000Z",
-    },
-    {
-        username: "user_user",
-        email: "user@example.com",
-        phone: "999-888-7777",
-        role: "guest",
-        createdAt: "2024-04-22T00:00:00.000Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "huydapchai",
-        email: "huydapchai@gmail.com",
-        phone: "0335538651",
-        role: "guest",
-        createdAt: "2024-04-22T07:50:44.784Z",
-    },
-    {
-        username: "nam",
-        email: "nam@gmail.com",
-        phone: "0123456789",
-        role: "admin",
-        createdAt: "2024-04-22T15:01:48.160Z",
-    },
-];
+
+var updateRoleUserCurrent;
 const itemsPerPage = 5;
 let currentPage = 1;
 let filteredData = mockData;
 function renderTable(page) {
+    console.log('Re-render');
     const tableBody = document.getElementById("user-table");
     tableBody.innerHTML = "";
     const startIndex = (page - 1) * itemsPerPage;
@@ -384,7 +14,7 @@ function renderTable(page) {
         const row = document.createElement("tr");
         row.innerHTML = `
     <td>${user.username}</td>
-    <td>${
+    <td class="user-role">${
         user.role == "admin"
             ? '<span class="me-2 badge bg-danger">Admin</span><span class="me-2 badge bg-warning text-dark">Moderator</span><span class="me-2 badge bg-success">Guest</span>'
             : `${
@@ -394,7 +24,7 @@ function renderTable(page) {
               }`
     }</td>
     <td>
-    <button class="btn btn-sm btn-primary" onclick="openEditModal('${
+    <button class="btn btn-sm btn-primary" onclick="openEditModal(event, '${
         user.username
     }', '${user.email}', '${user.phone}', '${user.role}')">Edit</button>
     <button class="btn btn-sm btn-danger">Delete</button>
@@ -469,21 +99,24 @@ function searchFunction() {
     renderTable(currentPage);
     renderPagination();
 }
-function openEditModal(username, email, phone, role) {
+function openEditModal(event, username, email, phone, role) {
+    updateRoleUserCurrent = event.target.parentElement.parentElement.querySelector('.user-role')
+    
     document.getElementById("editUsername").value = username;
     document.getElementById("editEmail").value = email;
     document.getElementById("editPhone").value = phone;
-    document.getElementById("editRole").innerHTML = `
+    document.getElementById("wrapperEditRole").innerHTML = `
     ${
         role == "admin"
             ? ""
             : `
-      <select class="form-select" aria-label="Default select example" name='role'>
-      <option value="moderator" ${
-          role == "moderator" ? "selected" : ""
-      }>Moderator</option>
-      <option value="user" ${role == "guest" ? "selected" : ""}>Guest</option>
-      </select>
+        <label class="form-label" for="editRole">Role</label>
+        <select id="editRole" class="form-select" aria-label="Default select example" name='role'>
+        <option value="moderator" ${
+            role == "moderator" ? "selected" : ""
+        }>Moderator</option>
+        <option value="user" ${role == "guest" ? "selected" : ""}>Guest</option>
+        </select>
     `
     }
     `;
@@ -492,3 +125,47 @@ function openEditModal(username, email, phone, role) {
 renderTable(currentPage);
 renderPagination();
 $("#searchButton").on("click", searchFunction);
+
+async function editUser(event) {
+    try {
+        event.preventDefault();
+
+        const userInfoRow = updateRoleUserCurrent
+
+        const cancelButton = document.querySelector('.btn-close[data-bs-dismiss="modal"]')
+        // Assuming formData is an object containing form data
+        const formData = {
+            username: document.getElementById("editUsername").value,
+            email: document.getElementById("editEmail").value,
+            phone: document.getElementById("editPhone").value,
+            role: document.getElementById("editRole").value,
+        };
+        await axios.post("/user/update", formData)
+        .then((response) => {
+            // Handle success
+            
+            if (response.data.success == true) {
+                
+                userInfoRow.innerHTML = `
+                    <span class="me-2 badge bg-warning text-dark">Moderator</span><span class="me-2 badge bg-success">Guest</span>
+                `
+
+                cancelButton.click()
+                
+                alert('Cập nhật trạng thái người dùng thành công!')
+
+                
+            } else {
+                alert('Có lỗi xảy ra khi cập nhật trạng thái người dùng.')
+            }
+        })
+        .catch((error) => {
+            // Handle error
+            console.error(error);
+        });
+    } catch (error) {
+        throw error;
+    }
+};
+
+$("#btnSubmit").on("click", editUser);

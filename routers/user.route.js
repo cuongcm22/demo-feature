@@ -24,5 +24,6 @@ router.get('/logout', authController.logOut);
 
 // Route quản lý người dùng
 router.get('/manage', authController.ShowManageUserPage);
+router.post('/update', authController.manageUserDB);
 
 module.exports = router;
