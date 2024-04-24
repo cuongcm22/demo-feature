@@ -1,0 +1,93 @@
+/* 1 */
+{
+    "_id" : ObjectId("6626163f490475b920ad7b9d"),
+    "username" : "john_doe",
+    "password" : "password123",
+    "email" : "john@example.com",
+    "phone" : "123-456-7890",
+    "role" : "guest",
+    "createdAt" : "2024-04-22T00:00:00Z"
+}
+
+/* 2 */
+{
+    "_id" : ObjectId("6626163f490475b920ad7b9e"),
+    "username" : "jane_smith",
+    "password" : "password456",
+    "email" : "jane@example.com",
+    "phone" : "987-654-3210",
+    "role" : "guest",
+    "createdAt" : "2024-04-22T00:00:00Z"
+}
+
+/* 3 */
+{
+    "_id" : ObjectId("6626163f490475b920ad7b9f"),
+    "username" : "mike_jackson",
+    "password" : "password789",
+    "email" : "mike@example.com",
+    "phone" : "555-555-5555",
+    "role" : "user",
+    "createdAt" : "2024-04-22T00:00:00Z"
+}
+
+/* 4 */
+{
+    "_id" : ObjectId("6626163f490475b920ad7ba0"),
+    "username" : "sara_williams",
+    "password" : "passwordabc",
+    "email" : "sara@example.com",
+    "phone" : "111-222-3333",
+    "role" : "moderator",
+    "createdAt" : "2024-04-22T00:00:00Z"
+}
+
+/* 5 */
+{
+    "_id" : ObjectId("6626163f490475b920ad7ba1"),
+    "username" : "user_user",
+    "password" : "userpassword",
+    "email" : "user@example.com",
+    "phone" : "999-888-7777",
+    "role" : "guest",
+    "createdAt" : "2024-04-22T00:00:00Z"
+}
+
+/* 6 */
+{
+    "_id" : ObjectId("662616d4af1ed0c40898ba62"),
+    "username" : "huydapchai",
+    "password" : "12345",
+    "email" : "huydapchai@gmail.com",
+    "phone" : "0335538651",
+    "role" : "moderator",
+    "createdAt" : ISODate("2024-04-22T07:50:44.784Z"),
+    "__v" : 0,
+    "fullname" : "Trần Đức Bo lbblb"
+}
+
+/* 7 */
+{
+    "_id" : ObjectId("66267bdc3845e4ecb477f0c8"),
+    "username" : "nam",
+    "password" : "nam",
+    "email" : "nam@gmail.com",
+    "phone" : "0123456789",
+    "role" : "admin",
+    "createdAt" : ISODate("2024-04-22T15:01:48.160Z"),
+    "__v" : 0,
+    "fullname" : "Nguyễn Danh Nam"
+}
+
+/* 8 */
+{
+    "_id" : ObjectId("6628ddd51384c60f648be9b5"),
+    "username" : "trang",
+    "fullname" : "Nguyễn Thị Thùy Trang lang thang",
+    "password" : "12345",
+    "email" : "trang@gmail.com",
+    "phone" : "0335538651",
+    "role" : "moderator",
+    "createdAt" : ISODate("2024-04-24T10:24:21.248Z"),
+    "__v" : 0
+}
