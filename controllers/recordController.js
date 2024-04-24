@@ -47,9 +47,14 @@ module.exports.ShowLoanRecordPage = async (req, res, next) => {
                 
                 const borrowedAt = formatDateTime(record.borrowedAt)
 
-                const expectedReturnDate = formatDateTime(formatDateTime)
+                const expectedReturnDate = formatDateTime(record.expectedReturnDate)
 
-                const actualReturnDate = formatDateTime(formatDateTime)
+                if (record.actualReturnDate) {
+                    var actualReturnDate = formatDateTime(record.actualReturnDate)
+                } else {
+                    var actualReturnDate = '-'
+                }
+
                 
                 const transactionStatus = record.transactionStatus
                 return {
@@ -101,20 +106,18 @@ module.exports.retrieveAllLoanRecordTable = async (req, res, next) => {
             const formattedDevices = records.map((record) => {
                 const device = record.device.name
                 const username = record.borrower.username
-                const borrowedAt =
-                    record.borrowedAt instanceof Date
-                        ? record.borrowedAt.toLocaleDateString("en-GB")
-                        : record.borrowedAt;
+                
+                const borrowedAt = formatDateTime(record.borrowedAt)
 
-                const expectedReturnDate =
-                    record.expectedReturnDate instanceof Date
-                        ? record.expectedReturnDate.toLocaleDateString("en-GB")
-                        : record.expectedReturnDate;
+                const expectedReturnDate = formatDateTime(record.expectedReturnDate)
 
-                const actualReturnDate =
-                    record.actualReturnDate instanceof Date
-                        ? record.actualReturnDate.toLocaleDateString("en-GB")
-                        : record.actualReturnDate;
+                if (record.actualReturnDate) {
+                    var actualReturnDate = formatDateTime(record.actualReturnDate)
+                } else {
+                    var actualReturnDate = '-'
+                }
+
+                
                 const transactionStatus = record.transactionStatus
                 return {
                     device,

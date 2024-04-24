@@ -14,18 +14,15 @@ const {
  } = require('../models/models.js')
 
 function convertDatetoString(dateString) {
-    // Parse the input date string
-    const initialDate = new Date(dateString);
-    
-    // Add 4 days to the initial date
-    const adjustedDate = new Date(initialDate.getTime() + (4 * 24 * 60 * 60 * 1000)); // Adding 4 days
-    
-    // Format the adjusted date to ISO 8601 format
-    const isoDateString = adjustedDate.toISOString();
-    
-    // Return the ISO 8601 formatted date string
-    return isoDateString;
-}
+    // Create a Date object from the string
+    const date = new Date(dateString);
+  
+    // Format the date according to the desired format
+    const formattedDate = date.toISOString();
+  
+    // Return the formatted date string
+    return formattedDate;
+  }
 
 function handleAlertWithRedirectPage(alertString, redirect) {
     return `<script>
@@ -330,7 +327,8 @@ module.exports.loanDeviceDB = async (req, res, next) => {
         const userId = req.userId;
         
         const { deviceId, expectedReturnDate } = req.body;
-        const adjustedDateString = convertDatetoString(expectedReturnDate);
+        
+        const expectedReturnDateString = convertDatetoString(expectedReturnDate);
         
         let deviceObject = await Device.findOne({ serialNumber: deviceId })
 
@@ -358,7 +356,7 @@ module.exports.loanDeviceDB = async (req, res, next) => {
             device: deviceObject,
             borrower: userId,
             borrowedAt: new Date(),
-            expectedReturnDate: adjustedDateString,
+            expectedReturnDate: expectedReturnDateString,
             transactionStatus: 'Borrowed'
         });
         
