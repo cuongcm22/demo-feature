@@ -107,7 +107,7 @@ module.exports.ShowReportDevicePage = async (req, res, next) => {
                     'Thông tin thiết bị': '/device/report',
                     'Tạo thiết bị': '/device/create',
                     'Mượn thiết bị': '/device/loan',
-                    'Trả thiết bị': '/device/return',
+                    'Đã mượn': '/device/return',
                     'Loan record': '/record/loanrecord'
                 },
                 formattedDevices: JSON.stringify(devices),
@@ -141,7 +141,7 @@ module.exports.showCreateDevicePage = async (req, res, next) => {
                 'Thông tin thiết bị': '/device/report',
                 'Tạo thiết bị': '/device/create',
                 'Mượn thiết bị': '/device/loan',
-                'Trả thiết bị': '/device/return',
+                'Đã mượn': '/device/return',
                 'Loan record': '/record/loanrecord'
             },
             devicetypes: devicetypes,
@@ -255,8 +255,56 @@ module.exports.deleteDeviceDB = async (req, res, next) => {
     }
 }
 
+// module.exports.ShowLoanDevicePage = async (req, res, next) => {
+//     try {
+//         console.log('Show loan device page route');
+//         const { role } = req.userId;
+
+//         if (role != 'admin' && role != 'moderator') {
+//             return res.redirect('/404')
+//         }
+
+//         // const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
+        
+//         // // Lấy danh sách tất cả các thiết bị và populate tên loại thiết bị
+//         // const devices = await Device.find({initStatus: 'notUsed'})
+//         //     // Phương thức populate() của Mongoose được sử dụng để thực hiện việc populate (nạp dữ liệu) từ một collection khác (trong trường hợp này là DeviceType)
+//         //     .populate('deviceType', 'name')
+//         //     .populate('location', 'name')
+//         //     .populate('supplier', 'name')
+        
+//         // // Chuyển đổi cấu trúc của deviceType thành object chỉ chứa trường name
+//         // const formattedDevices = devices.map(device => ({
+//         //     ...device.toObject(),
+//         //     deviceType: device.deviceType.name,
+//         //     location: device.location.name,
+//         //     supplier: device.supplier.name
+//         // }));
+
+//         // res.render("./contents/device/loanDevice.pug", {
+//         //     title: 'Thiết bị',
+//         //     routes: {
+//         //         'Trang chủ': '/',
+//         //         'Thông tin thiết bị': '/device/report',
+//         //         'Tạo thiết bị': '/device/create',
+//         //         'Mượn thiết bị': '/device/loan',
+//         //         'Đã mượn': '/device/return',
+//         //         'Loan record': '/record/loanrecord'
+//         //     },
+//         //     data: JSON.stringify(formattedDevices),
+//         //     deviceTypes: JSON.stringify(devicetypes)
+//         // });
+
+//     } catch (error) {
+//         res.status(401).json({
+//             message: error
+//         })
+//     }
+// }
+
 module.exports.ShowLoanDevicePage = async (req, res, next) => {
     try {
+            
         const { role } = req.userId;
 
         if (role != 'admin' && role != 'moderator') {
@@ -264,16 +312,30 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
         }
 
         const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
-        
-        // Lấy danh sách tất cả các thiết bị và populate tên loại thiết bị
-        const devices = await Device.find({initStatus: 'notUsed'})
-            // Phương thức populate() của Mongoose được sử dụng để thực hiện việc populate (nạp dữ liệu) từ một collection khác (trong trường hợp này là DeviceType)
+
+        // Khai báo các biến cần sử dụng
+        let arrDevicesNotUsed, arrDevicesUsed, arrDeviceReturned, Data;
+
+        // Câu truy vấn 1: Lọc ra tất cả các thiết bị với trạng thái notUsed
+        arrDevicesNotUsed = await Device.find({ initStatus: 'notUsed' })
             .populate('deviceType', 'name')
             .populate('location', 'name')
             .populate('supplier', 'name')
-        
-        // Chuyển đổi cấu trúc của deviceType thành object chỉ chứa trường name
-        const formattedDevices = devices.map(device => ({
+
+        // Câu truy vấn 2: Lọc ra tất cả các thiết bị với trạng thái Used
+        arrDevicesUsed = await Device.find({ initStatus: 'used' });
+
+        // Câu truy vấn 3: Lấy ra tất cả các deviceId trong bảng loan dựa trên arrDevicesUsed với trạng thái returned
+        const deviceIdsUsed = arrDevicesUsed.map(device => device._id);
+        arrDeviceReturned = await Loan.distinct('device', { device: { $in: deviceIdsUsed }, transactionStatus: 'Returned' })
+            .populate('deviceType', 'name')
+            .populate('location', 'name')
+            .populate('supplier', 'name')
+
+        // Câu truy vấn 4: Ghép 2 arrDevicesNotUsed và arrDeviceReturned
+        Data = [...arrDevicesNotUsed, ...arrDeviceReturned];
+
+        const formattedDevices = Data.map(device => ({
             ...device.toObject(),
             deviceType: device.deviceType.name,
             location: device.location.name,
@@ -287,7 +349,7 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
                 'Thông tin thiết bị': '/device/report',
                 'Tạo thiết bị': '/device/create',
                 'Mượn thiết bị': '/device/loan',
-                'Trả thiết bị': '/device/return',
+                'Đã mượn': '/device/return',
                 'Loan record': '/record/loanrecord'
             },
             data: JSON.stringify(formattedDevices),
@@ -297,7 +359,7 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
     } catch (error) {
         res.status(401).json({
             message: error
-        })
+        });
     }
 }
 
@@ -311,50 +373,48 @@ module.exports.loanDeviceDB = async (req, res, next) => {
 
         // Using inherited variable from authenServer
         const userId = req.userId;
-
+        
         const { deviceId, expectedReturnDate } = req.body;
         const adjustedDateString = convertDatetoString(expectedReturnDate);
         
-        const device = await Device.findOne({ serialNumber: deviceId })
+        let deviceObject = await Device.findOne({ serialNumber: deviceId })
 
-        const loans = await Loan.find({ device: device, transactionStatus: 'Borrowed' })
+        // Task 3: Check if the device is already borrowed
+        const existingLoan = await Loan.findOne({ device: deviceObject, transactionStatus: 'Borrowed' })
         
-        // Kiểm tra đã có người mượn thiết bị trong bảng loan hay chưa
-        if (loans.length > 0) {
-            return res.status(200).json({ success: false, message: 'Device already loaned' });
-        } else {
-            const device = await Device.findOneAndUpdate(
-                { serialNumber: deviceId },
-                { $set: { initStatus: 'used' } },
-                { new: true }
-            )
-    
-            if (!device) {
-                return res.status(200).json({ success: false, message: 'Device not found' });
-            }    
-    
-            // Create new loan object
-            const newLoan = new Loan({
-                device: device._id,
-                borrower: userId,
-                borrowedAt: new Date(),
-                expectedReturnDate: adjustedDateString,
-                transactionStatus: 'Borrowed'
-            });
-    
-            // Save the new loan
-            await newLoan.save()
-    
-            // Send success response
-            res.status(200).json({ success: true });
+        if (existingLoan) {
+            return res.status(200).json({ success: false, message: 'Device is already borrowed' });
+        }
+        
+        // Task 5: Update device status from notUsed to Used based on deviceId
+        deviceObject.initStatus = 'used';
+        await deviceObject.save();
+        
+        // Task 6: Get all idRecord from loan table and save them in increasing order, initialize idRecord to 1 if not exists
+        const latestLoan = await Loan.findOne().sort({ idRecord: -1 });
+        let nextIdRecord = 1;
+        if (latestLoan) {
+            nextIdRecord = latestLoan.idRecord + 1;
         }
 
+        // Task 7: Save all information into loan table
+        const newLoan = new Loan({
+            idRecord: nextIdRecord,
+            device: deviceObject,
+            borrower: userId,
+            borrowedAt: new Date(),
+            expectedReturnDate: adjustedDateString,
+            transactionStatus: 'Borrowed'
+        });
+        
+        await newLoan.save();
+
+        res.status(200).json({ success: true, message: 'Loan request processed successfully' });
+
     } catch (error) {
-        // Handle errors
-        console.error('Error loaning device:', error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
+        res.status(404).json({ error: error.message });
     }
-}
+};
 
 module.exports.ShowReturnDevicePage = async (req, res, next) => {
     try {
@@ -390,7 +450,7 @@ module.exports.ShowReturnDevicePage = async (req, res, next) => {
                 'Thông tin thiết bị': '/device/return',
                 'Tạo thiết bị': '/device/create',
                 'Mượn thiết bị': '/device/loan',
-                'Trả thiết bị': '/device/return',
+                'Đã mượn': '/device/return',
                 'Loan record': '/record/loanrecord'
             },
             data: JSON.stringify(formattedDevices),

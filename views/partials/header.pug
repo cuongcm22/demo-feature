@@ -19,11 +19,11 @@ header.header
             span.navbar-toggler-icon
         #navbarNav.collapse.navbar-collapse
           ul.navbar-nav.ms-auto
+            li.nav-item
+              a.nav-link#userNameID
             each route, nameRoute in routes
               li.nav-item
                 a.nav-link(href=route) #{nameRoute}
-            li.nav-item
-              a.nav-link#userNameID
             li#btnLogout.nav-item
               a.nav-link(href='/user/logout') Logout
               
