@@ -45,12 +45,12 @@ module.exports.homePage = async (req, res, next) => {
             title: 'Trang chủ',
             routes: {
                 'Trang chủ': '/',
-                'User': '/user',
-                'Thiết bị': '/device/report',
-                'Nhà cung cấp': '/suppliers/detail',
-                'Vị trí': '/locations/detail',
-                'Loại thiết bị': '/devicetypes/detail',
-                'Loan record': '/record/loanrecord',
+                'Quản lý profile': '/user',
+                'Quản lý thiết bị': '/device/report',
+                'Quản lý nhà cung cấp': '/suppliers/detail',
+                'Quản lý vị trí': '/locations/detail',
+                'Quản lý loại thiết bị': '/devicetypes/detail',
+                'Quản lý lịch sử mượn trả': '/record/loanrecord',
             }
         });
     } catch(err) {

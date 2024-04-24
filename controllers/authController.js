@@ -44,13 +44,16 @@ function handleAlertWithRedirectPage(alertString, redirect) {
 
 module.exports.showBioPage = async (req, res, next) => {
     try {
+        const { fullname, username, email, phone, role } = req.userId
+        // console.log({ fullname, username, email, phone });
         res.render("./contents/user/bioPage.pug", {
             title: 'Home page',
             routes: {
                 'Home': '/',
                 'User': '/user/login',
                 'Register': '/user/register'
-            }
+            },
+            data: { fullname, username, email, phone, role }
         });
     } catch (error) {
         res.status(400).json({

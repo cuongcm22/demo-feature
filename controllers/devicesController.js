@@ -255,55 +255,6 @@ module.exports.deleteDeviceDB = async (req, res, next) => {
     }
 }
 
-// module.exports.ShowLoanDevicePage = async (req, res, next) => {
-//     try {
-        
-//         const { role } = req.userId;
-
-//         if (role != 'admin' && role != 'moderator') {
-//             return res.redirect('/404')
-//         }
-
-//         const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
-        
-//         // Lấy danh sách tất cả các thiết bị và populate tên loại thiết bị
-//         const devices = await Device.find({initStatus: 'notUsed'})
-//             // Phương thức populate() của Mongoose được sử dụng để thực hiện việc populate (nạp dữ liệu) từ một collection khác (trong trường hợp này là DeviceType)
-//             .populate('deviceType', 'name')
-//             .populate('location', 'name')
-//             .populate('supplier', 'name')
-        
-//         // Chuyển đổi cấu trúc của deviceType thành object chỉ chứa trường name
-//         const formattedDevices = devices.map(device => ({
-//             ...device.toObject(),
-//             deviceType: device.deviceType.name,
-//             location: device.location.name,
-//             supplier: device.supplier.name
-//         }));
-
-//         // console.log(formattedDevices);
-
-//         res.render("./contents/device/loanDevice.pug", {
-//             title: 'Thiết bị',
-//             routes: {
-//                 'Trang chủ': '/',
-//                 'Thông tin thiết bị': '/device/report',
-//                 'Tạo thiết bị': '/device/create',
-//                 'Mượn thiết bị': '/device/loan',
-//                 'Đã mượn': '/device/return',
-//                 'Loan record': '/record/loanrecord'
-//             },
-//             data: JSON.stringify(formattedDevices),
-//             deviceTypes: JSON.stringify(devicetypes)
-//         });
-
-//     } catch (error) {
-//         res.status(401).json({
-//             message: error
-//         })
-//     }
-// }
-
 module.exports.ShowLoanDevicePage = async (req, res, next) => {
     try {
             

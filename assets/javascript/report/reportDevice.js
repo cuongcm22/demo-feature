@@ -248,21 +248,48 @@ function handleDelete(serialNumber, index) {
     })
 }
 // Search function
-document.getElementById("searchInput").addEventListener("keyup", function() {
-    var input, filter, table, tr, td, i, txtValue;
+// document.getElementById("searchButton").addEventListener("click", function() {
+//     var input, filter, table, tr, td, i, txtValue;
+//     input = document.getElementById("searchInput");
+//     filter = input.value.toUpperCase();
+//     table = document.querySelector("table");
+//     tr = table.getElementsByTagName("tr");
+//     for (i = 0; i < tr.length; i++) {
+//         td = tr[i].getElementsByTagName("td")[0]; // Search based on device name (first column)
+//         if (td) {
+//             txtValue = td.textContent || td.innerText;
+//             if (txtValue.toUpperCase().indexOf(filter) > -1) {
+//                 tr[i].style.display = ""; // Show row if search matches
+//             } else {
+//                 tr[i].style.display = "none"; // Hide row if search does not match
+//             }
+//         }
+//     }
+// });
+document.getElementById("searchButton").addEventListener("click", function() {
+    var input, filter, table, tr, td, i, j, txtValue;
     input = document.getElementById("searchInput");
     filter = input.value.toUpperCase();
     table = document.querySelector("table");
     tr = table.getElementsByTagName("tr");
     for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[0]; // Search based on device name (first column)
-        if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = ""; // Show row if search matches
-            } else {
-                tr[i].style.display = "none"; // Hide row if search does not match
+        // Lặp qua tất cả các cột của hàng
+        var found = false;
+        for (j = 0; j < tr[i].cells.length; j++) {
+            td = tr[i].cells[j];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                    break; // Nếu tìm thấy kết quả trong cột, thoát vòng lặp
+                }
             }
+        }
+        // Hiển thị hoặc ẩn hàng tùy thuộc vào kết quả tìm kiếm
+        if (found) {
+            tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
         }
     }
 });

@@ -13,6 +13,17 @@ const {
     DeviceType
  } = require('../models/models.js')
 
+ // Import thư viện Moment.js để làm việc với ngày giờ
+const moment = require('moment');
+
+// Hàm để chuyển đổi định dạng ngày giờ
+function formatDateTime(inputDateTime) {
+  // Sử dụng Moment.js để parse và format ngày giờ
+  const formattedDateTime = moment(inputDateTime).format('DD/MM/YYYY-HH:mm');
+  return formattedDateTime;
+}
+
+
 
 module.exports.ShowLoanRecordPage = async (req, res, next) => {
     try {
@@ -33,20 +44,13 @@ module.exports.ShowLoanRecordPage = async (req, res, next) => {
             const formattedDevices = records.map((record) => {
                 const device = record.device.name
                 const username = record.borrower.username
-                const borrowedAt =
-                    record.borrowedAt instanceof Date
-                        ? record.borrowedAt.toLocaleDateString("en-GB")
-                        : record.borrowedAt;
+                
+                const borrowedAt = formatDateTime(record.borrowedAt)
 
-                const expectedReturnDate =
-                    record.expectedReturnDate instanceof Date
-                        ? record.expectedReturnDate.toLocaleDateString("en-GB")
-                        : record.expectedReturnDate;
+                const expectedReturnDate = formatDateTime(formatDateTime)
 
-                const actualReturnDate =
-                    record.actualReturnDate instanceof Date
-                        ? record.actualReturnDate.toLocaleDateString("en-GB")
-                        : record.actualReturnDate;
+                const actualReturnDate = formatDateTime(formatDateTime)
+                
                 const transactionStatus = record.transactionStatus
                 return {
                     device,
