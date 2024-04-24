@@ -131,12 +131,13 @@ module.exports.showRegisterForm = async (req, res, next) => {
 
 module.exports.register = async (req, res, next) => {
     // Parse data from req.body
-    const { username, password, email, phone } = req.body;
+    const { fullname, username, password, email, phone } = req.body;
 
     try {
         // Create a new user instance
         const newUser = new User({
-        username: username,
+        fullname: fullname,
+        username: username.toLowerCase(),
         password: password,
         email: email,
         phone: phone,

@@ -17,6 +17,7 @@ $(document).ready(function () {
             <td>${record.device}</td>
             <td>${record.username}</td>
             <td>${record.borrowedAt}</td>
+            <td>${record.expectedReturnDate}</td>
             <td>${record.actualReturnDate ? record.actualReturnDate : "-"}</td>
             <td>${record.transactionStatus}</td>
             </tr>

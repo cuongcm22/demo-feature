@@ -52,7 +52,7 @@ section.container
         .warrper.text-center
           #spinner1.spinner-border.text-primary(role='status')
             span.visually-hidden Loading...
-          img#imageRender.img-fluid(style='max-width: 100%' src='' alt='')
+          img#imageRender.img-fluid(style='width: 100%; min-height: 500px; object-fit: cover;' src='/public/images/image-placeholder02.jpg' alt='')
       
       .mb-3
         label.form-label(for='deviceVideo') Video thi&#x1EBF;t b&#x1ECB;: (devices.videoUrl)
@@ -60,7 +60,7 @@ section.container
         .warrper.center-video
           #spinner2.spinner-border.text-primary(role='status')
             span.visually-hidden Loading...
-          video#videoRender.img-fluid(controls='' style='max-width: 100%; display: none;')
+          video#videoRender.img-fluid(controls='' style='width: 100%; min-height: 500px; display: none;')
             // Nếu trình duyệt không hỗ trợ video, thông báo sẽ hiển thị ở đây
             | Tr&igrave;nh duy&#x1EC7;t c&#x1EE7;a b&#x1EA1;n kh&ocirc;ng h&#x1ED7; tr&#x1EE3; ph&aacute;t video.
       
@@ -90,7 +90,7 @@ section.container
         input#warrantyExpiry.form-control(type='date' name='warrantyExpiry' required='')
       input#localStorageDataImage(type='hidden' name='imageUrl')
       input#localStorageDataVideo(type='hidden' name='videoUrl')
-      button.btn.btn-primary(type='submit') &Dstrok;&abreve;ng k&yacute;
+      button.btn.btn-primary.w-100.mb-5(type='submit') &Dstrok;&abreve;ng k&yacute;
 
 script(src='https://unpkg.com/html5-qrcode')
 script(src="/javascript/device/createDevice.js") 

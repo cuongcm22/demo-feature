@@ -38,6 +38,11 @@ module.exports.ShowLoanRecordPage = async (req, res, next) => {
                         ? record.borrowedAt.toLocaleDateString("en-GB")
                         : record.borrowedAt;
 
+                const expectedReturnDate =
+                    record.expectedReturnDate instanceof Date
+                        ? record.expectedReturnDate.toLocaleDateString("en-GB")
+                        : record.expectedReturnDate;
+
                 const actualReturnDate =
                     record.actualReturnDate instanceof Date
                         ? record.actualReturnDate.toLocaleDateString("en-GB")
@@ -47,6 +52,7 @@ module.exports.ShowLoanRecordPage = async (req, res, next) => {
                     device,
                     username,
                     borrowedAt,
+                    expectedReturnDate,
                     actualReturnDate,
                     transactionStatus
                 };
@@ -96,6 +102,11 @@ module.exports.retrieveAllLoanRecordTable = async (req, res, next) => {
                         ? record.borrowedAt.toLocaleDateString("en-GB")
                         : record.borrowedAt;
 
+                const expectedReturnDate =
+                    record.expectedReturnDate instanceof Date
+                        ? record.expectedReturnDate.toLocaleDateString("en-GB")
+                        : record.expectedReturnDate;
+
                 const actualReturnDate =
                     record.actualReturnDate instanceof Date
                         ? record.actualReturnDate.toLocaleDateString("en-GB")
@@ -105,6 +116,7 @@ module.exports.retrieveAllLoanRecordTable = async (req, res, next) => {
                     device,
                     username,
                     borrowedAt,
+                    expectedReturnDate,
                     actualReturnDate,
                     transactionStatus
                 };

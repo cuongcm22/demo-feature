@@ -8,6 +8,9 @@ script(src="/javascript/user/registerForm.js")
       h2.mb-4 &Dstrok;&abreve;ng K&yacute;
       form#registerForm(action='./register' method='post' enctype='application/json')
         .mb-3
+          label.form-label(for='fullname' required='true') Tên đầy đủ
+          input#fullname.form-control(type='text' name='fullname' required='' value='abcsdsds')
+        .mb-3
           label.form-label(for='username') T&ecirc;n &dstrok;&abreve;ng nh&#x1EAD;p:
           input#username.form-control(type='text' name='username' required='' value='abcsdsds')
         .mb-3
