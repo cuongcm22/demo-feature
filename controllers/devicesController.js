@@ -257,43 +257,45 @@ module.exports.deleteDeviceDB = async (req, res, next) => {
 
 // module.exports.ShowLoanDevicePage = async (req, res, next) => {
 //     try {
-//         console.log('Show loan device page route');
+        
 //         const { role } = req.userId;
 
 //         if (role != 'admin' && role != 'moderator') {
 //             return res.redirect('/404')
 //         }
 
-//         // const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
+//         const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
         
-//         // // Lấy danh sách tất cả các thiết bị và populate tên loại thiết bị
-//         // const devices = await Device.find({initStatus: 'notUsed'})
-//         //     // Phương thức populate() của Mongoose được sử dụng để thực hiện việc populate (nạp dữ liệu) từ một collection khác (trong trường hợp này là DeviceType)
-//         //     .populate('deviceType', 'name')
-//         //     .populate('location', 'name')
-//         //     .populate('supplier', 'name')
+//         // Lấy danh sách tất cả các thiết bị và populate tên loại thiết bị
+//         const devices = await Device.find({initStatus: 'notUsed'})
+//             // Phương thức populate() của Mongoose được sử dụng để thực hiện việc populate (nạp dữ liệu) từ một collection khác (trong trường hợp này là DeviceType)
+//             .populate('deviceType', 'name')
+//             .populate('location', 'name')
+//             .populate('supplier', 'name')
         
-//         // // Chuyển đổi cấu trúc của deviceType thành object chỉ chứa trường name
-//         // const formattedDevices = devices.map(device => ({
-//         //     ...device.toObject(),
-//         //     deviceType: device.deviceType.name,
-//         //     location: device.location.name,
-//         //     supplier: device.supplier.name
-//         // }));
+//         // Chuyển đổi cấu trúc của deviceType thành object chỉ chứa trường name
+//         const formattedDevices = devices.map(device => ({
+//             ...device.toObject(),
+//             deviceType: device.deviceType.name,
+//             location: device.location.name,
+//             supplier: device.supplier.name
+//         }));
 
-//         // res.render("./contents/device/loanDevice.pug", {
-//         //     title: 'Thiết bị',
-//         //     routes: {
-//         //         'Trang chủ': '/',
-//         //         'Thông tin thiết bị': '/device/report',
-//         //         'Tạo thiết bị': '/device/create',
-//         //         'Mượn thiết bị': '/device/loan',
-//         //         'Đã mượn': '/device/return',
-//         //         'Loan record': '/record/loanrecord'
-//         //     },
-//         //     data: JSON.stringify(formattedDevices),
-//         //     deviceTypes: JSON.stringify(devicetypes)
-//         // });
+//         // console.log(formattedDevices);
+
+//         res.render("./contents/device/loanDevice.pug", {
+//             title: 'Thiết bị',
+//             routes: {
+//                 'Trang chủ': '/',
+//                 'Thông tin thiết bị': '/device/report',
+//                 'Tạo thiết bị': '/device/create',
+//                 'Mượn thiết bị': '/device/loan',
+//                 'Đã mượn': '/device/return',
+//                 'Loan record': '/record/loanrecord'
+//             },
+//             data: JSON.stringify(formattedDevices),
+//             deviceTypes: JSON.stringify(devicetypes)
+//         });
 
 //     } catch (error) {
 //         res.status(401).json({
@@ -324,10 +326,12 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
 
         // Câu truy vấn 2: Lọc ra tất cả các thiết bị với trạng thái Used
         arrDevicesUsed = await Device.find({ initStatus: 'used' });
-
+        // console.log(arrDevicesUsed);
         // Câu truy vấn 3: Lấy ra tất cả các deviceId trong bảng loan dựa trên arrDevicesUsed với trạng thái returned
         const deviceIdsUsed = arrDevicesUsed.map(device => device._id);
         arrDeviceReturned = await Loan.distinct('device', { device: { $in: deviceIdsUsed }, transactionStatus: 'Returned' })
+        
+        arrDeviceReturned = await Device.find({ _id: { $in: arrDeviceReturned } })
             .populate('deviceType', 'name')
             .populate('location', 'name')
             .populate('supplier', 'name')
@@ -428,8 +432,10 @@ module.exports.ShowReturnDevicePage = async (req, res, next) => {
 
         const userId = req.userId;
         
+        // Thực hiện việc lấy ra các bảng loan với userId và transactionStatus: 'Borrowed'
         const loans = await Loan.find({ borrower: userId, transactionStatus: 'Borrowed' }).then(loans => loans.map(loan => loan.device));
         
+        // Lấy ra tất cả các deviceObjects dựa trên các bảng ghi người dùng mượn
         // Tìm kiếm dựa trên mảng
         const devices = await Device.find({ _id: { $in: loans } })
                 .populate('deviceType', 'name')
@@ -473,18 +479,16 @@ module.exports.returnDeviceDB = async (req, res, next) => {
 
         const { deviceId } = req.body
         
-        const device = await Device.findOneAndUpdate(
-            { serialNumber: deviceId },
-            { $set: { initStatus: 'notUsed' } },
-            { new: true }
-        )
+        // Task 1: Thực hiện việc lấy ra deviceObject được gửi lên từ phía client
+        let deviceObject = await Device.findOne({ serialNumber: deviceId })
         
-        if (!device) {
+        if (!deviceObject) {
             return res.status(200).json({ success: false, message: 'Device not found' });
         }  
 
+        // Task 2: Thực hiện việc tìm kiếm trong bảng loan với userId và deviceObject để cập nhật lại trạng thái
         const loan = await Loan.findOneAndUpdate(
-            { borrower: userId, device: device, transactionStatus: 'Borrowed' },
+            { borrower: userId, device: deviceObject, transactionStatus: 'Borrowed' },
             { $set: { transactionStatus: 'Returned', actualReturnDate: new Date() } },
             { new: true }
         )
