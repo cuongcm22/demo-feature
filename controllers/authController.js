@@ -45,14 +45,28 @@ function handleAlertWithRedirectPage(alertString, redirect) {
 module.exports.showBioPage = async (req, res, next) => {
     try {
         const { fullname, username, email, phone, role } = req.userId
-        // console.log({ fullname, username, email, phone });
-        res.render("./contents/user/bioPage.pug", {
-            title: 'Home page',
-            routes: {
+
+        let routesTemp;
+
+        const roleUserId = req.userId.role
+        if (roleUserId != 'admin') {
+            routesTemp = {
                 'Home': '/',
                 'User': '/user/login',
                 'Register': '/user/register'
-            },
+            }
+        } else {
+            routesTemp = {
+                'Home': '/',
+                'User': '/user/login',
+                'Quản trị viên': '/user/manage',
+                'Register': '/user/register'
+            }
+        }
+
+        res.render("./contents/user/bioPage.pug", {
+            title: 'Home page',
+            routes: routesTemp,
             data: { fullname, username, email, phone, role }
         });
     } catch (error) {
@@ -95,10 +109,11 @@ module.exports.login = async (req, res, next) => {
         });
 
         await User.find({email: email, password: password}).then(user => {
+            const fullname = encodeURIComponent(user[0].fullname);
             console.log(`User ${user[0].username} just login!`.bgBlue);
 
             const sessionId = `sessionId=${req.sessionID}; Max-Age=${expireTimeSession}; HttpOnly; SameSite=Strict; Path=/`;
-            const sessionUserName = `sessionUserName=${user[0].username}; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;
+            const sessionUserName = `sessionUserName=${fullname}; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;
             const sessionToken = `token=${accessToken}; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;
 
             res.setHeader('Set-Cookie', [sessionId, sessionUserName, sessionToken]);
@@ -205,10 +220,13 @@ module.exports.manageUserDB = async (req, res, next) => {
             return res.redirect('/404')
         }
 
-        const { username, role } = req.body
-        
+        const { username, fullname, email, phone, role } = req.body
+        console.log({ username, fullname, email, phone, role });
         const updatedUser = await User.findOneAndUpdate({username: username}, 
             {$set: {
+                fullname: fullname,
+                email: email,
+                phone: phone,
                 role: role
             }}
             , {

@@ -175,6 +175,13 @@ $(document).ready(function () {
     // Sự kiện tìm kiếm khi nhập vào ô tìm kiếm
     // $("#searchInput").on("input", searchFunction);
     $("#searchButton").on("click", searchFunction);
+    $("#searchInput").on("input", (event) => {
+        const btnSearch = document.querySelector('#searchButton')
+        if (!event.target.value) {
+            btnSearch.click()
+        }
+    });
+
     const tempMockData = mockData;
     $(".switchRetrieveAllData").change(function () {
         // Check if the checkbox is checked

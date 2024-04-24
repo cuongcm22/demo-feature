@@ -23,7 +23,7 @@ function renderTable(page) {
               }`
     }</td>
     <td>
-    <button class="btn btn-sm btn-primary" onclick="openEditModal(event, '${
+    <button class="btn btn-sm btn-primary" onclick="openEditModal(event, '${user.fullname}', '${
         user.username
     }', '${user.email}', '${user.phone}', '${user.role}')">Edit</button>
     <button class="btn btn-sm btn-danger">Delete</button>
@@ -112,10 +112,11 @@ function searchFunction() {
     renderTable(currentPage);
     renderPagination();
 }
-function openEditModal(event, username, email, phone, role) {
+function openEditModal(event, fullname, username, email, phone, role) {
     updateRoleUserCurrent = event.target.parentElement.parentElement.querySelector('.user-role')
     
     document.getElementById("editUsername").value = username;
+    document.getElementById("editUserFullName").value = fullname;
     document.getElementById("editEmail").value = email;
     document.getElementById("editPhone").value = phone;
     document.getElementById("wrapperEditRole").innerHTML = `
@@ -149,6 +150,7 @@ async function editUser(event) {
         // Assuming formData is an object containing form data
         const formData = {
             username: document.getElementById("editUsername").value,
+            fullname: document.getElementById("editUserFullName").value,
             email: document.getElementById("editEmail").value,
             phone: document.getElementById("editPhone").value,
             role: document.getElementById("editRole").value,
@@ -188,3 +190,9 @@ async function editUser(event) {
 };
 
 $("#btnSubmit").on("click", editUser);
+$("#searchInput").on("input", (event) => {
+    const btnSearch = document.querySelector('#searchButton')
+    if (!event.target.value) {
+        btnSearch.click()
+    }
+});
