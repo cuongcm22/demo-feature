@@ -264,43 +264,57 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
         const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
 
         // Khai báo các biến cần sử dụng
-        let arrDevicesNotUsed, arrDevicesUsed, arrDeviceReturned, Data, arrDeviceBorrwed;
+        let arrDeviceIdsNotUsed, arrDeviceIdsUsed, Data;
+
+        var arrDeviceIdsLoanChecked = [];
 
         // Câu truy vấn 1: Lọc ra tất cả các thiết bị với trạng thái notUsed
-        arrDevicesNotUsed = await Device.find({ initStatus: 'notUsed' })
+        arrDeviceIdsNotUsed = await Device.find({ initStatus: 'notUsed' })
             .populate('deviceType', 'name')
             .populate('location', 'name')
             .populate('supplier', 'name')
+        // console.log('arrDeviceIdsNotUsed: ', arrDeviceIdsNotUsed);
+        // Task 2: Kiểm tra bảng deviceId lấy ra tất cả các deviceId với trạng thái 'used' => arrDeviceIdsUsed
+        arrDeviceIdsUsed = await Device.find({ initStatus: 'used' }).then(device => device.map(device => device._id))
+
+        // Task 3: Thực hiện lượt qua tất cả các deviceIds có trong arrDeviceIdsUsed trong bảng loan table
+
+        const processDeviceId = async (deviceId) => {
+            let arrDeviceIdsBorrowedReturn = await Loan.find({ device: deviceId });
+            const arrDeviceIdsBorrowed = arrDeviceIdsBorrowedReturn
+                .filter(item => item.transactionStatus === 'Borrowed')
+                .map(item => item.device);
+            const arrDeviceIdsReturned = arrDeviceIdsBorrowedReturn
+                .filter(item => item.transactionStatus === 'Returned')
+                .map(item => item.device);
+            console.log('arrDeviceIdsBorrowed: ', arrDeviceIdsBorrowed.length);
+            console.log('arrDeviceIdsReturned: ', arrDeviceIdsReturned.length);
+            if (!arrDeviceIdsBorrowed.length > arrDeviceIdsReturned.length) {
+                arrDeviceIdsLoanChecked.push(deviceId);
+            }
+        };
+
+        await Promise.all(arrDeviceIdsUsed.map(processDeviceId));
+
+        console.log('Check 1 arrDeviceIdsLoanChecked: ', arrDeviceIdsLoanChecked.length)
         
-        // Task 2: Lọc ra tất cả các thiết bị với trạng thái Used
-        arrDevicesUsed = await Device.find({ initStatus: 'used' }).then(device => device.map(device => device._id))
-
-        // Task 3: Lấy ra những thiết bị đã mượn 
-        arrDeviceBorrwed = await Loan.find({transactionStatus: 'Borrowed'}).then(loan => loan.map(loan => loan.device))
-
-        // Task 4: sau đó loại bỏ ra khỏi arrDevicesUsed
-        // Chuyển đổi các ObjectId trong arrDeviceBorrwed thành chuỗi
-        const arrDeviceBorrwedStrings = arrDeviceBorrwed.map(obj => obj.toString());
-
-        // Lọc các phần tử có trong [arrDeviceBorrwed] khỏi [arrDevicesUsed]
-        const filteredarrDevicesUsed = arrDevicesUsed.filter(obj => !arrDeviceBorrwedStrings.includes(obj.toString()));
-
-        // Thực hiện việc lọc qua lần nữa và lấy ra thông tin của bảng Device dựa trên filteredarrDevicesUsed
-        arrDeviceReturned = await Device.find({ _id: { $in: filteredarrDevicesUsed } })
+        arrDeviceIdsLoanChecked = await Device.find({ _id: { $in: arrDeviceIdsLoanChecked } })
             .populate('deviceType', 'name')
             .populate('location', 'name')
             .populate('supplier', 'name')
+
+        console.log('Check 2 arrDeviceIdsLoanChecked: ', arrDeviceIdsLoanChecked.length);
         
         // Câu truy vấn 4: Ghép 2 arrDevicesNotUsed và arrDeviceReturned
-        Data = [...arrDevicesNotUsed, ...arrDeviceReturned];
-
+        Data = [...arrDeviceIdsNotUsed, ...arrDeviceIdsLoanChecked]
+        
         const formattedDevices = Data.map(device => ({
             ...device.toObject(),
             deviceType: device.deviceType.name,
             location: device.location.name,
             supplier: device.supplier.name
         }));
-
+        
         res.render("./contents/device/loanDevice.pug", {
             title: 'Thiết bị',
             routes: {
@@ -340,9 +354,11 @@ module.exports.loanDeviceDB = async (req, res, next) => {
         let deviceObject = await Device.findOne({ serialNumber: deviceId })
 
         // Task 3: Check if the device is already borrowed
-        const existingLoan = await Loan.findOne({ device: deviceObject, transactionStatus: 'Borrowed' })
+        const existingLoanBorrowed = await Loan.find({ device: deviceObject, transactionStatus: 'Borrowed' })
+
+        const existingLoanReturned = await Loan.find({ device: deviceObject, transactionStatus: 'Returned' })
         
-        if (existingLoan) {
+        if (existingLoanBorrowed.length > existingLoanReturned.length) {
             return res.status(200).json({ success: false, message: 'Device is already borrowed' });
         }
         
@@ -388,36 +404,62 @@ module.exports.ShowReturnDevicePage = async (req, res, next) => {
 
         const userId = req.userId;
         
-        // Thực hiện việc lấy ra các bảng loan với userId và transactionStatus: 'Borrowed'
-        const loans = await Loan.find({ borrower: userId, transactionStatus: 'Borrowed' }).then(loans => loans.map(loan => loan.device));
+        let arrDeviceIdsUsed = await Device.find({ initStatus: 'used' }).then(device => device.map(device => device._id))
+
+        const processDeviceId = async (deviceId) => {
+            let arrDeviceIdsBorrowedReturn = await Loan.find({ borrower: userId })
+            const arrDeviceIdsBorrowed = arrDeviceIdsBorrowedReturn
+                .filter(item => item.transactionStatus === 'Borrowed')
+                .map(item => item.device);
+            const arrDeviceIdsReturned = arrDeviceIdsBorrowedReturn
+                .filter(item => item.transactionStatus === 'Returned')
+                .map(item => item.device);
+            console.log('arrDeviceIdsBorrowed: ', arrDeviceIdsBorrowed.length);
+            console.log('arrDeviceIdsReturned: ', arrDeviceIdsReturned.length);
+            if (!arrDeviceIdsBorrowed.length > arrDeviceIdsReturned.length) {
+                arrDeviceIdsLoanChecked.push(deviceId);
+            }
+        };
+
+        await Promise.all(arrDeviceIdsUsed.map(processDeviceId));
+        console.log(arrDeviceIdsUsed);
+        // const loans = await Loan.find({ borrower: userId })
+        // const existingLoanBorrowed = await Loan.find({ device: deviceObject, transactionStatus: 'Borrowed' })
+
+        // const existingLoanReturned = await Loan.find({ device: deviceObject, transactionStatus: 'Returned' })
         
+        // if (existingLoanBorrowed.length > existingLoanReturned.length) {
+        //     return res.status(200).json({ success: false, message: 'Device is already borrowed' });
+        // }
+        // console.log(loans);
         // Lấy ra tất cả các deviceObjects dựa trên các bảng ghi người dùng mượn
         // Tìm kiếm dựa trên mảng
-        const devices = await Device.find({ _id: { $in: loans } })
-                .populate('deviceType', 'name')
-                .populate('location', 'name')
-                .populate('supplier', 'name')
+        // const devices = await Device.find({ _id: { $in: loans } })
+        //         .populate('deviceType', 'name')
+        //         .populate('location', 'name')
+        //         .populate('supplier', 'name')
         
-        const formattedDevices = devices.map(device => ({
-            ...device.toObject(),
-            deviceType: device.deviceType.name,
-            location: device.location.name,
-            supplier: device.supplier.name
-        }));
+        // const formattedDevices = devices.map(device => ({
+        //     ...device.toObject(),
+        //     deviceType: device.deviceType.name,
+        //     location: device.location.name,
+        //     supplier: device.supplier.name
+        // }));
         
-        res.render("./contents/device/returnDevice.pug", {
-            title: 'Thiết bị',
-            routes: {
-                'Trang chủ': '/',
-                'Thông tin thiết bị': '/device/return',
-                'Tạo thiết bị': '/device/create',
-                'Mượn thiết bị': '/device/loan',
-                'Đã mượn': '/device/return',
-                'Loan record': '/record/loanrecord'
-            },
-            data: JSON.stringify(formattedDevices),
-            deviceTypes: JSON.stringify(devicetypes)
-        });
+        // res.render("./contents/device/returnDevice.pug", {
+        //     title: 'Thiết bị',
+        //     routes: {
+        //         'Trang chủ': '/',
+        //         'Thông tin thiết bị': '/device/return',
+        //         'Tạo thiết bị': '/device/create',
+        //         'Mượn thiết bị': '/device/loan',
+        //         'Đã mượn': '/device/return',
+        //         'Loan record': '/record/loanrecord'
+        //     },
+        //     data: JSON.stringify(formattedDevices),
+        //     deviceTypes: JSON.stringify(devicetypes)
+        // });
+        res.status(200).json({})
     } catch (error) {
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
@@ -443,15 +485,37 @@ module.exports.returnDeviceDB = async (req, res, next) => {
         }  
 
         // Task 2: Thực hiện việc tìm kiếm trong bảng loan với userId và deviceObject để cập nhật lại trạng thái
-        const loan = await Loan.findOneAndUpdate(
-            { borrower: userId, device: deviceObject, transactionStatus: 'Borrowed' },
-            { $set: { transactionStatus: 'Returned', actualReturnDate: new Date() } },
-            { new: true }
-        )
+        // const loan = await Loan.findOneAndUpdate(
+        //     { borrower: userId, device: deviceObject, transactionStatus: 'Borrowed' },
+        //     { $set: { transactionStatus: 'Returned', actualReturnDate: new Date() } },
+        //     { new: true }
+        // )
+
+        // Task 6: Get all idRecord from loan table and save them in increasing order, initialize idRecord to 1 if not exists
+        const latestLoan = await Loan.findOne().sort({ idRecord: -1 });
+        let nextIdRecord = 1;
+        if (latestLoan) {
+            nextIdRecord = latestLoan.idRecord + 1;
+        }
+
+        const expectedReturnDate = await Loan.find({ borrower: userId, device: deviceObject, transactionStatus: 'Borrowed' }).sort({ idRecord: -1 }).then(loan => loan.expectedReturnDate)
+        // console.log(expectedReturnDate);
+        // Task 7: Save all information into loan table
+        const newLoan = new Loan({
+            idRecord: nextIdRecord,
+            device: deviceObject,
+            borrower: userId,
+            borrowedAt: new Date(),
+            expectedReturnDate: expectedReturnDate,
+            actualReturnDate: new Date(),
+            transactionStatus: 'Returned'
+        });
         
-        if (!loan) {
-            return res.status(200).json({ success: false, message: 'Loan not found' });
-        }  
+        await newLoan.save()
+            .then(result => {})
+            .catch(err => {
+                return res.status(200).json({success: false, message: 'Cant save device.'})
+            })
 
         res.status(200).json({
             success: true
