@@ -1,0 +1,124 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title Document
+    
+  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js' integrity='sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==' crossorigin='anonymous' referrerpolicy='no-referrer')
+  // jQuery Knob CDN
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/jQuery-Knob/1.2.13/jquery.knob.min.js' integrity='sha512-NhRZzPdzMOMf005Xmd4JonwPftz4Pe99mRVcFeRDcdCtfjv46zPIi/7ZKScbpHD/V0HB1Eb+ZWigMqw94VUVaw==' crossorigin='anonymous' referrerpolicy='no-referrer')
+  link(href='/css/dashboard/dashboard.css' rel='stylesheet')
+
+input#menu-toggle(type='checkbox' name='')
+.overlay
+  label(for='menu-toggle')  
+.sidebar
+  .sidebar-container
+    .brand
+      h3
+        span.lab.la-staylinked
+        |                         vase
+    .sidebar-avatar
+      div
+        img(src='https://media-exp1.licdn.com/dms/image/C4D03AQF9R2lxnH4fOw/profile-displayphoto-shrink_800_800/0/1639841285929?e=1654128000&v=beta&t=QvocDiNfivbaAzHjsX9fnl9eFa1ZSo4SBHeH4jZANEk' alt='avatar')
+      .avatar-info
+        .avatar-text
+          h4 maz develop
+          small 14-10-69
+        span.las.la-angle-double-down
+    .sidebar-menu
+      ul
+        li
+          a.active(href='#')
+            span.las.la-adjust
+            span Dashboard
+        li
+          a(href='#')
+            span.las.la-video
+            span Videos
+        li
+          a(href='#')
+            span.las.la-chart-bar
+            span Analytics
+        li
+          a(href='#')
+            span.las.la-calendar
+            span Schedule
+        li
+          a(href='#')
+            span.las.la-user
+            span Account
+    .sidebar-card
+      .side-card-icon
+        span.lab.la-codiepie
+      div
+        h4 Make AdSense
+        p add ads to your videos to earn money
+      button.btn.btn-main.btn-block Create now
+.main-content
+  header
+    .header-wrapper
+      label(for='menu-toggle')
+        span.las.la-bars
+      .header-title
+        h1 Analytics
+        p
+          | Display analytics about your Channel
+          span.las.la-chart-line
+    .header-action
+      button.btn.btn-main
+        span.las.la-video
+        |                         Upload
+  main
+    section
+      h3.section-head Overview
+      .analytics
+        .analytic
+          input.dial(data-readonly="true" type='text' value='75' data-width='100' data-height='100' data-fgcolor='#ffb515' data-thickness='.3')
+          .analytic-info
+            h4.analytic-info_desc Nh&#x1EEF;ng thi&#x1EBF;t b&#x1ECB; ch&#x1B0;a tr&#x1EA3;
+            h1.analytic-info_primary(style='color: #ffb515;') 75/100
+        .analytic
+          input.dial(data-readonly="true" type='text' value='50' data-width='100' data-height='100' data-fgcolor='#ff0000' data-thickness='.3')
+          .analytic-info
+            h4.analytic-info_desc Nh&#x1EEF;ng thi&#x1EBF;t b&#x1ECB; qu&aacute; h&#x1EA1;n nh&#x1B0;ng ch&#x1B0;a tr&#x1EA3;
+            h1.analytic-info_primary(style='color: #ff0000;')
+              | 50/100
+        .analytic
+          input.dial(data-readonly="true" type='text' value='5' data-width='100' data-height='250' data-fgcolor='#66EE66' data-thickness='.3')
+          .analytic-info
+            h4.analytic-info_desc Nh&#x1EEF;ng thi&#x1EBF;t b&#x1ECB; kh&ocirc;ng c&ograve;n ho&#x1EA1;t &dstrok;&#x1ED9;ng
+            h1.analytic-info_primary(style='color: #66EE66;')
+              | 5/250
+    section
+      .block-grid
+        .revenue-card
+          h3.section-head Total Revenue
+          .rev-content
+            img(src='https://media-exp1.licdn.com/dms/image/C4D03AQF9R2lxnH4fOw/profile-displayphoto-shrink_800_800/0/1639841285929?e=1654128000&v=beta&t=QvocDiNfivbaAzHjsX9fnl9eFa1ZSo4SBHeH4jZANEk' alt='profile')
+            .rev-info
+              h3 Mohsen Alizade
+              h1
+                | 3.5M 
+                small Subscribers
+            .rev-sum
+              h4 Total income
+              h2 $70.859
+        .graph-card
+          h3.section-head Graph
+          .graph-content
+            .graph-head
+              .icon-wrapper
+                .icon
+                  span.las.la-eye.text-main
+                .icon
+                  span.las.la-clock.text-success
+              .graph-select
+                select(name='' id='')
+                  option(value='') Septamber
+            .graph-board
+              canvas#revenueChart(width='100%')
+
+script(src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.js')
+script(src="/javascript/dashboard/dashboard.js") 

@@ -18,4 +18,6 @@ router.post('/export', homeController.exportFileCSV)
 router.get('/sendemail', homeController.sendEmail)
 router.post('/sendemailupload', moduleSendEmail.sendMail)
 
+// Route show dashboard
+router.get('/dashboard', homeController.showDashBoard)
 module.exports = router;
