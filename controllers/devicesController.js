@@ -403,63 +403,59 @@ module.exports.ShowReturnDevicePage = async (req, res, next) => {
         const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
 
         const userId = req.userId;
-        
-        let arrDeviceIdsUsed = await Device.find({ initStatus: 'used' }).then(device => device.map(device => device._id))
 
-        const processDeviceId = async (deviceId) => {
-            let arrDeviceIdsBorrowedReturn = await Loan.find({ borrower: userId })
-            const arrDeviceIdsBorrowed = arrDeviceIdsBorrowedReturn
-                .filter(item => item.transactionStatus === 'Borrowed')
-                .map(item => item.device);
-            const arrDeviceIdsReturned = arrDeviceIdsBorrowedReturn
-                .filter(item => item.transactionStatus === 'Returned')
-                .map(item => item.device);
-            console.log('arrDeviceIdsBorrowed: ', arrDeviceIdsBorrowed.length);
-            console.log('arrDeviceIdsReturned: ', arrDeviceIdsReturned.length);
-            if (!arrDeviceIdsBorrowed.length > arrDeviceIdsReturned.length) {
-                arrDeviceIdsLoanChecked.push(deviceId);
+        var arrDeviceIdsReuturnChecked = []
+        
+        // let arrDeviceIdsUsed = await Device.find({ initStatus: 'used' }).then(device => device.map(device => device._id))
+        
+        let arrDeviceIdsBorrowedReturn = await Loan.find({ borrower: userId }).then(loan => loan.map(loan => loan.device))
+        console.log(arrDeviceIdsBorrowedReturn);
+
+        var arrDeviceIdCount = {};
+
+        arrDeviceIdsBorrowedReturn.forEach(function(deviceId) {
+            if (arrDeviceIdCount[deviceId]) {
+                arrDeviceIdCount[deviceId]++;
+            } else {
+                arrDeviceIdCount[deviceId] = 1;
             }
-        };
-
-        await Promise.all(arrDeviceIdsUsed.map(processDeviceId));
-        console.log(arrDeviceIdsUsed);
-        // const loans = await Loan.find({ borrower: userId })
-        // const existingLoanBorrowed = await Loan.find({ device: deviceObject, transactionStatus: 'Borrowed' })
-
-        // const existingLoanReturned = await Loan.find({ device: deviceObject, transactionStatus: 'Returned' })
+        })
         
-        // if (existingLoanBorrowed.length > existingLoanReturned.length) {
-        //     return res.status(200).json({ success: false, message: 'Device is already borrowed' });
-        // }
-        // console.log(loans);
+        for (var deviceId in arrDeviceIdCount) {
+            console.log(deviceId + ': ' + arrDeviceIdCount[deviceId]);
+            if (arrDeviceIdCount[deviceId] % 2 != 0 ) {
+                console.log(`${deviceId} chia het cho 2`)
+                arrDeviceIdsReuturnChecked.push(deviceId)
+            }
+        }
         // Lấy ra tất cả các deviceObjects dựa trên các bảng ghi người dùng mượn
         // Tìm kiếm dựa trên mảng
-        // const devices = await Device.find({ _id: { $in: loans } })
-        //         .populate('deviceType', 'name')
-        //         .populate('location', 'name')
-        //         .populate('supplier', 'name')
+        const devices = await Device.find({ _id: { $in: arrDeviceIdsReuturnChecked }})
+                .populate('deviceType', 'name')
+                .populate('location', 'name')
+                .populate('supplier', 'name')
         
-        // const formattedDevices = devices.map(device => ({
-        //     ...device.toObject(),
-        //     deviceType: device.deviceType.name,
-        //     location: device.location.name,
-        //     supplier: device.supplier.name
-        // }));
+        const formattedDevices = devices.map(device => ({
+            ...device.toObject(),
+            deviceType: device.deviceType.name,
+            location: device.location.name,
+            supplier: device.supplier.name
+        }));
         
-        // res.render("./contents/device/returnDevice.pug", {
-        //     title: 'Thiết bị',
-        //     routes: {
-        //         'Trang chủ': '/',
-        //         'Thông tin thiết bị': '/device/return',
-        //         'Tạo thiết bị': '/device/create',
-        //         'Mượn thiết bị': '/device/loan',
-        //         'Đã mượn': '/device/return',
-        //         'Loan record': '/record/loanrecord'
-        //     },
-        //     data: JSON.stringify(formattedDevices),
-        //     deviceTypes: JSON.stringify(devicetypes)
-        // });
-        res.status(200).json({})
+        res.render("./contents/device/returnDevice.pug", {
+            title: 'Thiết bị',
+            routes: {
+                'Trang chủ': '/',
+                'Thông tin thiết bị': '/device/return',
+                'Tạo thiết bị': '/device/create',
+                'Mượn thiết bị': '/device/loan',
+                'Đã mượn': '/device/return',
+                'Loan record': '/record/loanrecord'
+            },
+            data: JSON.stringify(formattedDevices),
+            deviceTypes: JSON.stringify(devicetypes)
+        });
+        
     } catch (error) {
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
