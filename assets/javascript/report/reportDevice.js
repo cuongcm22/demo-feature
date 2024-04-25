@@ -19,32 +19,103 @@ function convertDateTime(isoDateString) {
     const formattedDate = `${day}/${month}/${year}`;
     return formattedDate
 }
+// Constants for pagination
+const itemsPerPage = 10; // Number of items per page
+let currentPage = 1; // Current page
+
+// Function to populate device loan table with pagination
+function populateTable(devices, currentPage, itemsPerPage) {
+    var tableBody = document.getElementById("deviceLoanTableBody");
+    tableBody.innerHTML = ""; // Clear previous content
+
+    // Calculate start and end index for current page
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, devices.length);
+
+    for (let i = startIndex; i < endIndex; i++) {
+        var device = devices[i];
+        var row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${device.name}</td>
+            <td>${device.deviceType.name}</td>
+            <td>${device.status}</td>
+            <td>${device.initStatus}</td>
+            <td>${device.location.name}</td>
+            <td>${convertDateTime(device.purchaseDate)}</td>
+            <td>${convertDateTime(device.warrantyExpiry)}</td>
+            <td>
+                <span class="btn badge bg-success" onclick="detailDevice(event, ${i})">Detail</span>
+                <span class="btn badge bg-warning" onclick="updateDevice(event, ${i})">Update</span>
+                <span class="btn badge bg-danger" onclick="deleteDevice(event, ${i}, '${device.serialNumber}')">Delete</span>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    }
+}
+
+// Render pagination
+function renderPagination() {
+    const pagination = document.getElementById("pagination");
+    pagination.innerHTML = "";
+    const totalPages = Math.ceil(mockData.devices.length / itemsPerPage);
+    for (let i = 1; i <= totalPages; i++) {
+        pagination.appendChild(createPaginationLink(i, i.toString(), i === currentPage));
+    }
+}
+
+// Create pagination link
+function createPaginationLink(pageNumber, text, isActive = false) {
+    const li = document.createElement("li");
+    li.className = "page-item";
+    if (isActive) {
+        li.classList.add("active");
+    }
+    const a = document.createElement("a");
+    a.className = "page-link";
+    a.href = "#";
+    a.textContent = text;
+    a.addEventListener("click", () => {
+        currentPage = pageNumber;
+        populateTable(mockData.devices, currentPage, itemsPerPage);
+        renderPagination();
+    });
+    li.appendChild(a);
+    return li;
+}
 
 // Function to populate device loan table
 function populateTable(devices) {
     var tableBody = document.getElementById("deviceLoanTableBody");
     tableBody.innerHTML = ""; // Clear previous content
-    devices.forEach(function(device, index) {
+
+    // Calculate start and end index for current page
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, devices.length);
+
+    for (let i = startIndex; i < endIndex; i++) {
+        var device = devices[i];
         var row = document.createElement("tr");
         row.innerHTML = `
-<td>${device.name}</td>
-<td>${device.deviceType.name}</td>
-<td>${device.status}</td>
-<td>${device.initStatus}</td>
-<td>${device.location.name}</td>
-<td>${convertDateTime(device.purchaseDate)}</td>
-<td>${convertDateTime(device.warrantyExpiry)}</td>
-<td>
-<span class="btn badge bg-success" onclick="detailDevice(event, ${index})">Detail</span>
-<span class="btn badge bg-warning" onclick="updateDevice(event, ${index})">Update</span>
-<span class="btn badge bg-danger" onclick="deleteDevice(event, ${index}, '${device.serialNumber}')">Delete</span>
-</td>
-`;
+            <td>${device.name}</td>
+            <td>${device.deviceType.name}</td>
+            <td>${device.status}</td>
+            <td>${device.initStatus}</td>
+            <td>${device.location.name}</td>
+            <td>${convertDateTime(device.purchaseDate)}</td>
+            <td>${convertDateTime(device.warrantyExpiry)}</td>
+            <td>
+                <span class="btn badge bg-success" onclick="detailDevice(event, ${i})">Detail</span>
+                <span class="btn badge bg-warning" onclick="updateDevice(event, ${i})">Update</span>
+                <span class="btn badge bg-danger" onclick="deleteDevice(event, ${i}, '${device.serialNumber}')">Delete</span>
+            </td>
+        `;
         tableBody.appendChild(row);
-    });
+    }
 }
 // Initial population of table
 populateTable(mockData.devices);
+renderPagination(); // Render pagination
+
 // Detail function
 function detailDevice(event, index) {
     const openModalBtn = document.getElementById('openModalBtn');
@@ -132,7 +203,6 @@ Your browser does not support the video tag.
 }
 // Update function
 function updateDevice(event, index) {
-    console.log(mockData.devices[index]);
     const openModalBtn = document.getElementById('openModalBtn');
     const deviceModal = new bootstrap.Modal(document.getElementById('deviceModal'));
     updateRenderDevice(mockData.devices[index]); // Populate modal with device information
@@ -247,25 +317,8 @@ function handleDelete(serialNumber, index) {
         }
     })
 }
+
 // Search function
-// document.getElementById("searchButton").addEventListener("click", function() {
-//     var input, filter, table, tr, td, i, txtValue;
-//     input = document.getElementById("searchInput");
-//     filter = input.value.toUpperCase();
-//     table = document.querySelector("table");
-//     tr = table.getElementsByTagName("tr");
-//     for (i = 0; i < tr.length; i++) {
-//         td = tr[i].getElementsByTagName("td")[0]; // Search based on device name (first column)
-//         if (td) {
-//             txtValue = td.textContent || td.innerText;
-//             if (txtValue.toUpperCase().indexOf(filter) > -1) {
-//                 tr[i].style.display = ""; // Show row if search matches
-//             } else {
-//                 tr[i].style.display = "none"; // Hide row if search does not match
-//             }
-//         }
-//     }
-// });
 document.getElementById("searchButton").addEventListener("click", function() {
     var input, filter, table, tr, td, i, j, txtValue;
     input = document.getElementById("searchInput");
@@ -273,7 +326,7 @@ document.getElementById("searchButton").addEventListener("click", function() {
     table = document.querySelector("table");
     tr = table.getElementsByTagName("tr");
     for (i = 0; i < tr.length; i++) {
-        // Lặp qua tất cả các cột của hàng
+        // Loop through all rows in the table
         var found = false;
         for (j = 0; j < tr[i].cells.length; j++) {
             td = tr[i].cells[j];
@@ -281,11 +334,11 @@ document.getElementById("searchButton").addEventListener("click", function() {
                 txtValue = td.textContent || td.innerText;
                 if (txtValue.toUpperCase().indexOf(filter) > -1) {
                     found = true;
-                    break; // Nếu tìm thấy kết quả trong cột, thoát vòng lặp
+                    break; // If result found in column, exit loop
                 }
             }
         }
-        // Hiển thị hoặc ẩn hàng tùy thuộc vào kết quả tìm kiếm
+        // Show or hide row based on search result
         if (found) {
             tr[i].style.display = "";
         } else {
@@ -293,6 +346,25 @@ document.getElementById("searchButton").addEventListener("click", function() {
         }
     }
 });
+
+// Go to page function
+function goToPage() {
+    const pageInput = document.getElementById('pageInput').value;
+    if (pageInput >= 1 && pageInput <= Math.ceil(mockData.devices.length / itemsPerPage)) {
+        currentPage = parseInt(pageInput);
+        populateTable(mockData.devices, currentPage, itemsPerPage);
+        renderPagination();
+    } else {
+        alert('Page does not exist');
+    }
+}
+
+// Highlight current page
+function highlightCurrentPage() {
+    const pages = pagination.find(".page-item");
+    pages.removeClass("active");
+    pages.eq(currentPage - 1).addClass("active");
+}
 
 function renderImageVideo() {
 
