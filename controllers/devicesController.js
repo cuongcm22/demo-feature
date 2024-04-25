@@ -271,22 +271,39 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
             .populate('deviceType', 'name')
             .populate('location', 'name')
             .populate('supplier', 'name')
-
+        console.log('Device not used length', arrDevicesNotUsed.length);
         // Câu truy vấn 2: Lọc ra tất cả các thiết bị với trạng thái Used
         arrDevicesUsed = await Device.find({ initStatus: 'used' });
+        console.log('Device used length ',arrDevicesUsed.length);
+        arrDevicesUsed = await Device.find();
+        console.log('Total ',arrDevicesUsed.length);
         // console.log(arrDevicesUsed);
         // Câu truy vấn 3: Lấy ra tất cả các deviceId trong bảng loan dựa trên arrDevicesUsed với trạng thái returned
-        const deviceIdsUsed = arrDevicesUsed.map(device => device._id);
-        arrDeviceReturned = await Loan.distinct('device', { device: { $in: deviceIdsUsed }, transactionStatus: 'Returned' })
+        // arrDeviceReturned = await Loan.distinct('device', { device: { $in: arrDevicesUsed }, transactionStatus: 'Returned' })
+        arrDeviceReturned = await Loan.distinct('device', { device: { $in: arrDevicesUsed }}, {transactionStatus: 'Returned'})
+        console.log('Here', arrDeviceReturned);
+        arrDeviceBorrwed = await Loan.find({transactionStatus: 'Borrowed'}).then(loan => loan.map(loan => loan.device))
+        console.log('Here 2', arrDeviceBorrwed);
+
+        // Filter out devices from arrDeviceReturned that are in arrDeviceBorrwed
+        // Chuyển đổi các ObjectId trong arr2 thành chuỗi
+        const arrDeviceReturnedStrings = arrDeviceBorrwed.map(obj => obj.toString());
+
+        // Lọc các phần tử có trong arr1 nhưng không có trong arr2
+        const filteredArrDeviceReturned = arrDeviceReturned.filter(obj => !arrDeviceReturnedStrings.includes(obj.toString()));
+
+        console.log('Here 3', filteredArrDeviceReturned);
         
-        arrDeviceReturned = await Device.find({ _id: { $in: arrDeviceReturned } })
+
+        arrDeviceReturned = await Device.find({ _id: { $in: filteredArrDeviceReturned } })
             .populate('deviceType', 'name')
             .populate('location', 'name')
             .populate('supplier', 'name')
-
+        
         // Câu truy vấn 4: Ghép 2 arrDevicesNotUsed và arrDeviceReturned
         Data = [...arrDevicesNotUsed, ...arrDeviceReturned];
-
+        console.log('Here 4', Data.length);
+        // console.log(Data.length);
         const formattedDevices = Data.map(device => ({
             ...device.toObject(),
             deviceType: device.deviceType.name,
