@@ -45,6 +45,7 @@ module.exports.homePage = async (req, res, next) => {
             title: 'Trang chủ',
             routes: {
                 'Trang chủ': '/',
+                'Dashboard': '/dashboard',
                 'Quản lý profile': '/user',
                 'Quản lý thiết bị': '/device/report',
                 'Quản lý nhà cung cấp': '/suppliers/detail',
@@ -152,7 +153,7 @@ module.exports.showDashBoard = async (req, res, next) => {
           });
 
         // ==== Task 3: Thống kê những thiết bị không còn hoạt động
-        const arrDevice = []
+        let arrDevice = await Device.find({})
         const arrDeviceNotWorking = [];
 
         await Device.find()
@@ -162,7 +163,7 @@ module.exports.showDashBoard = async (req, res, next) => {
                         // console.log(device);
                         arrDeviceNotWorking.push(device)
                     } else {
-                        arrDevice.push(device)
+                        // arrDevice.push(device)
                     }
                 })
             })
@@ -210,6 +211,7 @@ module.exports.showExportFileCSV = async (req, res, next) => {
                 'Supplier': 'Suppliers table',
                 'Location': 'Locations table',
                 'DeviceType': 'Device Types table',
+                'Loan': 'Loan table',
             }
         });
     } catch(err) {
@@ -238,6 +240,11 @@ module.exports.exportFileCSV = async (req, res, next) => {
                     const deviceTypes = await DeviceType.find({}, { _id: 0, __v: 0 }).then(devicetypes => devicetypes.map(devicetype => {return {...devicetype._doc}}));
                     csvFileName = 'deviceTypes'; // Set corresponding CSV file name
                     return { data: deviceTypes, fileName: csvFileName }; // Return data and file name
+                }
+                else if (req.body.csvFile == 'Loan') {
+                    const loans = await Loan.find({}, { _id: 0, __v: 0 }).then(loans => loans.map(loan => {return {...loan._doc}}));
+                    csvFileName = 'loans'; // Set corresponding CSV file name
+                    return { data: loans, fileName: csvFileName }; // Return data and file name
                 }
             }
 

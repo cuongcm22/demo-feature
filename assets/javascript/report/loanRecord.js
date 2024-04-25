@@ -1,3 +1,5 @@
+
+
 $(document).ready(function () {
     $("#spinner").hide();
     const loanTableBody = $("#loanTableBody");
@@ -15,7 +17,9 @@ $(document).ready(function () {
             <tr>
             <td>${startIndex + index + 1}</td>
             <td>${record.device}</td>
-            <td>${record.username}</td>
+            <td>
+                <span class="userName-Info">${record.username}</span>                
+            </td>
             <td>${record.borrowedAt}</td>
             <td>${record.expectedReturnDate}</td>
             <td>${record.actualReturnDate ? record.actualReturnDate : "-"}</td>

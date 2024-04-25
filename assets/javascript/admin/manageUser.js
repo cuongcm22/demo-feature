@@ -12,7 +12,10 @@ function renderTable(page) {
     paginatedData.forEach((user) => {
         const row = document.createElement("tr");
         row.innerHTML = `
-    <td>${user.username}</td>
+    <td>
+        <span class="userName-Info">${user.username}</span>
+    </td>
+
     <td class="user-role">${
         user.role == "admin"
             ? '<span class="me-2 badge bg-danger">Admin</span><span class="me-2 badge bg-warning text-dark">Moderator</span><span class="me-2 badge bg-success">Guest</span>'

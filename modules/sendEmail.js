@@ -4,10 +4,11 @@ const nodemailer = require('nodemailer')
 const path = require('path');
 
 module.exports.sendMail = async (req, res, next) => {
-
+    console.log('Send mail route');
     const { userEmail, csvFile } = req.body;
-    const csvPath = path.join(__dirname, '../assets/public', 'csv', csvFile);
     
+    console.log('csvPath: ', csvFile);
+    const csvPath = path.join(__dirname, '../assets/public', 'csv', csvFile);
     // Send email
     const transporter = nodemailer.createTransport({
         // Your SMTP configuration here

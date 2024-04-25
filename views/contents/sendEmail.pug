@@ -2,7 +2,7 @@ include ../main.pug
 
 .container.mt-5
   h1.mb-4 Send Email with CSV Attachment
-  form#emailForm(method='post' action='/sendEmailUpload' enctype='multipart/form-data')
+  form#emailForm(method='post' action='/sendEmailUpload')
     .mb-3
       label.form-label(for='userEmail') Recipient Email:
       input#userEmail.form-control(type='email' name='userEmail' required='')
@@ -12,5 +12,5 @@ include ../main.pug
         option(selected='' disabled='') Select CSV File
         each filename in filesnamecsv
             option(value=filename) #{filename}
-    button.btn.btn-primary(type='submit') Send Email
+    button.w-100.btn.btn-primary(type='submit') Send Email
 
