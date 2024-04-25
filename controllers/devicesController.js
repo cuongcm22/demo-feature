@@ -278,18 +278,18 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
         arrDeviceIdsUsed = await Device.find({ initStatus: 'used' }).then(device => device.map(device => device._id))
 
         // Task 3: Thực hiện lượt qua tất cả các deviceIds có trong arrDeviceIdsUsed trong bảng loan table
-
+        // Để kiểm tra thiết bị nào đã được trả
         const processDeviceId = async (deviceId) => {
             let arrDeviceIdsBorrowedReturn = await Loan.find({ device: deviceId });
             const arrDeviceIdsBorrowed = arrDeviceIdsBorrowedReturn
-                .filter(item => item.transactionStatus === 'Borrowed')
+                .filter(item => item.transactionStatus == 'Borrowed')
                 .map(item => item.device);
             const arrDeviceIdsReturned = arrDeviceIdsBorrowedReturn
-                .filter(item => item.transactionStatus === 'Returned')
+                .filter(item => item.transactionStatus == 'Returned')
                 .map(item => item.device);
-            console.log('arrDeviceIdsBorrowed: ', arrDeviceIdsBorrowed.length);
-            console.log('arrDeviceIdsReturned: ', arrDeviceIdsReturned.length);
-            if (!arrDeviceIdsBorrowed.length > arrDeviceIdsReturned.length) {
+            // console.log('arrDeviceIdsBorrowed: ', arrDeviceIdsBorrowed.length);
+            // console.log('arrDeviceIdsReturned: ', arrDeviceIdsReturned.length);
+            if (arrDeviceIdsBorrowed.length == arrDeviceIdsReturned.length) {
                 arrDeviceIdsLoanChecked.push(deviceId);
             }
         };
@@ -404,12 +404,11 @@ module.exports.ShowReturnDevicePage = async (req, res, next) => {
 
         const userId = req.userId;
 
+        // T1: Lưu một biến để nhận các deviceId mà người dùng đã mượn sau khi kiểm tra là thiết bị đã trả
         var arrDeviceIdsReuturnChecked = []
         
-        // let arrDeviceIdsUsed = await Device.find({ initStatus: 'used' }).then(device => device.map(device => device._id))
-        
         let arrDeviceIdsBorrowedReturn = await Loan.find({ borrower: userId }).then(loan => loan.map(loan => loan.device))
-        console.log(arrDeviceIdsBorrowedReturn);
+        // console.log(arrDeviceIdsBorrowedReturn);
 
         var arrDeviceIdCount = {};
 
@@ -422,7 +421,7 @@ module.exports.ShowReturnDevicePage = async (req, res, next) => {
         })
         
         for (var deviceId in arrDeviceIdCount) {
-            console.log(deviceId + ': ' + arrDeviceIdCount[deviceId]);
+            // console.log(deviceId + ': ' + arrDeviceIdCount[deviceId]);
             if (arrDeviceIdCount[deviceId] % 2 != 0 ) {
                 console.log(`${deviceId} chia het cho 2`)
                 arrDeviceIdsReuturnChecked.push(deviceId)
