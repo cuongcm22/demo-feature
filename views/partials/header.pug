@@ -20,12 +20,12 @@ header.header
         #navbarNav.collapse.navbar-collapse
           ul.navbar-nav.ms-auto
             li.nav-item
-              a.nav-link#userNameID
+              a.nav-link#userNameID.text-primary
             each route, nameRoute in routes
               li.nav-item
                 a.nav-link(href=route) #{nameRoute}
             li#btnLogout.nav-item
-              a.nav-link(href='/user/logout') Logout
+              a.nav-link.text-danger(href='/user/logout') Logout
               
 // Bootstrap Bundle with Popper
 script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js')

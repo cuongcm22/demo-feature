@@ -34,7 +34,7 @@ $(document).ready(function () {
         const pagination = document.getElementById("pagination");
         pagination.innerHTML = "";
         const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-        const maxVisiblePages = 5; // Maximum number of visible page links
+        const maxVisiblePages = 3; // Maximum number of visible page links
         const halfMaxVisiblePages = Math.floor(maxVisiblePages / 2);
         let startPage = Math.max(1, currentPage - halfMaxVisiblePages);
         let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);

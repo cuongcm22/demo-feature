@@ -36,12 +36,13 @@ link(href='/css/report/loanRecord.css' rel='stylesheet')
         }
       }
     p#showingInfo.text-muted() Showing 0 of 0 total Users
-
-    nav(aria-label='Page navigation')
-      ul#pagination.pagination(style='margin-bottom: unset')
-    .input-group(style='width: 100px;')
-      input#pageInput.form-control(type='number' min='1' max='1' value='1')
-      button.btn.btn-primary(onclick='goToPage()') Go
+    .row
+      nav(aria-label='Page navigation')
+        ul#pagination.pagination(style='margin-bottom: unset')
+    .row
+      .input-group(style='width: 100px;')
+        input#pageInput.form-control(type='number' min='1' max='1' value='1')
+        button.btn.btn-primary(onclick='goToPage()') Go
       // Data will be dynamically inserted here
 
 script.
