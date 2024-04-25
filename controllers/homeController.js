@@ -61,6 +61,108 @@ module.exports.homePage = async (req, res, next) => {
 
 module.exports.showDashBoard = async (req, res, next) => {
     try {
+
+        var arrDeviceIdsNotReturned = []
+
+        let arrDeviceIdsUsed = await Device.find({ initStatus: 'used' }).then(device => device.map(device => device._id))
+
+        // Task 3: Thực hiện lượt qua tất cả các deviceIds có trong arrDeviceIdsUsed trong bảng loan table
+        // Để kiểm tra thiết bị nào đã được trả
+        const processDeviceId = async (deviceId) => {
+            let arrDeviceIdsBorrowedReturn = await Loan.find({ device: deviceId });
+            const arrDeviceIdsBorrowed = arrDeviceIdsBorrowedReturn
+                .filter(item => item.transactionStatus == 'Borrowed')
+                .map(item => item.device);
+            const arrDeviceIdsReturned = arrDeviceIdsBorrowedReturn
+                .filter(item => item.transactionStatus == 'Returned')
+                .map(item => item.device);
+            if (arrDeviceIdsBorrowed.length != arrDeviceIdsReturned.length) {
+                arrDeviceIdsNotReturned.push(deviceId);
+            }
+        };
+
+        await Promise.all(arrDeviceIdsUsed.map(processDeviceId));
+
+        // Thống kê những thiết bị được mượn nhưng chưa được trả => done
+        console.log('Thống kê những thiết bị được mượn nhưng chưa được trả');
+        console.log('arrDeviceIdsNotReturned: ', arrDeviceIdsNotReturned.length);
+
+        
+        // Thống kê những người mượn quá hạn nhưng chưa trả
+        //T1: Đầu tiên phải lấy ra được các thiết bị đã mượn nhưng chưa trả
+        // => arrDeviceIdsNotReturned <= 
+
+        // Sau đó tìm kiếm trong bảng loan với những deviceId này, những deviceId nào với expectedReturnDate < now
+
+        // const loans = await Loan.find({ device: { $in: arrDeviceIdsNotReturned } })
+        // .then(loans => {
+        //     // Lọc ra các bản ghi có expectedReturnDate < thời gian hiện tại
+        //     const overdueLoans = loans.filter(loan => loan.expectedReturnDate < Date.now());
+            
+        //     // In ra các bản ghi có expectedReturnDate < thời gian hiện tại
+        //     overdueLoans.forEach(loan => {
+        //     console.log("Loan ID:", loan._id);
+        //     console.log("Expected Return Date:", loan.expectedReturnDate);
+        //     });
+        // })
+        // .catch(error => {
+        //     console.error('Error:', error);
+        // });
+        // console.log('loans: ', loans.length);
+        
+        // Bước 1: Tìm kiếm và lọc các bản ghi trong bảng Loan dựa trên arrDeviceIdsNotReturned
+        Loan.aggregate([
+            // Match records based on arrDeviceIdsNotReturned
+            {
+              $match: {
+                device: { $in: arrDeviceIdsNotReturned }
+              }
+            },
+            // Group by device, select the latest record based on idRecord
+            {
+              $group: {
+                _id: "$device",
+                latestRecord: { $max: "$idRecord" },
+                records: { $push: "$$ROOT" }
+              }
+            },
+            // Unwind the grouped records
+            {
+              $unwind: "$records"
+            },
+            // Match records with the latest idRecord
+            {
+              $match: {
+                $expr: { $eq: ["$records.idRecord", "$latestRecord"] }
+              }
+            },
+            // Filter overdue loans
+            {
+              $match: {
+                "records.transactionStatus": "Borrowed",
+                "records.expectedReturnDate": { $lt: new Date() }
+              }
+            },
+            // Project to reshape the output documents
+            {
+              $project: {
+                _id: "$records._id",
+                idRecord: "$records.idRecord",
+                device: "$records.device",
+                borrower: "$records.borrower",
+                borrowedAt: "$records.borrowedAt",
+                expectedReturnDate: "$records.expectedReturnDate",
+                actualReturnDate: "$records.actualReturnDate",
+                transactionStatus: "$records.transactionStatus"
+              }
+            }
+          ])
+          .then(result => {
+            console.log(result);
+          })
+          .catch(error => {
+            console.error(error);
+          });
         res.render("./contents/dashboard/dashboard.pug");
     } catch(err) {
         console.log(err)
