@@ -23,36 +23,6 @@ function convertDateTime(isoDateString) {
 const itemsPerPage = 10; // Number of items per page
 let currentPage = 1; // Current page
 
-// Function to populate device loan table with pagination
-function populateTable(devices, currentPage, itemsPerPage) {
-    var tableBody = document.getElementById("deviceLoanTableBody");
-    tableBody.innerHTML = ""; // Clear previous content
-
-    // Calculate start and end index for current page
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = Math.min(startIndex + itemsPerPage, devices.length);
-
-    for (let i = startIndex; i < endIndex; i++) {
-        var device = devices[i];
-        var row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${device.name}</td>
-            <td>${device.deviceType.name}</td>
-            <td>${device.status}</td>
-            <td>${device.initStatus}</td>
-            <td>${device.location.name}</td>
-            <td>${convertDateTime(device.purchaseDate)}</td>
-            <td>${convertDateTime(device.warrantyExpiry)}</td>
-            <td>
-                <span class="btn badge bg-success" onclick="detailDevice(event, ${i})">Detail</span>
-                <span class="btn badge bg-warning" onclick="updateDevice(event, ${i})">Update</span>
-                <span class="btn badge bg-danger" onclick="deleteDevice(event, ${i}, '${device.serialNumber}')">Delete</span>
-            </td>
-        `;
-        tableBody.appendChild(row);
-    }
-}
-
 // Render pagination
 function renderPagination() {
     const pagination = document.getElementById("pagination");
@@ -319,31 +289,77 @@ function handleDelete(serialNumber, index) {
 }
 
 // Search function
+// document.getElementById("searchButton").addEventListener("click", function() {
+//     var input, filter, table, tr, td, i, j, txtValue;
+//     input = document.getElementById("searchInput");
+//     filter = input.value.toUpperCase();
+//     table = document.querySelector("table");
+//     tr = table.getElementsByTagName("tr");
+//     for (i = 0; i < tr.length; i++) {
+//         // Loop through all rows in the table
+//         var found = false;
+//         for (j = 0; j < tr[i].cells.length; j++) {
+//             td = tr[i].cells[j];
+//             if (td) {
+//                 txtValue = td.textContent || td.innerText;
+//                 if (txtValue.toUpperCase().indexOf(filter) > -1) {
+//                     found = true;
+//                     break; // If result found in column, exit loop
+//                 }
+//             }
+//         }
+//         // Show or hide row based on search result
+//         if (found) {
+//             tr[i].style.display = "";
+//         } else {
+//             tr[i].style.display = "none";
+//         }
+//     }
+// });
 document.getElementById("searchButton").addEventListener("click", function() {
-    var input, filter, table, tr, td, i, j, txtValue;
-    input = document.getElementById("searchInput");
-    filter = input.value.toUpperCase();
-    table = document.querySelector("table");
-    tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-        // Loop through all rows in the table
-        var found = false;
-        for (j = 0; j < tr[i].cells.length; j++) {
-            td = tr[i].cells[j];
-            if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    found = true;
-                    break; // If result found in column, exit loop
+    const input = document.getElementById("searchInput").value.toUpperCase();
+    const tableBody = document.getElementById("deviceLoanTableBody");
+    const devices = mockData.devices;
+
+    // Filter devices based on search input
+    const filteredDevices = devices.filter(device => {
+        for (const key in device) {
+            if (device.hasOwnProperty(key)) {
+                const value = device[key];
+                if (typeof value === "string" && value.toUpperCase().includes(input)) {
+                    return true;
                 }
             }
         }
-        // Show or hide row based on search result
-        if (found) {
-            tr[i].style.display = "";
-        } else {
-            tr[i].style.display = "none";
-        }
+        return false;
+    });
+
+    // Update table rows based on filtered devices
+    tableBody.innerHTML = "";
+    filteredDevices.forEach(device => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${device.name}</td>
+            <td>${device.deviceType.name}</td>
+            <td>${device.status}</td>
+            <td>${device.initStatus}</td>
+            <td>${device.location.name}</td>
+            <td>${convertDateTime(device.purchaseDate)}</td>
+            <td>${convertDateTime(device.warrantyExpiry)}</td>
+            <td>
+                <span class="btn badge bg-success" onclick="detailDevice(event, ${device.serialNumber})">Detail</span>
+                <span class="btn badge bg-warning" onclick="updateDevice(event, ${device.serialNumber})">Update</span>
+                <span class="btn badge bg-danger" onclick="deleteDevice(event, ${device.serialNumber})">Delete</span>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+});
+
+$("#searchInput").on("input", (event) => {
+    const btnSearch = document.querySelector('#searchButton')
+    if (!event.target.value) {
+        btnSearch.click()
     }
 });
 
