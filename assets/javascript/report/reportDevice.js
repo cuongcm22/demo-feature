@@ -288,34 +288,6 @@ function handleDelete(serialNumber, index) {
     })
 }
 
-// Search function
-// document.getElementById("searchButton").addEventListener("click", function() {
-//     var input, filter, table, tr, td, i, j, txtValue;
-//     input = document.getElementById("searchInput");
-//     filter = input.value.toUpperCase();
-//     table = document.querySelector("table");
-//     tr = table.getElementsByTagName("tr");
-//     for (i = 0; i < tr.length; i++) {
-//         // Loop through all rows in the table
-//         var found = false;
-//         for (j = 0; j < tr[i].cells.length; j++) {
-//             td = tr[i].cells[j];
-//             if (td) {
-//                 txtValue = td.textContent || td.innerText;
-//                 if (txtValue.toUpperCase().indexOf(filter) > -1) {
-//                     found = true;
-//                     break; // If result found in column, exit loop
-//                 }
-//             }
-//         }
-//         // Show or hide row based on search result
-//         if (found) {
-//             tr[i].style.display = "";
-//         } else {
-//             tr[i].style.display = "none";
-//         }
-//     }
-// });
 document.getElementById("searchButton").addEventListener("click", function() {
     const input = document.getElementById("searchInput").value.toUpperCase();
     const tableBody = document.getElementById("deviceLoanTableBody");
@@ -336,7 +308,7 @@ document.getElementById("searchButton").addEventListener("click", function() {
 
     // Update table rows based on filtered devices
     tableBody.innerHTML = "";
-    filteredDevices.forEach(device => {
+    filteredDevices.forEach((device, i) => {
         const row = document.createElement("tr");
         row.innerHTML = `
             <td>${device.name}</td>
@@ -347,9 +319,9 @@ document.getElementById("searchButton").addEventListener("click", function() {
             <td>${convertDateTime(device.purchaseDate)}</td>
             <td>${convertDateTime(device.warrantyExpiry)}</td>
             <td>
-                <span class="btn badge bg-success" onclick="detailDevice(event, ${device.serialNumber})">Detail</span>
-                <span class="btn badge bg-warning" onclick="updateDevice(event, ${device.serialNumber})">Update</span>
-                <span class="btn badge bg-danger" onclick="deleteDevice(event, ${device.serialNumber})">Delete</span>
+                <span class="btn badge bg-success" onclick="detailDevice(event, ${i})">Detail</span>
+                <span class="btn badge bg-warning" onclick="updateDevice(event, ${i})">Update</span>
+                <span class="btn badge bg-danger" onclick="deleteDevice(event, ${i}, '${device.serialNumber}')">Delete</span>
             </td>
         `;
         tableBody.appendChild(row);
