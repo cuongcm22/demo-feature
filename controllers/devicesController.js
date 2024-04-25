@@ -287,23 +287,17 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
             const arrDeviceIdsReturned = arrDeviceIdsBorrowedReturn
                 .filter(item => item.transactionStatus == 'Returned')
                 .map(item => item.device);
-            // console.log('arrDeviceIdsBorrowed: ', arrDeviceIdsBorrowed.length);
-            // console.log('arrDeviceIdsReturned: ', arrDeviceIdsReturned.length);
             if (arrDeviceIdsBorrowed.length == arrDeviceIdsReturned.length) {
                 arrDeviceIdsLoanChecked.push(deviceId);
             }
         };
 
         await Promise.all(arrDeviceIdsUsed.map(processDeviceId));
-
-        console.log('Check 1 arrDeviceIdsLoanChecked: ', arrDeviceIdsLoanChecked.length)
         
         arrDeviceIdsLoanChecked = await Device.find({ _id: { $in: arrDeviceIdsLoanChecked } })
             .populate('deviceType', 'name')
             .populate('location', 'name')
             .populate('supplier', 'name')
-
-        console.log('Check 2 arrDeviceIdsLoanChecked: ', arrDeviceIdsLoanChecked.length);
         
         // Câu truy vấn 4: Ghép 2 arrDevicesNotUsed và arrDeviceReturned
         Data = [...arrDeviceIdsNotUsed, ...arrDeviceIdsLoanChecked]
@@ -421,9 +415,7 @@ module.exports.ShowReturnDevicePage = async (req, res, next) => {
         })
         
         for (var deviceId in arrDeviceIdCount) {
-            // console.log(deviceId + ': ' + arrDeviceIdCount[deviceId]);
             if (arrDeviceIdCount[deviceId] % 2 != 0 ) {
-                console.log(`${deviceId} chia het cho 2`)
                 arrDeviceIdsReuturnChecked.push(deviceId)
             }
         }
@@ -493,7 +485,7 @@ module.exports.returnDeviceDB = async (req, res, next) => {
             nextIdRecord = latestLoan.idRecord + 1;
         }
 
-        const expectedReturnDate = await Loan.find({ borrower: userId, device: deviceObject, transactionStatus: 'Borrowed' }).sort({ idRecord: -1 }).then(loan => loan.expectedReturnDate)
+        const expectedReturnDate = await Loan.findOne({ borrower: userId, device: deviceObject, transactionStatus: 'Borrowed' }).sort({ idRecord: -1 })
         // console.log(expectedReturnDate);
         // Task 7: Save all information into loan table
         const newLoan = new Loan({
@@ -501,7 +493,7 @@ module.exports.returnDeviceDB = async (req, res, next) => {
             device: deviceObject,
             borrower: userId,
             borrowedAt: new Date(),
-            expectedReturnDate: expectedReturnDate,
+            expectedReturnDate: expectedReturnDate.expectedReturnDate,
             actualReturnDate: new Date(),
             transactionStatus: 'Returned'
         });
