@@ -66,7 +66,7 @@ module.exports.showDashBoard = async (req, res, next) => {
 
         let arrDeviceIdsUsed = await Device.find({ initStatus: 'used' }).then(device => device.map(device => device._id))
 
-        // Task 3: Thực hiện lượt qua tất cả các deviceIds có trong arrDeviceIdsUsed trong bảng loan table
+        // Thực hiện lượt qua tất cả các deviceIds có trong arrDeviceIdsUsed trong bảng loan table
         // Để kiểm tra thiết bị nào đã được trả
         const processDeviceId = async (deviceId) => {
             let arrDeviceIdsBorrowedReturn = await Loan.find({ device: deviceId });
@@ -83,35 +83,21 @@ module.exports.showDashBoard = async (req, res, next) => {
 
         await Promise.all(arrDeviceIdsUsed.map(processDeviceId));
 
-        // Thống kê những thiết bị được mượn nhưng chưa được trả => done
+        // ==== Task 1: Thống kê những thiết bị được mượn nhưng chưa được trả => done
         console.log('Thống kê những thiết bị được mượn nhưng chưa được trả');
         console.log('arrDeviceIdsNotReturned: ', arrDeviceIdsNotReturned.length);
 
         
-        // Thống kê những người mượn quá hạn nhưng chưa trả
+        // ==== Task 2: Thống kê những người mượn quá hạn nhưng chưa trả
         //T1: Đầu tiên phải lấy ra được các thiết bị đã mượn nhưng chưa trả
         // => arrDeviceIdsNotReturned <= 
 
         // Sau đó tìm kiếm trong bảng loan với những deviceId này, những deviceId nào với expectedReturnDate < now
-
-        // const loans = await Loan.find({ device: { $in: arrDeviceIdsNotReturned } })
-        // .then(loans => {
-        //     // Lọc ra các bản ghi có expectedReturnDate < thời gian hiện tại
-        //     const overdueLoans = loans.filter(loan => loan.expectedReturnDate < Date.now());
-            
-        //     // In ra các bản ghi có expectedReturnDate < thời gian hiện tại
-        //     overdueLoans.forEach(loan => {
-        //     console.log("Loan ID:", loan._id);
-        //     console.log("Expected Return Date:", loan.expectedReturnDate);
-        //     });
-        // })
-        // .catch(error => {
-        //     console.error('Error:', error);
-        // });
-        // console.log('loans: ', loans.length);
         
+        let arrDeviceIdsDue;
+
         // Bước 1: Tìm kiếm và lọc các bản ghi trong bảng Loan dựa trên arrDeviceIdsNotReturned
-        Loan.aggregate([
+        await Loan.aggregate([
             // Match records based on arrDeviceIdsNotReturned
             {
               $match: {
@@ -158,12 +144,42 @@ module.exports.showDashBoard = async (req, res, next) => {
             }
           ])
           .then(result => {
-            console.log(result);
+            // console.log(result);
+            arrDeviceIdsDue = result
           })
           .catch(error => {
             console.error(error);
           });
-        res.render("./contents/dashboard/dashboard.pug");
+
+        // ==== Task 3: Thống kê những thiết bị không còn hoạt động
+        const arrDevice = []
+        const arrDeviceNotWorking = [];
+
+        await Device.find()
+            .then(device => {
+                device.map(device => {
+                    if (device.status != 'Active') {
+                        // console.log(device);
+                        arrDeviceNotWorking.push(device)
+                    } else {
+                        arrDevice.push(device)
+                    }
+                })
+            })
+        console.log(arrDevice.length);
+        console.log('arrDeviceNotWorking: ', arrDeviceNotWorking.length);
+
+        res.render("./contents/dashboard/dashboard.pug", {
+            data: {
+                totalDevices: arrDevice.length,
+                // Task 1: Thống kê những thiết bị được mượn nhưng chưa được trả || arrDeviceIdsNotReturned / totalDevices
+                arrDeviceIdsNotReturned: arrDeviceIdsNotReturned.length,
+                // Task 2: Thống kê những người mượn quá hạn nhưng chưa trả || arrDeviceIdsDue / arrDeviceIdsNotReturned
+                arrDeviceIdsDue: arrDeviceIdsDue.length,
+                // Task 3: Thống kê những thiết bị không còn hoạt động || arrDeviceNotWorking / totalDevices
+                arrDeviceNotWorking: arrDeviceNotWorking.length
+            }
+        });
     } catch(err) {
         console.log(err)
         res.status(404)
