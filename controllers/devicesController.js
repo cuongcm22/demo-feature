@@ -264,46 +264,36 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
         const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
 
         // Khai báo các biến cần sử dụng
-        let arrDevicesNotUsed, arrDevicesUsed, arrDeviceReturned, Data;
+        let arrDevicesNotUsed, arrDevicesUsed, arrDeviceReturned, Data, arrDeviceBorrwed;
 
         // Câu truy vấn 1: Lọc ra tất cả các thiết bị với trạng thái notUsed
         arrDevicesNotUsed = await Device.find({ initStatus: 'notUsed' })
             .populate('deviceType', 'name')
             .populate('location', 'name')
             .populate('supplier', 'name')
-        console.log('Device not used length', arrDevicesNotUsed.length);
-        // Câu truy vấn 2: Lọc ra tất cả các thiết bị với trạng thái Used
-        arrDevicesUsed = await Device.find({ initStatus: 'used' });
-        console.log('Device used length ',arrDevicesUsed.length);
-        arrDevicesUsed = await Device.find();
-        console.log('Total ',arrDevicesUsed.length);
-        // console.log(arrDevicesUsed);
-        // Câu truy vấn 3: Lấy ra tất cả các deviceId trong bảng loan dựa trên arrDevicesUsed với trạng thái returned
-        // arrDeviceReturned = await Loan.distinct('device', { device: { $in: arrDevicesUsed }, transactionStatus: 'Returned' })
-        arrDeviceReturned = await Loan.distinct('device', { device: { $in: arrDevicesUsed }}, {transactionStatus: 'Returned'})
-        console.log('Here', arrDeviceReturned);
-        arrDeviceBorrwed = await Loan.find({transactionStatus: 'Borrowed'}).then(loan => loan.map(loan => loan.device))
-        console.log('Here 2', arrDeviceBorrwed);
-
-        // Filter out devices from arrDeviceReturned that are in arrDeviceBorrwed
-        // Chuyển đổi các ObjectId trong arr2 thành chuỗi
-        const arrDeviceReturnedStrings = arrDeviceBorrwed.map(obj => obj.toString());
-
-        // Lọc các phần tử có trong arr1 nhưng không có trong arr2
-        const filteredArrDeviceReturned = arrDeviceReturned.filter(obj => !arrDeviceReturnedStrings.includes(obj.toString()));
-
-        console.log('Here 3', filteredArrDeviceReturned);
         
+        // Task 2: Lọc ra tất cả các thiết bị với trạng thái Used
+        arrDevicesUsed = await Device.find({ initStatus: 'used' }).then(device => device.map(device => device._id))
 
-        arrDeviceReturned = await Device.find({ _id: { $in: filteredArrDeviceReturned } })
+        // Task 3: Lấy ra những thiết bị đã mượn 
+        arrDeviceBorrwed = await Loan.find({transactionStatus: 'Borrowed'}).then(loan => loan.map(loan => loan.device))
+
+        // Task 4: sau đó loại bỏ ra khỏi arrDevicesUsed
+        // Chuyển đổi các ObjectId trong arrDeviceBorrwed thành chuỗi
+        const arrDeviceBorrwedStrings = arrDeviceBorrwed.map(obj => obj.toString());
+
+        // Lọc các phần tử có trong [arrDeviceBorrwed] khỏi [arrDevicesUsed]
+        const filteredarrDevicesUsed = arrDevicesUsed.filter(obj => !arrDeviceBorrwedStrings.includes(obj.toString()));
+
+        // Thực hiện việc lọc qua lần nữa và lấy ra thông tin của bảng Device dựa trên filteredarrDevicesUsed
+        arrDeviceReturned = await Device.find({ _id: { $in: filteredarrDevicesUsed } })
             .populate('deviceType', 'name')
             .populate('location', 'name')
             .populate('supplier', 'name')
         
         // Câu truy vấn 4: Ghép 2 arrDevicesNotUsed và arrDeviceReturned
         Data = [...arrDevicesNotUsed, ...arrDeviceReturned];
-        console.log('Here 4', Data.length);
-        // console.log(Data.length);
+
         const formattedDevices = Data.map(device => ({
             ...device.toObject(),
             deviceType: device.deviceType.name,
