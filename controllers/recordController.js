@@ -76,7 +76,7 @@ module.exports.ShowLoanRecordPage = async (req, res, next) => {
                     'Tạo thiết bị': '/device/create',
                     'Mượn thiết bị': '/device/loan',
                     'Trả thiết bị': '/device/return',
-                    'Loan record': '/record/loanrecord'
+                    'Quản lý lịch sử mượn trả': '/record/loanrecord'
                 },
                 data: JSON.stringify(formattedDevices)
             });

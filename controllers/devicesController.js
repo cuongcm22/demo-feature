@@ -105,7 +105,7 @@ module.exports.ShowReportDevicePage = async (req, res, next) => {
                     'Tạo thiết bị': '/device/create',
                     'Mượn thiết bị': '/device/loan',
                     'Đã mượn': '/device/return',
-                    'Loan record': '/record/loanrecord'
+                    'Quản lý lịch sử mượn trả': '/record/loanrecord'
                 },
                 formattedDevices: JSON.stringify(devices),
                 devicetypes: JSON.stringify(devicetypes),
@@ -139,7 +139,7 @@ module.exports.showCreateDevicePage = async (req, res, next) => {
                 'Tạo thiết bị': '/device/create',
                 'Mượn thiết bị': '/device/loan',
                 'Đã mượn': '/device/return',
-                'Loan record': '/record/loanrecord'
+                'Quản lý lịch sử mượn trả': '/record/loanrecord'
             },
             devicetypes: devicetypes,
             locations: locations,
@@ -317,7 +317,7 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
                 'Tạo thiết bị': '/device/create',
                 'Mượn thiết bị': '/device/loan',
                 'Đã mượn': '/device/return',
-                'Loan record': '/record/loanrecord'
+                'Quản lý lịch sử mượn trả': '/record/loanrecord'
             },
             data: JSON.stringify(formattedDevices),
             deviceTypes: JSON.stringify(devicetypes)
@@ -441,7 +441,7 @@ module.exports.ShowReturnDevicePage = async (req, res, next) => {
                 'Tạo thiết bị': '/device/create',
                 'Mượn thiết bị': '/device/loan',
                 'Đã mượn': '/device/return',
-                'Loan record': '/record/loanrecord'
+                'Quản lý lịch sử mượn trả': '/record/loanrecord'
             },
             data: JSON.stringify(formattedDevices),
             deviceTypes: JSON.stringify(devicetypes)

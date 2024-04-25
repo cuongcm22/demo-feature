@@ -23,10 +23,10 @@ function renderTable(page) {
               }`
     }</td>
     <td>
-    <button class="btn btn-sm btn-primary" onclick="openEditModal(event, '${user.fullname}', '${
+    <button class="btn badge bg-primary" onclick="openEditModal(event, '${user.fullname}', '${
         user.username
     }', '${user.email}', '${user.phone}', '${user.role}')">Edit</button>
-    <button class="btn btn-sm btn-danger">Delete</button>
+    <button class="btn badge bg-danger">Delete</button>
     </td>
     `;
         tableBody.appendChild(row);
@@ -120,19 +120,15 @@ function openEditModal(event, fullname, username, email, phone, role) {
     document.getElementById("editEmail").value = email;
     document.getElementById("editPhone").value = phone;
     document.getElementById("wrapperEditRole").innerHTML = `
-    ${
-        role == "admin"
-            ? ""
-            : `
-        <label class="form-label" for="editRole">Role</label>
-        <select id="editRole" class="form-select" aria-label="Default select example" name='role'>
-        <option value="moderator" ${
-            role == "moderator" ? "selected" : ""
-        }>Moderator</option>
-        <option value="user" ${role == "guest" ? "selected" : ""}>Guest</option>
-        </select>
-    `
-    }
+    <label class="form-label" for="editRole">Role</label>
+    <select ${role == 'admin' ? 'hidden' : ''} id="editRole" class="form-select" aria-label="Default select example" name='role'>
+        ${role == 'admin' ? '<option value="admin"></option>' : `
+            <option value="moderator" ${
+                role == "moderator" ? "selected" : ""
+            }>Moderator</option>
+            <option value="user" ${role == "guest" ? "selected" : ""}>Guest</option>
+        `}
+    </select>
     `;
     $("#editUserModal").modal("show");
 }
@@ -153,7 +149,7 @@ async function editUser(event) {
             fullname: document.getElementById("editUserFullName").value,
             email: document.getElementById("editEmail").value,
             phone: document.getElementById("editPhone").value,
-            role: document.getElementById("editRole").value,
+            role: document.getElementById("editRole").value
         };
         await axios.post("/user/update", formData)
         .then((response) => {
