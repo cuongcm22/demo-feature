@@ -48,7 +48,7 @@ section.container
       .mb-3
         label.form-label(for='deviceUrlImg') &#x1EA2;nh thi&#x1EBF;t b&#x1ECB;: (devices.imageUrl)
         //- accept='image/*'
-        input#deviceUrlImg.form-control(type='file')
+        input#deviceUrlImg.form-control(type='file' accept=".jpg, .jpeg, .png")
         .warrper.text-center
           #spinner1.spinner-border.text-primary(role='status')
             span.visually-hidden Loading...
@@ -88,7 +88,6 @@ section.container
       .mb-3
         label.form-label(for='warrantyExpiry') Ng&agrave;y h&#x1EBF;t h&#x1EA1;n: (device.warrantyExpiry)
         input#warrantyExpiry.form-control(type='date' name='warrantyExpiry' required='')
-      input#localStorageDataImage(type='hidden' name='imageUrl')
       input#localStorageDataVideo(type='hidden' name='videoUrl')
       button.btn.btn-primary.w-100.mb-5(type='submit') &Dstrok;&abreve;ng k&yacute;
 

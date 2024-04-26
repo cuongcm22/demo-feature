@@ -9,7 +9,8 @@ const loanSchema = new mongoose.Schema({
   borrowedAt: { type: Date, required: true },
   expectedReturnDate: { type: Date },
   actualReturnDate: { type: Date },
-  transactionStatus: { type: String, enum: ['Borrowed', 'Returned'], required: true }
+  transactionStatus: { type: String, enum: ['Borrowed', 'Returned'], required: true },
+  proofImageUrl: { type: String }
 });
 
 module.exports = mongoose.model('Loan', loanSchema);

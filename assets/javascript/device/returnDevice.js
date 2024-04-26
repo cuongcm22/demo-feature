@@ -83,15 +83,148 @@ function populateTable(event) {
     <p class="card-text"><strong>Ngày mua:</strong> ${new Date(
         device.purchaseDate
     ).toLocaleDateString()}</p>
+    <div class="mb-3"><label class="form-label" for="deviceUrlImg"><strong>Vui Lòng chụp ảnh minh chứng: </strong> (Hệ thống có lưu lại các hoạt động, vui lòng đọc kĩ hướng dẫn sử dụng)</label><input class="form-control" id="deviceUrlImg" type="file" accept=".jpg, .jpeg, .png" />
+        <div class="warrper text-center">
+            <div class="spinner-border text-primary" id="spinner1" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <img class="img-fluid" id="imageRender" style="width: 100%; min-height: 500px; object-fit: cover;" src="" alt=""/>
+        </div>
+    </div>
+    <div class="mb-3"><label class="form-label" for="deviceVideo"><strong>Vui lòng quay video minh chứng: </strong> (devices.videoUrl)</label><input class="form-control" id="deviceVideo" type="file" accept="video/*" />
+        <div class="warrper center-video">
+            <div class="spinner-border text-primary" id="spinner2" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <video class="img-fluid" id="videoRender" controls="" style="width: 100%; min-height: 500px; display: none;"><!-- Nếu trình duyệt không hỗ trợ video, thông báo sẽ hiển thị ở đây-->Tr&igrave;nh duy&#x1EC7;t c&#x1EE7;a b&#x1EA1;n kh&ocirc;ng h&#x1ED7; tr&#x1EE3; ph&aacute;t video.</video>
+        </div>
+    </div>
     <div class="d-flex justify-content-end"> <!-- Flex container for buttons -->
       <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Hủy</button>
-      <button type="button" class="btn btn-warning" onclick="confirmLoan('${device.serialNumber}')">Trả thiết bị</button>
+      <button type="button" class="btn btn-warning" onclick="confirmLoan(event, '${device.serialNumber}')">Trả thiết bị</button>
     </div>
     `;
+
+    $('#imageRender').hide()
+    $('#spinner1').hide();
+    $('#spinner2').hide();
+
+    const imageRender = document.querySelector('#imageRender');
+    const videoRender = document.querySelector('#videoRender');
+
+    var imageUrlValue = '';
+    var videoUrlValue = '';
+
+    $('#deviceUrlImg').on('change', function(event) {
+
+        var file = this.files[0];
+        var maxSize = 2 * 1024 * 1024; // Giới hạn kích thước tập tin là 1MB
+        if (file.size > maxSize) {
+            alert('Kích thước ảnh tối thiểu 2mb.');
+            this.value = ''; // Xóa lựa chọn tập tin
+        } else {
+            $('#imageRender').show()
+            const fileName = $(this)[0].files[0].name;
+            event.preventDefault();
+            const formData = new FormData($(this).closest('form')[0]);
+            formData.append('file', $(this)[0].files[0]);
+            console.log(formData);
+            // Show spinner
+    
+            uploadFile(formData, function(error, response) {
+    
+                if (error) {
+                    console.error(error);
+                } else {
+                    imageUrlValue = response.data;
+                    imageRender.src = response.data;
+                    try {
+                        localStorage.setItem('imageUrl', response.data);
+                        document.getElementById('localStorageDataImage').value = localStorage.getItem('imageUrl');
+                        // Hide spinner regardless of response status
+                        $('#spinner1').hide()
+                    } catch (e) {
+                        console.error('LocalStorage error: ', e);
+                    }
+                }
+
+            });
+        }
+
+        
+    });
+
+    $('#deviceVideo').on('change', function(event) {
+        console.log('Upload video');
+        var file = this.files[0];
+        console.log(file);
+        var maxSize = 25 * 1024 * 1024; // Giới hạn kích thước tập tin là 100MB
+        if (file.size > maxSize) {
+            alert('Kích thước video tối thiểu 100mb.');
+            this.value = ''; // Xóa lựa chọn tập tin
+        } else {
+            
+            const fileName = $(this)[0].files[0].name;
+            event.preventDefault();
+            const formData = new FormData($(this).closest('form')[0]);
+            formData.append('file', $(this)[0].files[0]);
+            
+            // Show spinner
+            $('#spinner2').show()
+    
+            uploadFile(formData, function(error, response) {
+                // Hide spinner regardless of response status
+    
+                if (error) {
+                    console.error(error);
+                } else {
+                    videoRender.src = response.data;
+                    videoRender.style.display = "flex";
+                    try {
+                        localStorage.setItem('videoUrl', response.data);
+                        document.getElementById('localStorageDataVideo').value = localStorage.getItem('videoUrl');
+                        $('#spinner2').hide()
+                    } catch (e) {
+                        console.error('LocalStorage error: ', e);
+                    }
+                }
+            });
+
+        }
+
+    });
+
+    // Function to upload file using AJAX
+    function uploadFile(formData, callback) {
+        $.ajax({
+            url: '/uploads',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log('response: ', response);
+                callback(null, response);
+            },
+            error: function(xhr, status, error) {
+                callback(error);
+            }
+        });
+    }
 }
 
 // Function to confirm loan
-function confirmLoan(deviceId) {
+function confirmLoan(event, deviceId) {
+    const parentElement = event.target.parentElement.parentElement
+    const imageUrl = parentElement.querySelector('#imageRender').getAttribute("src");
+    if (imageUrl == '') {
+        alert('Vui lòng chụp ảnh minh chứng!')
+        return;
+    }
+
+    
+    // Hiện ảnh lên
+    
     // Get a reference to your modal
     var cancelButton = document.querySelector('.btn-secondary[data-bs-dismiss="modal"]');
 
@@ -102,7 +235,8 @@ function confirmLoan(deviceId) {
         // Send device ID to loan route
         axios
             .post("/device/return", { 
-                deviceId: deviceId
+                deviceId: deviceId,
+                proofImageUrl: imageUrl
              })
             .then((response) => {
                 if (response.data.success) {
@@ -241,4 +375,9 @@ $(document).ready(function () {
     // Initial render
     renderDeviceCards(getCurrentPageData());
     renderPagination();
+
+    
+
+    
 });
+

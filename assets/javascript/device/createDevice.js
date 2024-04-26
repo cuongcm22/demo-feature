@@ -1,3 +1,5 @@
+
+
 var resultContainer = document.getElementById("qr-reader-results");
 var lastResult,
     countResults = 0;
@@ -75,59 +77,81 @@ $(document).ready(function() {
     var videoUrlValue = '';
 
     $('#deviceUrlImg').on('change', function(event) {
-        const fileName = $(this)[0].files[0].name;
-        event.preventDefault();
-        const formData = new FormData($(this).closest('form')[0]);
-        formData.append('file', $(this)[0].files[0]);
-        console.log(formData);
-        // Show spinner
-        $('#spinner1').show()
 
-        uploadFile(formData, function(error, response) {
+        var file = this.files[0];
+        var maxSize = 2 * 1024 * 1024; // Giới hạn kích thước tập tin là 1MB
+        if (file.size > maxSize) {
+            alert('Kích thước ảnh tối thiểu 2mb.');
+            this.value = ''; // Xóa lựa chọn tập tin
+        } else {
 
-            if (error) {
-                console.error(error);
-            } else {
-                imageUrlValue = response.data;
-                imageRender.src = response.data;
-                try {
-                    localStorage.setItem('imageUrl', response.data);
-                    document.getElementById('localStorageDataImage').value = localStorage.getItem('imageUrl');
-                    // Hide spinner regardless of response status
-                    $('#spinner1').hide()
-                } catch (e) {
-                    console.error('LocalStorage error: ', e);
+            const fileName = $(this)[0].files[0].name;
+            event.preventDefault();
+            const formData = new FormData($(this).closest('form')[0]);
+            formData.append('file', $(this)[0].files[0]);
+            console.log(formData);
+            // Show spinner
+            $('#spinner1').show()
+    
+            uploadFile(formData, function(error, response) {
+    
+                if (error) {
+                    console.error(error);
+                } else {
+                    imageUrlValue = response.data;
+                    imageRender.src = response.data;
+                    try {
+                        localStorage.setItem('imageUrl', response.data);
+                        document.getElementById('localStorageDataImage').value = localStorage.getItem('imageUrl');
+                        // Hide spinner regardless of response status
+                        $('#spinner1').hide()
+                    } catch (e) {
+                        console.error('LocalStorage error: ', e);
+                    }
                 }
-            }
-        });
+            });
+
+        }
+
     });
 
     $('#deviceVideo').on('change', function(event) {
-        const fileName = $(this)[0].files[0].name;
-        event.preventDefault();
-        const formData = new FormData($(this).closest('form')[0]);
-        formData.append('file', $(this)[0].files[0]);
-        
-        // Show spinner
-        $('#spinner2').show()
 
-        uploadFile(formData, function(error, response) {
-            // Hide spinner regardless of response status
-
-            if (error) {
-                console.error(error);
-            } else {
-                videoRender.src = response.data;
-                videoRender.style.display = "flex";
-                try {
-                    localStorage.setItem('videoUrl', response.data);
-                    document.getElementById('localStorageDataVideo').value = localStorage.getItem('videoUrl');
-                    $('#spinner2').hide()
-                } catch (e) {
-                    console.error('LocalStorage error: ', e);
+        var file = this.files[0];
+        var maxSize = 25 * 1024 * 1024; // Giới hạn kích thước tập tin là 100MB
+        if (file.size > maxSize) {
+            alert('Kích thước video tối thiểu 100mb.');
+            this.value = ''; // Xóa lựa chọn tập tin
+        } else {
+            
+            const fileName = $(this)[0].files[0].name;
+            event.preventDefault();
+            const formData = new FormData($(this).closest('form')[0]);
+            formData.append('file', $(this)[0].files[0]);
+            
+            // Show spinner
+            $('#spinner2').show()
+    
+            uploadFile(formData, function(error, response) {
+                // Hide spinner regardless of response status
+    
+                if (error) {
+                    console.error(error);
+                } else {
+                    videoRender.src = response.data;
+                    videoRender.style.display = "flex";
+                    try {
+                        localStorage.setItem('videoUrl', response.data);
+                        document.getElementById('localStorageDataVideo').value = localStorage.getItem('videoUrl');
+                        $('#spinner2').hide()
+                    } catch (e) {
+                        console.error('LocalStorage error: ', e);
+                    }
                 }
-            }
-        });
+            });
+
+        }
+
     });
 
     // Function to upload file using AJAX

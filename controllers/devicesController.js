@@ -462,7 +462,7 @@ module.exports.returnDeviceDB = async (req, res, next) => {
         
         const userId = req.userId;
 
-        const { deviceId } = req.body
+        const { deviceId, proofImageUrl } = req.body
         
         // Task 1: Thực hiện việc lấy ra deviceObject được gửi lên từ phía client
         let deviceObject = await Device.findOne({ serialNumber: deviceId })
