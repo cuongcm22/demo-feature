@@ -83,7 +83,8 @@ function populateTable(event) {
     <p class="card-text"><strong>Ngày mua:</strong> ${new Date(
         device.purchaseDate
     ).toLocaleDateString()}</p>
-    <div class="mb-3"><label class="form-label" for="deviceUrlImg"><strong>Vui Lòng chụp ảnh minh chứng: </strong> (Hệ thống có lưu lại các hoạt động, vui lòng đọc kĩ hướng dẫn sử dụng)</label><input class="form-control" id="deviceUrlImg" type="file" accept=".jpg, .jpeg, .png" />
+    <div class="mb-3"><label class="form-label" for="deviceUrlImg"><strong>Vui Lòng chụp ảnh minh chứng: </strong> (Hệ thống có lưu lại các hoạt động, vui lòng đọc kĩ hướng dẫn sử dụng)</label>
+        <input class="form-control" id="deviceUrlImg" type="file" accept=".jpg, .jpeg, .png" />
         <div class="warrper text-center">
             <div class="spinner-border text-primary" id="spinner1" role="status">
                 <span class="visually-hidden">Loading...</span>
@@ -91,12 +92,13 @@ function populateTable(event) {
             <img class="img-fluid" id="imageRender" style="width: 100%; min-height: 500px; object-fit: cover;" src="" alt=""/>
         </div>
     </div>
-    <div class="mb-3"><label class="form-label" for="deviceVideo"><strong>Vui lòng quay video minh chứng: </strong> (devices.videoUrl)</label><input class="form-control" id="deviceVideo" type="file" accept="video/*" />
+    <div class="mb-3"><label class="form-label" for="deviceVideo"><strong>Vui lòng quay video minh chứng: </strong> (devices.videoUrl)</label>
+        <input class="form-control" id="uploadDeviceVideo" type="file" accept="video/*" />
         <div class="warrper center-video">
             <div class="spinner-border text-primary" id="spinner2" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
-            <video class="img-fluid" id="videoRender" controls="" style="width: 100%; min-height: 500px; display: none;"><!-- Nếu trình duyệt không hỗ trợ video, thông báo sẽ hiển thị ở đây-->Tr&igrave;nh duy&#x1EC7;t c&#x1EE7;a b&#x1EA1;n kh&ocirc;ng h&#x1ED7; tr&#x1EE3; ph&aacute;t video.</video>
+            <video class="img-fluid" id="videoRender" controls="" style="width: 100%; min-height: 500px; display: none; "><!-- Nếu trình duyệt không hỗ trợ video, thông báo sẽ hiển thị ở đây-->Tr&igrave;nh duy&#x1EC7;t c&#x1EE7;a b&#x1EA1;n kh&ocirc;ng h&#x1ED7; tr&#x1EE3; ph&aacute;t video.</video>
         </div>
     </div>
     <div class="d-flex justify-content-end"> <!-- Flex container for buttons -->
@@ -109,14 +111,14 @@ function populateTable(event) {
     $('#spinner1').hide();
     $('#spinner2').hide();
 
-    const imageRender = document.querySelector('#imageRender');
+    // const imageRender = document.querySelector('#imageRender');
     const videoRender = document.querySelector('#videoRender');
 
     var imageUrlValue = '';
     var videoUrlValue = '';
 
     $('#deviceUrlImg').on('change', function(event) {
-
+        console.log('Upload img');
         var file = this.files[0];
         var maxSize = 2 * 1024 * 1024; // Giới hạn kích thước tập tin là 1MB
         if (file.size > maxSize) {
@@ -154,7 +156,7 @@ function populateTable(event) {
         
     });
 
-    $('#deviceVideo').on('change', function(event) {
+    $('#uploadDeviceVideo').on('change', function(event) {
         console.log('Upload video');
         var file = this.files[0];
         console.log(file);
@@ -376,8 +378,5 @@ $(document).ready(function () {
     renderDeviceCards(getCurrentPageData());
     renderPagination();
 
-    
-
-    
 });
 
