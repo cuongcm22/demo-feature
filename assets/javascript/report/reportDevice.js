@@ -288,6 +288,45 @@ function handleDelete(serialNumber, index) {
     })
 }
 
+// document.getElementById("searchButton").addEventListener("click", function() {
+//     const input = document.getElementById("searchInput").value.toUpperCase();
+//     const tableBody = document.getElementById("deviceLoanTableBody");
+//     const devices = mockData.devices;
+
+//     // Filter devices based on search input
+//     const filteredDevices = devices.filter(device => {
+//         for (const key in device) {
+//             if (device.hasOwnProperty(key)) {
+//                 const value = device[key];
+//                 if (typeof value === "string" && value.toUpperCase().includes(input)) {
+//                     return true;
+//                 }
+//             }
+//         }
+//         return false;
+//     });
+
+//     // Update table rows based on filtered devices
+//     tableBody.innerHTML = "";
+//     filteredDevices.forEach((device, index) => {
+//         const row = document.createElement("tr");
+//         row.innerHTML = `
+//             <td>${device.name}</td>
+//             <td>${device.deviceType.name}</td>
+//             <td>${device.status}</td>
+//             <td>${device.initStatus}</td>
+//             <td>${device.location.name}</td>
+//             <td>${convertDateTime(device.purchaseDate)}</td>
+//             <td>${convertDateTime(device.warrantyExpiry)}</td>
+//             <td>
+//                 <span class="btn badge bg-success" onclick="detailDevice(event, ${index})">Detail</span>
+//                 <span class="btn badge bg-warning" onclick="updateDevice(event, ${index})">Update</span>
+//                 <span class="btn badge bg-danger" onclick="deleteDevice(event, ${index}, '${device.serialNumber}')">Delete</span>
+//             </td>
+//         `;
+//         tableBody.appendChild(row);
+//     });
+// });
 document.getElementById("searchButton").addEventListener("click", function() {
     const input = document.getElementById("searchInput").value.toUpperCase();
     const tableBody = document.getElementById("deviceLoanTableBody");
@@ -308,7 +347,8 @@ document.getElementById("searchButton").addEventListener("click", function() {
 
     // Update table rows based on filtered devices
     tableBody.innerHTML = "";
-    filteredDevices.forEach((device, i) => {
+    filteredDevices.forEach(device => {
+        const index = devices.indexOf(device); // Lấy chỉ mục của thiết bị trong mảng gốc
         const row = document.createElement("tr");
         row.innerHTML = `
             <td>${device.name}</td>
@@ -319,9 +359,9 @@ document.getElementById("searchButton").addEventListener("click", function() {
             <td>${convertDateTime(device.purchaseDate)}</td>
             <td>${convertDateTime(device.warrantyExpiry)}</td>
             <td>
-                <span class="btn badge bg-success" onclick="detailDevice(event, ${i})">Detail</span>
-                <span class="btn badge bg-warning" onclick="updateDevice(event, ${i})">Update</span>
-                <span class="btn badge bg-danger" onclick="deleteDevice(event, ${i}, '${device.serialNumber}')">Delete</span>
+                <span class="btn badge bg-success" onclick="detailDevice(event, ${index})">Detail</span>
+                <span class="btn badge bg-warning" onclick="updateDevice(event, ${index})">Update</span>
+                <span class="btn badge bg-danger" onclick="deleteDevice(event, ${index}, '${device.serialNumber}')">Delete</span>
             </td>
         `;
         tableBody.appendChild(row);
