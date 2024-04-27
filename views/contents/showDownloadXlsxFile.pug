@@ -1,0 +1,11 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title Download XLSX
+h1 Download XLSX File
+form(action='/download' method='get')
+  label(for='filename') Select Filename:
+//-   select#filename(name='filename' required='')
+//-     | ${options}
+  button(type='submit') Download

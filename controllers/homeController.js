@@ -1,12 +1,15 @@
 const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose');
+const moment = require('moment');
 const { stringify } = require('uuid');
 // Ensure public/csv directory exists, create it if not
 const csvDir = path.join(__dirname, '../assets/public/csv');
 if (!fs.existsSync(csvDir)) {
     fs.mkdirSync(csvDir, { recursive: true });
 }
+
+const pathFolderXlsxWorking = '/assets/public/csv'
 
 const { 
     Device,
@@ -21,6 +24,8 @@ const {
 // Module
 const { exportFileCSV } = require('../modules/exportFileCSV');
 const { sendEmail } = require('../modules/sendEmail')
+const { exportHeaderLayout, exportDataToXlsxFile } = require('../modules/exportFileXlsx.js')
+
 
 function getStringDateTime() {
     const currentTime = Date.now();
@@ -271,6 +276,65 @@ module.exports.exportFileCSV = async (req, res, next) => {
         console.log(err)
         res.status(404)
     }
+}
+
+module.exports.ShowDownloadXlsxFile = async (req, res, next) => {
+
+    const inputLayoutFile = path.join(__dirname, '../', pathFolderXlsxWorking, 'layout', 'headerXlsxFile.xlsx');
+    const tableNames = 'Loans';
+    const timestamp = moment().format('YYYYMMDDTHHmmss');
+    const outputFile = path.join(__dirname, '../', pathFolderXlsxWorking, 'export', `${tableNames}-${timestamp}.xlsx`);
+
+    // Get header row
+    const keys = Object.keys(Loan.schema.obj);
+    console.log(keys);
+    try {
+
+        await exportHeaderLayout(inputLayoutFile, outputFile);
+    
+        const loans = await Loan.find({}, { _id: 0, __v: 0, proofImageUrl: 0, proofVideoUrl: 0 })
+            .populate('device', 'name')
+            .populate('borrower', 'username');
+        
+        const formattedLoans = loans.map(loan => ({
+            ...loan.toObject(),
+            device: loan.device.name,
+            borrower: loan.borrower.username,
+        }));
+        
+        setTimeout(() => {
+            exportDataToXlsxFile(formattedLoans, outputFile);
+        }, 1000)
+
+        
+
+        res.status(200).json({})
+        // === Get filenames ====
+        // const directoryPath = path.join(__dirname, '../assets', 'public', 'csv', 'export');
+        // const fileNames = []
+        // fs.readdir(directoryPath, (err, files) => {
+        //     if (err) {
+        //         console.error('Error reading directory:', err);
+        //     }
+    
+        //     // Render the index.html file with filenames as options in the select tag
+        //     // const options = files.map(file => `<option value="${file}">${file}</option>`).join('');
+        //     console.log(files);
+        //     return;
+        // });
+
+        // res.render("./contents/showDownloadXlsxFile.pug")
+    } catch {err => {
+        res.status(404).json({error: err})
+    }}
+}
+
+module.exports.downloadXlsxFile = async (req, res, next) => {
+    try {
+        res.status(200).json({})
+    } catch {err => {
+
+    }}
 }
 
 module.exports.sendEmail = async (req, res, next) => {

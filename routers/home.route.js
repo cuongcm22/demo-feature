@@ -14,6 +14,11 @@ router.get('/404', homeController.errorPage)
 router.get('/export', homeController.showExportFileCSV)
 router.post('/export', homeController.exportFileCSV)
 
+// Route export xlsx
+
+router.get('/xlsx/download', homeController.ShowDownloadXlsxFile)
+router.post('/xlsx/get', homeController.downloadXlsxFile)
+
 // Route send email
 router.get('/sendemail', homeController.sendEmail)
 router.post('/sendemailupload', moduleSendEmail.sendMail)

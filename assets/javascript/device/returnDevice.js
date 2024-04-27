@@ -98,7 +98,7 @@ function populateTable(event) {
             <div class="spinner-border text-primary" id="spinner2" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
-            <video class="img-fluid" id="videoRender" controls="" style="width: 100%; min-height: 500px; display: none; "><!-- Nếu trình duyệt không hỗ trợ video, thông báo sẽ hiển thị ở đây-->Tr&igrave;nh duy&#x1EC7;t c&#x1EE7;a b&#x1EA1;n kh&ocirc;ng h&#x1ED7; tr&#x1EE3; ph&aacute;t video.</video>
+            <video class="img-fluid" id="videoRender" controls="" style="width: 100%; min-height: 500px; display: none; " src=""><!-- Nếu trình duyệt không hỗ trợ video, thông báo sẽ hiển thị ở đây-->Tr&igrave;nh duy&#x1EC7;t c&#x1EE7;a b&#x1EA1;n kh&ocirc;ng h&#x1ED7; tr&#x1EE3; ph&aacute;t video.</video>
         </div>
     </div>
     <div class="d-flex justify-content-end"> <!-- Flex container for buttons -->
@@ -219,8 +219,9 @@ function populateTable(event) {
 function confirmLoan(event, deviceId) {
     const parentElement = event.target.parentElement.parentElement
     const imageUrl = parentElement.querySelector('#imageRender').getAttribute("src");
-    if (imageUrl == '') {
-        alert('Vui lòng chụp ảnh minh chứng!')
+    const videoUrl = parentElement.querySelector('#videoRender').getAttribute("src");
+    if (imageUrl == '' || videoUrl == '') {
+        alert('Vui lòng chụp ảnh và quay video minh chứng!')
         return;
     }
 
@@ -238,7 +239,8 @@ function confirmLoan(event, deviceId) {
         axios
             .post("/device/return", { 
                 deviceId: deviceId,
-                proofImageUrl: imageUrl
+                proofImageUrl: imageUrl,
+                proofVideoUrl: videoUrl
              })
             .then((response) => {
                 if (response.data.success) {

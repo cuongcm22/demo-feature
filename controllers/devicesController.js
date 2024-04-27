@@ -462,8 +462,8 @@ module.exports.returnDeviceDB = async (req, res, next) => {
         
         const userId = req.userId;
 
-        const { deviceId, proofImageUrl } = req.body
-        
+        const { deviceId, proofImageUrl, proofVideoUrl } = req.body
+
         // Task 1: Thực hiện việc lấy ra deviceObject được gửi lên từ phía client
         let deviceObject = await Device.findOne({ serialNumber: deviceId })
         
@@ -471,14 +471,7 @@ module.exports.returnDeviceDB = async (req, res, next) => {
             return res.status(200).json({ success: false, message: 'Device not found' });
         }  
 
-        // Task 2: Thực hiện việc tìm kiếm trong bảng loan với userId và deviceObject để cập nhật lại trạng thái
-        // const loan = await Loan.findOneAndUpdate(
-        //     { borrower: userId, device: deviceObject, transactionStatus: 'Borrowed' },
-        //     { $set: { transactionStatus: 'Returned', actualReturnDate: new Date() } },
-        //     { new: true }
-        // )
-
-        // Task 6: Get all idRecord from loan table and save them in increasing order, initialize idRecord to 1 if not exists
+        // Task 2: Get all idRecord from loan table and save them in increasing order, initialize idRecord to 1 if not exists
         const latestLoan = await Loan.findOne().sort({ idRecord: -1 });
         let nextIdRecord = 1;
         if (latestLoan) {
@@ -486,8 +479,8 @@ module.exports.returnDeviceDB = async (req, res, next) => {
         }
 
         const expectedReturnDate = await Loan.findOne({ borrower: userId, device: deviceObject, transactionStatus: 'Borrowed' }).sort({ idRecord: -1 })
-        // console.log(expectedReturnDate);
-        // Task 7: Save all information into loan table
+        
+        // Task 3: Save all information into loan table
         const newLoan = new Loan({
             idRecord: nextIdRecord,
             device: deviceObject,
@@ -495,7 +488,9 @@ module.exports.returnDeviceDB = async (req, res, next) => {
             borrowedAt: new Date(),
             expectedReturnDate: expectedReturnDate.expectedReturnDate,
             actualReturnDate: new Date(),
-            transactionStatus: 'Returned'
+            transactionStatus: 'Returned',
+            proofImageUrl: proofImageUrl,
+            proofVideoUrl: proofVideoUrl
         });
         
         await newLoan.save()
