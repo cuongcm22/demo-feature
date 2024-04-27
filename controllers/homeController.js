@@ -280,33 +280,62 @@ module.exports.exportFileCSV = async (req, res, next) => {
 
 module.exports.ShowDownloadXlsxFile = async (req, res, next) => {
 
-    const inputLayoutFile = path.join(__dirname, '../', pathFolderXlsxWorking, 'layout', 'headerXlsxFile.xlsx');
-    const tableNames = 'Loans';
     const timestamp = moment().format('YYYYMMDDTHHmmss');
+    const inputLayoutFile = path.join(__dirname, '../', pathFolderXlsxWorking, 'layout', 'headerXlsxFile.xlsx');
+
+    const tableNames = 'Devices';
     const outputFile = path.join(__dirname, '../', pathFolderXlsxWorking, 'export', `${tableNames}-${timestamp}.xlsx`);
 
     // Get header row
-    const keys = Object.keys(Loan.schema.obj);
-    console.log(keys);
     try {
+        var headerRow, formattedLoans;
+        
+        switch (tableNames) {
 
-        await exportHeaderLayout(inputLayoutFile, outputFile);
-    
-        const loans = await Loan.find({}, { _id: 0, __v: 0, proofImageUrl: 0, proofVideoUrl: 0 })
-            .populate('device', 'name')
-            .populate('borrower', 'username');
-        
-        const formattedLoans = loans.map(loan => ({
-            ...loan.toObject(),
-            device: loan.device.name,
-            borrower: loan.borrower.username,
-        }));
-        
-        setTimeout(() => {
-            exportDataToXlsxFile(formattedLoans, outputFile);
-        }, 1000)
+            case 'Loans':
 
-        
+                headerRow = Object.keys(Loan.schema.obj);
+                headerRow = headerRow.filter(key => key !== '_id' && key !== '__v' && key !== 'proofImageUrl' && key !== 'proofVideoUrl');
+
+                await exportHeaderLayout(inputLayoutFile, outputFile);
+            
+                const loans = await Loan.find({}, { _id: 0, __v: 0, proofImageUrl: 0, proofVideoUrl: 0 })
+                    .populate('device', 'name')
+                    .populate('borrower', 'username');
+                
+                formattedLoans = loans.map(loan => ({
+                    ...loan.toObject(),
+                    device: loan.device.name,
+                    borrower: loan.borrower.username,
+                }));
+                
+                setTimeout(() => {
+                    exportDataToXlsxFile(tableNames, headerRow, formattedLoans, outputFile);
+                }, 1000)
+                
+            case 'Devices':
+                headerRow = Object.keys(Device.schema.obj);
+                headerRow = headerRow.filter(key => key !== '_id' && key !== '__v' && key !== 'proofImageUrl' && key !== 'proofVideoUrl');
+
+                await exportHeaderLayout(inputLayoutFile, outputFile);
+            
+                const devices = await Device.find({}, { _id: 0, __v: 0, loans: 0, logs: 0 })
+                    .populate('deviceType', 'name')
+                    .populate('location', 'name')
+                    .populate('supplier', 'name')
+                
+                formattedLoans = devices.map(device => ({
+                    ...device.toObject(),
+                    deviceType: device.deviceType.name,
+                    location: device.location.name,
+                    supplier: device.supplier.name,
+                }));
+                
+                setTimeout(() => {
+                    exportDataToXlsxFile(tableNames, headerRow, formattedLoans, outputFile);
+                }, 1000)
+        }
+
 
         res.status(200).json({})
         // === Get filenames ====

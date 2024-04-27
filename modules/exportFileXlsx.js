@@ -9,10 +9,8 @@ const path = require('path');
 const pathFolderWorking = '/assets/public/csv'
 
 async function exportHeaderLayout(inputFile, outputFile) {
-    console.log('exportHeaderLayout run 1');
     // inputfile = '/assets/public/csv'/layout/headerXlsxFile.xlsx
     // output file = /assets/public/csv/export/[nametable]-YYYYMMDDTHHmmss.xlsx
-
     
 
     const workbook = new ExcelJS.Workbook();
@@ -51,14 +49,13 @@ async function exportHeaderLayout(inputFile, outputFile) {
 }
 
 
-async function exportDataToXlsxFile(myData, inputFile) {
-    console.log('exportDataToXlsxFile run 2');
+async function exportDataToXlsxFile(tableNames, headerRow, myData, inputFile) {
+    console.log(headerRow);
     // myData = [tensp,masp,soluong,dongia,v.v]
     // inputFile cần chèn và sao lưu lại
     // inputFile = /assets/public/csv/export/[nametable]-YYYYMMDDTHHmmss.xlsx
 
     const workbook = new ExcelJS.Workbook();
-    const headerRow = ['idRecord', 'device', 'borrower', 'borrowedAt', 'expectedReturnDate', 'actualReturnDate', 'transactionStatus', 'proofImageUrl', 'proofVideoUrl'];
 
     workbook.xlsx.readFile(inputFile)
         .then(() => {
@@ -69,9 +66,28 @@ async function exportDataToXlsxFile(myData, inputFile) {
 
             // Thêm dữ liệu từ mảng myData vào file Excel
             myData.forEach(data => {
-                // const { tenSanPham, maSanPham, soLuong, donGia, tongTien } = data;
-                const { idRecord, device, borrower, borrowedAt, expectedReturnDate, actualReturnDate, transactionStatus } = data;
-                worksheet.addRow([idRecord, device, borrower, borrowedAt, expectedReturnDate, actualReturnDate, transactionStatus]);
+                switch (tableNames) {
+                    case 'Loans':
+                        var { idRecord, device, borrower, borrowedAt, expectedReturnDate, actualReturnDate, transactionStatus } = data;
+                        worksheet.addRow([idRecord, device, borrower, borrowedAt, expectedReturnDate, actualReturnDate, transactionStatus]);    
+                    case 'Devices':
+                        var { serialNumber,   name,
+                        deviceType,     status,
+                        initStatus,     location,
+                        supplier,       description,
+                        price,          purchaseDate,
+                        warrantyExpiry, createDate,
+                        assignedUser } = data;
+                        worksheet.addRow([serialNumber,   name,
+                            deviceType,     status,
+                            initStatus,     location,
+                            supplier,       description,
+                            price,          purchaseDate,
+                            warrantyExpiry, createDate,
+                            assignedUser ]);    
+
+                }
+
             });
 
             // Lưu file Excel
