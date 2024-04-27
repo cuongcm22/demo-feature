@@ -16,8 +16,9 @@ router.post('/export', homeController.exportFileCSV)
 
 // Route export xlsx
 
-router.get('/xlsx/download', homeController.ShowDownloadXlsxFile)
-router.post('/xlsx/get', homeController.downloadXlsxFile)
+router.get('/xlsx/update', homeController.updateXlsxFile)
+router.get('/xlsx/get', homeController.ShowDownloadXlsxFile)
+router.get('/xlsx/download', homeController.downloadXlsxFile)
 
 // Route send email
 router.get('/sendemail', homeController.sendEmail)

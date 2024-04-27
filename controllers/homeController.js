@@ -276,17 +276,16 @@ module.exports.exportFileCSV = async (req, res, next) => {
         console.log(err)
         res.status(404)
     }
+
 }
-
-module.exports.ShowDownloadXlsxFile = async (req, res, next) => {
-
+module.exports.updateXlsxFile = async (req, res, next) => {
+    
     const timestamp = moment().format('YYYYMMDDTHHmmss');
     const inputLayoutFile = path.join(__dirname, '../', pathFolderXlsxWorking, 'layout', 'headerXlsxFile.xlsx');
 
     const tableNames = 'Devices';
     const outputFile = path.join(__dirname, '../', pathFolderXlsxWorking, 'export', `${tableNames}-${timestamp}.xlsx`);
-
-    // Get header row
+    
     try {
         var headerRow, formattedLoans;
         
@@ -315,7 +314,7 @@ module.exports.ShowDownloadXlsxFile = async (req, res, next) => {
                 
             case 'Devices':
                 headerRow = Object.keys(Device.schema.obj);
-                headerRow = headerRow.filter(key => key !== '_id' && key !== '__v' && key !== 'proofImageUrl' && key !== 'proofVideoUrl');
+                headerRow = headerRow.filter(key => key !== '_id' && key !== '__v' && key !== 'imageUrl' && key !== 'videoUrl');
 
                 await exportHeaderLayout(inputLayoutFile, outputFile);
             
@@ -338,32 +337,70 @@ module.exports.ShowDownloadXlsxFile = async (req, res, next) => {
 
 
         res.status(200).json({})
-        // === Get filenames ====
-        // const directoryPath = path.join(__dirname, '../assets', 'public', 'csv', 'export');
-        // const fileNames = []
-        // fs.readdir(directoryPath, (err, files) => {
-        //     if (err) {
-        //         console.error('Error reading directory:', err);
-        //     }
-    
-        //     // Render the index.html file with filenames as options in the select tag
-        //     // const options = files.map(file => `<option value="${file}">${file}</option>`).join('');
-        //     console.log(files);
-        //     return;
-        // });
+    } catch {err => {
+        res.status(404).json({error: err})
+    }}
+}
 
-        // res.render("./contents/showDownloadXlsxFile.pug")
+module.exports.ShowDownloadXlsxFile = async (req, res, next) => {
+
+    // Get header row
+    try {
+        
+        // === Get filenames ====
+        const directoryPath = path.join(__dirname, '../assets', 'public', 'csv', 'export');
+        
+        fs.readdir(directoryPath, (err, files) => {
+            if (err) {
+                console.error('Error reading directory:', err);
+            }
+
+            res.render("./contents/showDownloadXlsxFile.pug", {
+                title: 'Download xlsx file',
+                routes: {
+                    'Trang chủ': '/',
+                    'Thông tin thiết bị': '/device/report',
+                    'Tạo thiết bị': '/device/create',
+                    'Mượn thiết bị': '/device/loan',
+                    'Đã mượn': '/device/return',
+                    'Quản lý lịch sử mượn trả': '/record/loanrecord'
+                },
+                data: files
+            })
+        });
     } catch {err => {
         res.status(404).json({error: err})
     }}
 }
 
 module.exports.downloadXlsxFile = async (req, res, next) => {
-    try {
-        res.status(200).json({})
-    } catch {err => {
+    const {filename} = req.query; // Get the filename from query parameters
+    console.log(filename);
+    // Check if filename is provided
+    if (!filename) {
+        return res.status(400).send('Filename is required');
+    }
 
-    }}
+    // Construct the file path
+    const filePath = path.join(__dirname, '../assets', 'public', 'csv', 'export', filename);
+
+    // Check if the file exists
+    if (!fs.existsSync(filePath)) {
+        return res.status(404).send('File not found');
+    }
+
+    try {
+        // Set response headers
+        res.setHeader('Content-Type', 'application/octet-stream');
+        res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+
+        // Stream the file to the response
+        const fileStream = fs.createReadStream(filePath);
+        fileStream.pipe(res);
+    } catch (err) {
+        console.error("Error reading file:", err);
+        res.status(500).send("Internal Server Error");
+    }
 }
 
 module.exports.sendEmail = async (req, res, next) => {
