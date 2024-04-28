@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const moment = require('moment');
 const { stringify } = require('uuid');
 // Ensure public/csv directory exists, create it if not
-const csvDir = path.join(__dirname, '../assets/public/csv');
+const csvDir = path.join(__dirname, '../assets/public/csv/export');
 if (!fs.existsSync(csvDir)) {
     fs.mkdirSync(csvDir, { recursive: true });
 }
@@ -312,6 +312,7 @@ module.exports.updateXlsxFile = async (req, res, next) => {
                     exportDataToXlsxFile(tableNames, headerRow, formattedLoans, outputFile);
                 }, 1000)
                 
+                break;
             case 'Devices':
                 headerRow = Object.keys(Device.schema.obj);
                 headerRow = headerRow.filter(key => key !== '_id' && key !== '__v' && key !== 'imageUrl' && key !== 'videoUrl' && key !== 'assignedUser' && key !== 'loans' && key !== 'logs');
@@ -333,6 +334,11 @@ module.exports.updateXlsxFile = async (req, res, next) => {
                 setTimeout(() => {
                     exportDataToXlsxFile(tableNames, headerRow, formattedLoans, outputFile);
                 }, 1000)
+
+                break;
+
+            default: 
+                break;
         }
 
 
@@ -413,7 +419,7 @@ module.exports.sendEmail = async (req, res, next) => {
                 res.status(500).json({ error: 'Internal Server Error' });
                 return;
             }
-            const csvFiles = files.filter(file => file.endsWith('.csv'));
+            const csvFiles = files.filter(file => file.endsWith('.xlsx'));
             res.render("./contents/sendEmail.pug", {
                 title: 'Gửi mail',
                 routes: {

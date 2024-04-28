@@ -7,7 +7,9 @@ link(href='/css/report/loanRecord.css' rel='stylesheet')
     .input-group
       input#searchInput.form-control(type='text' placeholder='Search...')
       button#searchButton.btn.btn-outline-success Tìm kiếm
-  
+    .d-flex.mb-3.mt-3
+      button#downloadBtn.btn.badge.bg-primary() Export xlsx file
+      button#downloadBtn.btn.badge.bg-info.ms-3(onclick="window.location.href = '/sendemail'") Send email
   .form-check.form-switch
     .mt-3
       input#flexSwitchCheckDefault.switchRetrieveAllData.form-check-input(type='checkbox' role='switch')
