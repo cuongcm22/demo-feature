@@ -144,6 +144,7 @@ $(document).ready(function () {
     window.deleteSupplier = deleteSupplier;
 
     window.showSupplierDetails = function (index) {
+        console.log(index);
         const supplier = filteredData[index];
         $("#name-holder").val(supplier.name);
         $("#name").val(supplier.name);

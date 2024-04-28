@@ -36,7 +36,7 @@ module.exports.ShowLoanRecordPage = async (req, res, next) => {
         // Thực hiện truy vấn để lấy ra tất cả dữ liệu trong bảng LoanRecord, loại trừ các trường _id, __v và notes
         Loan.find({}, { _id: 0, __v: 0, notes: 0 })
         .populate('device', 'name')
-        .populate('borrower', 'username')
+        .populate('borrower', 'username fullname email phone')
         .sort({ _id: -1 }) // Sắp xếp theo _id giảm dần để lấy 20 phần tử cuối cùng
         .limit(20) 
         .then(records => {
@@ -44,6 +44,9 @@ module.exports.ShowLoanRecordPage = async (req, res, next) => {
             const formattedDevices = records.map((record) => {
                 const device = record.device.name
                 const username = record.borrower.username
+                const fullname = record.borrower.fullname
+                const phone = record.borrower.phone
+                const email = record.borrower.email
                 
                 const borrowedAt = formatDateTime(record.borrowedAt)
 
@@ -60,6 +63,9 @@ module.exports.ShowLoanRecordPage = async (req, res, next) => {
                 return {
                     device,
                     username,
+                    fullname,
+                    phone,
+                    email,
                     borrowedAt,
                     expectedReturnDate,
                     actualReturnDate,

@@ -24,6 +24,11 @@ $(document).ready(function () {
             <td>${record.expectedReturnDate}</td>
             <td>${record.actualReturnDate ? record.actualReturnDate : "-"}</td>
             <td>${record.transactionStatus}</td>
+            <td>
+            <button class="btn badge bg-primary" onclick="showRecordDetails(${
+                startIndex + index
+            })">Xem</button>
+            </td>
             </tr>
             `;
             loanTableBody.append(row);
@@ -109,6 +114,20 @@ $(document).ready(function () {
         pages.removeClass("active");
         pages.eq(currentPage - 1).addClass("active");
     }
+
+    window.showRecordDetails = function (index) {
+        const record = filteredData[index];
+        $("#btnCallUser").attr('href', 'tel:' + record.phone)
+        $("#btnSendMailUser").attr('href', 'mailto:' + record.email)
+        $("#device").val(record.device);
+        $("#username").val(record.username);
+        $("#fullname").val(record.fullname);
+        $("#borrowedAt").val(record.borrowedAt);
+        $("#expectedReturnDate").val(record.expectedReturnDate);
+        $("#actualReturnDate").val(record.actualReturnDate);
+        $("#transactionStatus").val(record.transactionStatus);
+        $("#recordModal").modal("show");
+    };
 
     function searchFunction() {
         const input = $("#searchInput").val().trim().toLowerCase();

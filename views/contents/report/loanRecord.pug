@@ -25,6 +25,7 @@ link(href='/css/report/loanRecord.css' rel='stylesheet')
           th Expected Return Date
           th Actual Return Date
           th Status
+          th Chức năng
       tbody#loanTableBody
         .warrper.text-center
           #spinner.spinner-border.text-primary(role='status')
@@ -45,6 +46,43 @@ link(href='/css/report/loanRecord.css' rel='stylesheet')
       input#pageInput.form-control(type='number' min='1' max='1' value='1')
       button.btn.btn-primary(onclick='goToPage()') Go
       // Data will be dynamically inserted here
+
+// Modal for displaying supplier details
+#recordModal.modal.fade(tabindex='-1' aria-labelledby='recordModalLabel' aria-hidden='true')
+  .modal-dialog.modal-dialog-centered
+    .modal-content
+      .modal-header
+        h5#recordModalLabel.modal-title Thông tin chi tiết
+        button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+      .modal-body
+        div#updateRecordForm
+          .mb-3
+            a#btnCallUser.btn.badge.bg-dark(href='') Gọi điện
+            a#btnSendMailUser.btn.badge.bg-light.text-dark.ms-3(href='') Gửi mail
+          .mb-3
+            label.form-label(for='fullname') Full Name
+            input#fullname.form-control(type='text' name='fullname' readonly='')
+          .mb-3
+            label.form-label(for='username') Username
+            input#username.form-control(type='text' name='username' readonly='')
+          .mb-3
+            label.form-label(for='device') Device
+            input#device.form-control(type='text' name='device' readonly='')
+          .mb-3
+            label.form-label(for='borrowedAt') Borrowed At
+            input#borrowedAt.form-control(type='text' name='borrowedAt' readonly='')
+          .mb-3
+            label.form-label(for='expectedReturnDate') Expected Return Date
+            input#expectedReturnDate.form-control(type='text' name='expectedReturnDate' readonly='')
+          .mb-3
+            label.form-label(for='actualReturnDate') Actual Return Date
+            input#actualReturnDate.form-control(type='text' name='actualReturnDate' readonly='')
+          .mb-3
+            label.form-label(for='transactionStatus') Transaction Status
+            input#transactionStatus.form-control(type='text' name='transactionStatus' readonly='')
+
+
+
 script.
   var mockData = !{data};
 script.
