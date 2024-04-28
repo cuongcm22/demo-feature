@@ -232,7 +232,9 @@ module.exports.showDashBoard = async (req, res, next) => {
         .catch((error) => {
             console.error(error);
         });
-        console.log(arrDeviceIdsDue);
+        // console.log(arrDeviceIdsDue);
+
+        
         // ==== Task 3: Thống kê những thiết bị không còn hoạt động
         let arrDevice = await Device.find({});
         const arrDeviceNotWorking = [];

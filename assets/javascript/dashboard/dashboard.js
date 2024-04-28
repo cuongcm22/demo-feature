@@ -83,9 +83,9 @@ function renderLoanList() {
   arrDeviceIdsDue.forEach(function(loan) {
     var row = document.createElement('tr');
     row.innerHTML = `
-      <td>${loan.device}</td>
       <td>${loan.fullname}</td>
       <td>${loan.borrower}</td>
+      <td>${loan.device}</td>
       <td>${new Date(loan.borrowedAt).toLocaleString()}</td>
       <td>${new Date(loan.expectedReturnDate).toLocaleDateString()}</td>
     `;
