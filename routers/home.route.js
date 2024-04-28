@@ -8,6 +8,7 @@ const moduleSendEmail = require('../modules/sendEmail')
 
 router.get('/', homeController.homePage)
 router.post('/uploads', upload.single('file'), uploadModule.uploadFile)
+router.post('/image/delete', uploadModule.deleteFile)
 router.get('/404', homeController.errorPage)
 
 // Route export csv file

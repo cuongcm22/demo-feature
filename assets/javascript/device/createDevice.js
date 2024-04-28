@@ -171,4 +171,34 @@ $(document).ready(function() {
             }
         });
     }
+
+    // Delete image url 
+    const deleteButton = document.querySelector('#deleteUrlImageBtn');
+    const image = document.querySelector('#imageRender');
+    deleteButton.addEventListener('click', () => {
+        // Lấy giá trị của thuộc tính src của thẻ hình ảnh
+        const filename = image.getAttribute('src');
+        
+        if (filename == '/public/images/image-placeholder02.jpg') {
+            alert('Bạn cần up ảnh lên trước rồi mới xóa được')
+        } else {
+            // Gửi yêu cầu POST sử dụng Axios
+            axios.post('/image/delete', { filename })
+                .then(response => {
+                    // Xử lý phản hồi từ server nếu cần
+                    console.log(response);
+                    if (response.data.success == true) {
+                        image.src = '/public/images/image-placeholder02.jpg';
+                        alert('Xóa tệp thành công!')
+                    } else {
+                        alert('Xóa tệp không thành công!')
+                        console.log(response.data.message);
+                    }
+                })
+                .catch(error => {
+                    // Xử lý lỗi nếu có
+                    console.error('Có lỗi xảy ra khi gửi yêu cầu:', error);
+                });
+        }
+    });
 });

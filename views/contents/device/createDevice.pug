@@ -48,7 +48,9 @@ section.container
       .mb-3
         label.form-label(for='deviceUrlImg') &#x1EA2;nh thi&#x1EBF;t b&#x1ECB;: (devices.imageUrl)
         //- accept='image/*'
-        input#deviceUrlImg.form-control(type='file' accept=".jpg, .jpeg, .png")
+        .input-group
+          input#deviceUrlImg.form-control(type='file' accept=".jpg, .jpeg, .png")
+          button#deleteUrlImageBtn.btn.btn-outline-danger(type='button') Xóa
         .warrper.text-center
           #spinner1.spinner-border.text-primary(role='status')
             span.visually-hidden Loading...
