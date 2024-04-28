@@ -51,3 +51,47 @@ let revChart = new Chart(ctx, {
     }
   }
 });
+
+// Render table
+
+function renderUserList() {
+  var userList = document.getElementById('table1-body');
+  userList.innerHTML = ''; // Clear previous content
+
+  arrUserIdsNotReturned.forEach(function(userObj) {
+    var user = userObj.user;
+    var numDevice = userObj.numDevice;
+    var row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${user.fullname}</td>
+      <td>${user.username}</td>
+      <td>${user.email}</td>
+      <td>${user.phone}</td>
+      <td>${numDevice}</td>
+    `;
+    userList.appendChild(row);
+  });
+}
+
+// Call the function to render user list on page load
+renderUserList();
+
+function renderLoanList() {
+  var loanList = document.getElementById('loan-list');
+  loanList.innerHTML = ''; // Clear previous content
+
+  arrDeviceIdsDue.forEach(function(loan) {
+    var row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${loan.device}</td>
+      <td>${loan.fullname}</td>
+      <td>${loan.borrower}</td>
+      <td>${new Date(loan.borrowedAt).toLocaleString()}</td>
+      <td>${new Date(loan.expectedReturnDate).toLocaleDateString()}</td>
+    `;
+    loanList.appendChild(row);
+  });
+}
+
+// Call the function to render device loan list on page load
+renderLoanList();

@@ -70,6 +70,7 @@ async function exportDataToXlsxFile(tableNames, headerRow, myData, inputFile) {
                     case 'Loans':
                         var { idRecord, device, borrower, borrowedAt, expectedReturnDate, actualReturnDate, transactionStatus } = data;
                         worksheet.addRow([idRecord, device, borrower, borrowedAt, expectedReturnDate, actualReturnDate, transactionStatus]);    
+                        break;
                     case 'Devices':
                         var { serialNumber,   name,
                         deviceType,     status,
@@ -85,6 +86,9 @@ async function exportDataToXlsxFile(tableNames, headerRow, myData, inputFile) {
                             price,          purchaseDate,
                             warrantyExpiry, createDate,
                             assignedUser ]);    
+                        break;
+                    default: 
+                        break;
 
                 }
 

@@ -34,7 +34,7 @@ module.exports.deleteFile = async (req, res, next) => {
 
     fs.access(filePath, fs.constants.F_OK, (err) => {
         if (err) {
-            console.error('Tệp không tồn tại hoặc không thể truy cập:', err);
+            // console.error('Tệp không tồn tại hoặc không thể truy cập:', err);
             return res.status(200).json({
                 success: false,
                 message: err

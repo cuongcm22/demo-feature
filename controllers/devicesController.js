@@ -90,6 +90,7 @@ module.exports.ShowReportDevicePage = async (req, res, next) => {
                 videoUrl: 1,
                 'location.name': 1,
                 'supplier.name': 1,
+                price: 1,
                 description: 1,
                 purchaseDate: 1,
                 warrantyExpiry: 1,

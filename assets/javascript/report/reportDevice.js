@@ -147,6 +147,10 @@ Your browser does not support the video tag.
           <td>${deviceInfo.location.name}</td>
         </tr>
         <tr>
+          <th scope="row">Giá:</th>
+          <td>${deviceInfo.price ? deviceInfo.price : '-'}</td>
+        </tr>
+        <tr>
           <th scope="row">Mô tả:</th>
           <td>${deviceInfo.description}</td>
         </tr>
