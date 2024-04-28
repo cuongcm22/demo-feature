@@ -280,11 +280,11 @@ module.exports.exportFileCSV = async (req, res, next) => {
 }
 module.exports.updateXlsxFile = async (req, res, next) => {
     
-    const timestamp = moment().format('YYYYMMDDTHHmmss');
     const inputLayoutFile = path.join(__dirname, '../', pathFolderXlsxWorking, 'layout', 'headerXlsxFile.xlsx');
 
-    const tableNames = 'Devices';
-    const outputFile = path.join(__dirname, '../', pathFolderXlsxWorking, 'export', `${tableNames}-${timestamp}.xlsx`);
+    // const tableNames = 'Devices';
+    const tableNames = 'Loans';
+    const outputFile = path.join(__dirname, '../', pathFolderXlsxWorking, 'export', `${tableNames}.xlsx`);
     
     try {
         var headerRow, formattedLoans;
@@ -314,7 +314,7 @@ module.exports.updateXlsxFile = async (req, res, next) => {
                 
             case 'Devices':
                 headerRow = Object.keys(Device.schema.obj);
-                headerRow = headerRow.filter(key => key !== '_id' && key !== '__v' && key !== 'imageUrl' && key !== 'videoUrl');
+                headerRow = headerRow.filter(key => key !== '_id' && key !== '__v' && key !== 'imageUrl' && key !== 'videoUrl' && key !== 'assignedUser' && key !== 'loans' && key !== 'logs');
 
                 await exportHeaderLayout(inputLayoutFile, outputFile);
             
@@ -374,7 +374,8 @@ module.exports.ShowDownloadXlsxFile = async (req, res, next) => {
 }
 
 module.exports.downloadXlsxFile = async (req, res, next) => {
-    const {filename} = req.query; // Get the filename from query parameters
+    const {filename} = req.body; // Get the filename from query parameters
+    const timestamp = moment().format('YYYYMMDDTHHmmss');
     console.log(filename);
     // Check if filename is provided
     if (!filename) {
@@ -390,9 +391,10 @@ module.exports.downloadXlsxFile = async (req, res, next) => {
     }
 
     try {
+        const newFilename = `${filename.split('.')[0]}-${timestamp}.${filename.split('.')[1]}`;
         // Set response headers
         res.setHeader('Content-Type', 'application/octet-stream');
-        res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+        res.setHeader('Content-Disposition', `attachment; filename=${newFilename}`);
 
         // Stream the file to the response
         const fileStream = fs.createReadStream(filePath);
