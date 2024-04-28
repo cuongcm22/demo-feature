@@ -60,6 +60,11 @@ module.exports.ShowLoanRecordPage = async (req, res, next) => {
 
                 
                 const transactionStatus = record.transactionStatus
+                
+                const proofImageUrl = record.proofImageUrl
+
+                const proofVideoUrl = record.proofVideoUrl
+                
                 return {
                     device,
                     username,
@@ -69,10 +74,12 @@ module.exports.ShowLoanRecordPage = async (req, res, next) => {
                     borrowedAt,
                     expectedReturnDate,
                     actualReturnDate,
-                    transactionStatus
+                    transactionStatus,
+                    proofImageUrl,
+                    proofVideoUrl
                 };
             });
-            // console.log(formattedDevices);
+            // console.log(formattedDevices[formattedDevices.length-1]);
             // res.render("./contents/report/loanRecord", {data: JSON.stringify(formattedDevices)})
             res.render("./contents/report/loanRecord.pug", {
                 title: 'Home page',
