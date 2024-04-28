@@ -54,11 +54,13 @@ section.container
         .warrper.text-center
           #spinner1.spinner-border.text-primary(role='status')
             span.visually-hidden Loading...
-          img#imageRender.img-fluid(style='width: 100%; min-height: 500px; object-fit: cover;' src='/public/images/image-placeholder02.jpg' alt='')
+          img#imageRender.img-fluid(style='width: 100%; min-height: 500px; object-fit: cover;' src='/public/images/image-placeholder02.png' alt='')
       
       .mb-3
         label.form-label(for='deviceVideo') Video thi&#x1EBF;t b&#x1ECB;: (devices.videoUrl)
-        input#deviceVideo.form-control(type='file' accept='video/*')
+        .input-group
+          input#deviceVideo.form-control(type='file' accept='video/*')
+          button#deleteUrlVideoBtn.btn.btn-outline-danger(type='button') Xóa
         .warrper.center-video
           #spinner2.spinner-border.text-primary(role='status')
             span.visually-hidden Loading...

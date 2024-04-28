@@ -22,7 +22,7 @@ module.exports.uploadFile = async (req, res, next) => {
 
 module.exports.deleteFile = async (req, res, next) => {
     const { filename } = req.body;
-    
+
     if (!filename) {
         return res.status(200).json({
             success: false,
@@ -44,13 +44,13 @@ module.exports.deleteFile = async (req, res, next) => {
         // Nếu tệp tồn tại, thực hiện xóa
         fs.unlink(filePath, (err) => {
             if (err) {
-                console.error('Lỗi khi xóa tệp:', err);
+                // console.error('Lỗi khi xóa tệp:', err);
                 return res.status(200).json({
                     success: false,
                     message: err
                 });
             }
-            console.log('Tệp đã được xóa thành công.');
+            
             return res.status(200).json({
                 success: true,
                 message: 'Xóa tệp thành công'
