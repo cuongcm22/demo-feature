@@ -69,6 +69,13 @@ module.exports.homePage = async (req, res, next) => {
 
 module.exports.showDashBoard = async (req, res, next) => {
     try {
+
+        const { role } = req.userId;
+
+        if (role != 'admin' && role != 'moderator') {
+            return res.redirect('/user')
+        }
+
         var arrDeviceIdsNotReturned = [];
         var arrUserIdsNotReturned = [];
         let arrDeviceIdsUsed = await Device.find({ initStatus: "used" }).then(
@@ -257,6 +264,12 @@ module.exports.showDashBoard = async (req, res, next) => {
             title: "Home page",
             routes: {
                 "Trang chủ": "/",
+                "Quản lý profile": "/user",
+                "Quản lý thiết bị": "/device/report",
+                "Quản lý nhà cung cấp": "/suppliers/detail",
+                "Quản lý vị trí": "/locations/detail",
+                "Quản lý loại thiết bị": "/devicetypes/detail",
+                "Quản lý lịch sử mượn trả": "/record/loanrecord",
             },
             data: {
                 totalDevices: arrDevice.length,

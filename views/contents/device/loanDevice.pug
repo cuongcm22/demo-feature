@@ -1,6 +1,9 @@
 include ../../main.pug
 //- link(href='/css/device/loanDevice.css' rel='stylesheet')
 style.
+  body * {
+    color: #f16022;
+  }
   /* Custom styles */
   .card {
   margin-bottom: 20px;
@@ -17,7 +20,7 @@ style.
   }
   
   .nav-bar-desktop > li:hover {
-    background: #0d6efd;
+    background: #f16022;
     color: white;
   }
 
@@ -29,6 +32,21 @@ style.
 
   .nav-bar-tablet-mobile > li:hover {
     background: #cacaca;
+  }
+
+  #pagination a {
+    background-color: #f16022; 
+    border-color: #f16022; 
+  }
+
+  .btn-goToPage {
+    background-color: #f16022; 
+    border-color: #f16022; 
+  }
+
+  .btn-goToPage:hover {
+    background-color: #f16022; 
+    border-color: #f16022; 
   }
 
 .container-fluid
@@ -74,7 +92,7 @@ style.
             ul#pagination.pagination
           .input-group(style='width: 100px;')
             input#pageInput.form-control(type='number' min='1' max='1' value='1')
-            button.btn.btn-primary(onclick='goToPage()') Go
+            button.btn-goToPage.btn.btn-primary(onclick='goToPage()') Go
 
 
 // Modal

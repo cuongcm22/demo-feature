@@ -18,7 +18,7 @@ function createDeviceCard(device, index) {
     <p class="card-text">Warranty Date: ${new Date(
         device.warrantyExpiry
     ).toLocaleDateString()}</p>
-    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal"  onclick="populateTable(event)">Trả thiết bị</button>
+    <button type="button" style="background-color: #f16022; color: white;" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal"  onclick="populateTable(event)">Trả thiết bị</button>
     </div>
     </div>
     `;
