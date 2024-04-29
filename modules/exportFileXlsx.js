@@ -49,8 +49,9 @@ async function exportHeaderLayout(inputFile, outputFile) {
 }
 
 
-async function exportDataToXlsxFile(tableNames, headerRow, myData, inputFile) {
-    console.log(headerRow);
+async function exportDataToXlsxFile(tableNames, headerRowOrigin, headerRow, myData, inputFile) {
+    console.log(headerRowOrigin);
+    // console.log(myData);
     // myData = [tensp,masp,soluong,dongia,v.v]
     // inputFile cần chèn và sao lưu lại
     // inputFile = /assets/public/csv/export/[nametable]-YYYYMMDDTHHmmss.xlsx
@@ -63,40 +64,82 @@ async function exportDataToXlsxFile(tableNames, headerRow, myData, inputFile) {
 
             // Add header
             worksheet.addRow(headerRow);
-
+            console.log(myData);
             // Thêm dữ liệu từ mảng myData vào file Excel
-            myData.forEach(data => {
-                switch (tableNames) {
-                    case 'Loans':
+            switch (tableNames) {
+                case 'Loans':
+                        myData.forEach(data => {
                         var { idRecord, device, borrower, borrowedAt, expectedReturnDate, actualReturnDate, transactionStatus } = data;
                         worksheet.addRow([idRecord, device, borrower, borrowedAt, expectedReturnDate, actualReturnDate, transactionStatus]);    
+                        })
                         break;
+                        
                     case 'Devices':
-                        var { serialNumber,   name,
-                        deviceType,     status,
-                        initStatus,     location,
-                        supplier,       description,
-                        price,          purchaseDate,
-                        warrantyExpiry, createDate,
-                        assignedUser } = data;
-                        worksheet.addRow([serialNumber,   name,
-                            deviceType,     status,
-                            initStatus,     location,
-                            supplier,       description,
-                            price,          purchaseDate,
-                            warrantyExpiry, createDate,
-                            assignedUser ]);    
-                        break;
+                        // console.log(data);
+                        // var { name, serialNumber, createDate, quantity, price } = data;
+                        // if (quantity == undefined) return '';
+                        // worksheet.addRow([name, serialNumber, createDate, quantity, price ]);    
+                        // break;
+
+                        // const rowData = [];
+                        // headerRowOrigin.forEach(key => {
+                        //     // if (data[key] == 'Active') {data[key] = 'Hoạt động'}
+                        //     rowData.push(data[key] || ''); // Lấy giá trị từ data hoặc để trống nếu không tồn tại
+                        // });
+                        // console.log(rowData);
+                        
+                        // worksheet.addRow(rowData);
+                        const deviceMap = new Map();
+
+                        myData.forEach((data, index) => {
+                            const { name, serialNumber, purchaseDate, price } = data;
+                            
+                            if (!deviceMap.has(name)) {
+                              deviceMap.set(name, {
+                                quantity: 1,
+                                price: parseInt(price),
+                                purchaseDate: new Date(purchaseDate).getFullYear(),
+                                index: deviceMap.size + 1
+                              });
+                            } else {
+                              const device = deviceMap.get(name);
+                              device.quantity += 1;
+                              device.price += parseInt(price);
+                            }
+                          });
+                          
+                          deviceMap.forEach((device, name) => {
+                            const rowData = [
+                              device.index,
+                              name,
+                              '', // Mã số
+                              device.purchaseDate, // Năm
+                              device.quantity,
+                              device.price,
+                              '', // Nguyên giá
+                              device.quantity,
+                              device.price,
+                              '', // Nguyên giá
+                              device.quantity,
+                              device.price,
+                              '' // Nguyên giá
+                            ];
+                            worksheet.addRow(rowData);
+                          });
+
+                        // Add header row
+                        // worksheet.getRow(1).values = headerRowOrigin;
+                        
                     default: 
                         break;
 
                 }
 
-            });
+                return workbook.xlsx.writeFile(inputFile);
+            })
 
             // Lưu file Excel
-            return workbook.xlsx.writeFile(inputFile);
-        })
+        
         .then(() => {
             console.log('Dữ liệu đã được thêm vào file Excel thành công.');
     

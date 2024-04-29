@@ -84,7 +84,16 @@ module.exports.ShowReportDevicePage = async (req, res, next) => {
                 serialNumber: 1,
                 name: 1,
                 'deviceType.name': 1,
-                status: 1,
+                status: {
+                  $switch: {
+                    branches: [
+                      { case: { $eq: ['$status', 'Active'] }, then: 'Hoạt động' },
+                      { case: { $eq: ['$status', 'Repair'] }, then: 'Đang sửa chữa' },
+                      { case: { $eq: ['$status', 'Damaged'] }, then: 'Bị hư hại' }
+                    ],
+                    default: '$status'
+                  }
+                },
                 initStatus: 1,
                 imageUrl: 1,
                 videoUrl: 1,
@@ -97,7 +106,7 @@ module.exports.ShowReportDevicePage = async (req, res, next) => {
                 createDate: 1
               }
             }
-        ]).then((devices) => {
+          ]).then((devices) => {
             res.render("./contents/report/reportDevice.pug", {
                 title: 'Thiết bị',
                 routes: {

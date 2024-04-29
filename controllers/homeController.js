@@ -390,8 +390,8 @@ module.exports.updateXlsxFile = async (req, res, next) => {
         "headerXlsxFile.xlsx"
     );
 
-    // const tableNames = 'Devices';
-    const tableNames = "Loans";
+    const tableNames = 'Devices';
+    // const tableNames = "Loans";
     const outputFile = path.join(
         __dirname,
         "../",
@@ -440,17 +440,72 @@ module.exports.updateXlsxFile = async (req, res, next) => {
 
                 break;
             case "Devices":
-                headerRow = Object.keys(Device.schema.obj);
-                headerRow = headerRow.filter(
-                    (key) =>
-                        key !== "_id" &&
-                        key !== "__v" &&
-                        key !== "imageUrl" &&
-                        key !== "videoUrl" &&
-                        key !== "assignedUser" &&
-                        key !== "loans" &&
-                        key !== "logs"
-                );
+                console.log('GET deivce table');
+
+                // const headerRowOrigin = Object.keys(Device.schema.obj)
+                // .filter(key => !["_id", "__v", "imageUrl", "videoUrl", "assignedUser", "loans", "logs"].includes(key))
+                // .sort((a, b) => {
+                //   // Sắp xếp các key theo thứ tự yêu cầu
+                //   const order = ["name", "serialNumber", "createDate", "quantity", "price", "residual value"];
+                //   return order.indexOf(a) - order.indexOf(b);
+                // });
+                const headerRowOrigin = ["STT", "name", "serial Number", "purchaseDate", "quantity", "price", "residual value", "quantity", "price", "residual value", "quantity", "price", "residual value"];
+
+                const headerMapping = {
+                    name: 'Tên dụng cụ lâu bền',
+                    serialNumber: 'Mã số',
+                    createDate: 'Năm',
+                    quantity: 'Số lượng',
+                    price: 'Nguyên giá',
+                    // 'residual value': 'Giá trị còn lại' - Đã loại bỏ vì giá trị mặc định rỗng
+                  };
+                  
+                // const headerRow = Object.keys(Device.schema.obj)
+                // .filter(key =>
+                //     key !== "_id" &&
+                //     key !== "__v" &&
+                //     key !== "imageUrl" &&
+                //     key !== "videoUrl" &&
+                //     key !== "assignedUser" &&
+                //     key !== "loans" &&
+                //     key !== "logs" &&
+                //     key !== "deviceType" &&
+                //     key !== "initStatus" &&
+                //     key !== "location" &&
+                //     key !== "supplier" &&
+                //     key !== "description" &&
+                //     key !== "purchaseDate" &&
+                //     key !== "warrantyExpiry" &&
+                //     key !== "status" 
+
+                // )
+                // .map(key => ({
+                //     key,
+                //     displayName: headerMapping[key] || key
+                // }))
+                // .sort((a, b) => {
+                //     // Sắp xếp theo thứ tự yêu cầu
+                //     const order = ['name', 'serialNumber', 'createDate', 'quantity', 'price'];
+                //     return order.indexOf(a.key) - order.indexOf(b.key);
+                // })
+                // .map(item => item.displayName); // Chỉ lấy tên hiển thị
+
+                const headerRow = [
+                    "Stt",
+                    'Tên dụng cụ lâu bền',
+                    'Mã số',
+                    'Năm',
+                    'Số lượng',
+                    'Nguyên giá',
+                    'Giá trị còn lại',
+                    'Số lượng',
+                    'Nguyên giá',
+                    'Giá trị còn lại',
+                    'Số lượng',
+                    'Nguyên giá',
+                    'Giá trị còn lại'
+                  ]
+                // console.log(headerRow);
 
                 await exportHeaderLayout(inputLayoutFile, outputFile);
 
@@ -462,7 +517,7 @@ module.exports.updateXlsxFile = async (req, res, next) => {
                     .populate("location", "name")
                     .populate("supplier", "name");
 
-                formattedLoans = devices.map((device) => ({
+                formattedDevices = devices.map((device) => ({
                     ...device.toObject(),
                     deviceType: device.deviceType.name,
                     location: device.location.name,
@@ -472,8 +527,9 @@ module.exports.updateXlsxFile = async (req, res, next) => {
                 setTimeout(() => {
                     exportDataToXlsxFile(
                         tableNames,
+                        headerRowOrigin,
                         headerRow,
-                        formattedLoans,
+                        formattedDevices,
                         outputFile
                     );
                 }, 1000);
