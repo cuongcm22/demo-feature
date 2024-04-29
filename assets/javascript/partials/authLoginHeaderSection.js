@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         cookieData[name] = value;
     });
     // Output cookie data to console (for demonstration)
-    console.log("Cookie Data:", cookieData);
+    // console.log("Cookie Data:", cookieData);
     if (cookieData.sessionUserName && cookieData.token) {
         userSectionElement.forEach(userSection => {
             userSection.innerHTML = 'Welcome <strong>' + cookieData.sessionUserName + '</strong>';

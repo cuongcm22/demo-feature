@@ -404,7 +404,9 @@ module.exports.updateXlsxFile = async (req, res, next) => {
     const deviceTypesName = req.body.deviceTypes
     // const deviceTypesName = "Dụng cụ lâu bền"
     // const deviceTypesName = "Tài sản cố định"
-    const timestamp = moment().format('YYYYMMDDTHHmmss');
+    // const timestamp = moment().format('YYYYMMDDTHHmmss');
+    const timestamp = require('moment-timezone').utc().utcOffset('+07:00').format('YYYYMMDDTHHmmss');
+
 
     const inputLayoutFile = path.join(
         __dirname,
@@ -464,7 +466,7 @@ module.exports.updateXlsxFile = async (req, res, next) => {
 
                 break;
             case "Devices":
-                console.log('GET deivce table');
+                // console.log('GET deivce table');
 
                 // const headerRowOrigin = Object.keys(Device.schema.obj)
                 // .filter(key => !["_id", "__v", "imageUrl", "videoUrl", "assignedUser", "loans", "logs"].includes(key))
@@ -551,7 +553,7 @@ module.exports.updateXlsxFile = async (req, res, next) => {
                     })
                     .populate('location', 'name')
                     .populate('supplier', 'name');
-                console.log(devices);
+                // console.log(devices);
 
                 // formattedDevices = devices.map((device) => ({
                 //     ...device.toObject(),

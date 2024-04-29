@@ -132,7 +132,7 @@ app.get('/api/v1/exports',authenToken.authenToken, async (req, res) => {
 
     try {
       const result = await listFilesWithExtension(directory, extensions);
-      console.log(result);
+      // console.log(result[0]);
       res.json(result);
     } catch (error) {
         res.status(500).json({ error: error.message });

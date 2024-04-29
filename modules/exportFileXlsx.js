@@ -33,7 +33,7 @@ async function exportHeaderLayout(inputFile, outputFile) {
             return workbook.xlsx.writeFile(outputFile);
         })
         .then(() => {
-            console.log(`Đã lưu thành công vào ${outputFile}`);
+            // console.log(`Đã lưu thành công vào ${outputFile}`);
             return;
         })
         .catch((error) => {
@@ -45,8 +45,8 @@ async function exportHeaderLayout(inputFile, outputFile) {
 
 
 async function exportDataToXlsxFile(tableNames, headerRowOrigin, headerRow, myData, inputFile) {
-    console.log(headerRowOrigin);
-    console.log(myData);
+    // console.log(headerRowOrigin);
+    // console.log(myData);
     // myData = [tensp,masp,soluong,dongia,v.v]
     // inputFile cần chèn và sao lưu lại
     // inputFile = /assets/public/csv/export/[nametable]-YYYYMMDDTHHmmss.xlsx
@@ -136,7 +136,7 @@ async function exportDataToXlsxFile(tableNames, headerRowOrigin, headerRow, myDa
             // Lưu file Excel
         
         .then(() => {
-            console.log('Dữ liệu đã được thêm vào file Excel thành công.');
+            // console.log('Dữ liệu đã được thêm vào file Excel thành công.');
     
             // // Chèn thêm 7 hàng phía trên dữ liệu đã chèn
             // const worksheet = workbook.getWorksheet(1);
@@ -168,7 +168,7 @@ async function exportDataToXlsxFile(tableNames, headerRowOrigin, headerRow, myDa
             return workbook.xlsx.writeFile(inputFile);
         })
         .then(() => {
-            console.log('Dữ liệu mới đã được chèn vào file Excel thành công.');
+            // console.log('Dữ liệu mới đã được chèn vào file Excel thành công.');
         })
         .catch(err => {
             console.error('Đã xảy ra lỗi:', err);
