@@ -190,7 +190,8 @@ Sidebar
 }
 /* main */
 .main-content {
-  margin-left: 345px;
+  margin-left: auto;
+  margin-right: auto;
   width: calc(100vw - 345px);
   padding: 1rem 2rem 1.2rem 1.2rem;
   transition: margin-left 300ms;

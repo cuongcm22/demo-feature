@@ -218,6 +218,7 @@ module.exports.showDashBoard = async (req, res, next) => {
                     device: { $arrayElemAt: ["$device_info.name", 0] }, // Assuming device name is in the "name" field
                     borrower: { $arrayElemAt: ["$borrower_info.username", 0] }, // Assuming borrower username is in the "username" field
                     fullname: { $arrayElemAt: ["$borrower_info.fullname", 0] }, // Assuming borrower username is in the "username" field
+                    phone: { $arrayElemAt: ["$borrower_info.phone", 0] }, // Assuming borrower username is in the "username" field
                     borrowedAt: "$records.borrowedAt",
                     expectedReturnDate: "$records.expectedReturnDate",
                     actualReturnDate: "$records.actualReturnDate",
@@ -253,6 +254,10 @@ module.exports.showDashBoard = async (req, res, next) => {
         console.log("arrDeviceNotWorking: ", arrDeviceNotWorking.length);
 
         res.render("./contents/dashboard/dashboard.pug", {
+            title: "Home page",
+            routes: {
+                "Trang chủ": "/",
+            },
             data: {
                 totalDevices: arrDevice.length,
                 // Task 1: Thống kê những thiết bị được mượn nhưng chưa được trả || arrDeviceIdsNotReturned / totalDevices

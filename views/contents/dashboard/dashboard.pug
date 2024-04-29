@@ -1,80 +1,22 @@
-doctype html
-head
-  meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  title Document
+include ../../main.pug
     
-  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css')
-  script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js' integrity='sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==' crossorigin='anonymous' referrerpolicy='no-referrer')
-  // jQuery Knob CDN
-  script(src='https://cdnjs.cloudflare.com/ajax/libs/jQuery-Knob/1.2.13/jquery.knob.min.js' integrity='sha512-NhRZzPdzMOMf005Xmd4JonwPftz4Pe99mRVcFeRDcdCtfjv46zPIi/7ZKScbpHD/V0HB1Eb+ZWigMqw94VUVaw==' crossorigin='anonymous' referrerpolicy='no-referrer')
-  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC' crossorigin='anonymous')
-  script(src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js' integrity='sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p' crossorigin='anonymous')
-  script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js' integrity='sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF' crossorigin='anonymous')
+link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css')
+script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js' integrity='sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==' crossorigin='anonymous' referrerpolicy='no-referrer')
+// jQuery Knob CDN
+script(src='https://cdnjs.cloudflare.com/ajax/libs/jQuery-Knob/1.2.13/jquery.knob.min.js' integrity='sha512-NhRZzPdzMOMf005Xmd4JonwPftz4Pe99mRVcFeRDcdCtfjv46zPIi/7ZKScbpHD/V0HB1Eb+ZWigMqw94VUVaw==' crossorigin='anonymous' referrerpolicy='no-referrer')
+link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC' crossorigin='anonymous')
+script(src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js' integrity='sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p' crossorigin='anonymous')
 
-  link(href='/css/dashboard/dashboard.css' rel='stylesheet')
+
+link(href='/css/dashboard/dashboard.css' rel='stylesheet')
 
 
 input#menu-toggle(type='checkbox' name='')
 .overlay
   label(for='menu-toggle')  
-.sidebar
-  .sidebar-container
-    .brand
-      h3
-        span.lab.la-staylinked
-        | vase
-    .sidebar-avatar
-      div
-        img(src='/public/images/logo-huet-00.png' alt='avatar')
-      .avatar-info
-        .avatar-text
-          h4 User
-          small 14-10-69
-        span.las.la-angle-double-down
-    .sidebar-menu
-      ul
-        li
-          a.active(href='#')
-            span.las.la-adjust
-            span Dashboard
-        li
-          a(href='#')
-            span.las.la-video
-            span Videos
-        li
-          a(href='#')
-            span.las.la-chart-bar
-            span Analytics
-        li
-          a(href='#')
-            span.las.la-calendar
-            span Schedule
-        li
-          a(href='#')
-            span.las.la-user
-            span Account
-    .sidebar-card
-      .side-card-icon
-        span.lab.la-codiepie
-      div
-        h4 Make AdSense
-        p add ads to your videos to earn money
-      button.btn.btn-main.btn-block Create now
 .main-content
   header
-    .header-wrapper
-      label(for='menu-toggle')
-        span.las.la-bars
-      .header-title
-        h1 Analytics
-        p
-          | Display analytics about your Channel
-          span.las.la-chart-line
-    .header-action
-      a.btn.btn-main.btn-home(href="/") 
-        span.las.la-video
-        | Go Home
+    
   main
     section
       h3.section-head Overview
@@ -95,7 +37,7 @@ input#menu-toggle(type='checkbox' name='')
           .analytic-info
             h4.analytic-info_desc Nh&#x1EEF;ng thi&#x1EBF;t b&#x1ECB; kh&ocirc;ng c&ograve;n ho&#x1EA1;t &dstrok;&#x1ED9;ng
             h1.analytic-info_primary(style='color: #66EE66;')
-              | #{data.arrDeviceNotWorking}/#{data.totalDevices}
+              | #{data.arrDeviceNotWorking}
     section 
       style.
         .table-custom {
@@ -105,7 +47,7 @@ input#menu-toggle(type='checkbox' name='')
           padding: 15px
         }
       .container
-        h3 MƯỢN CHƯA TRẢ
+        h3.ps-4 MƯỢN CHƯA TRẢ
         .table-container.table.table-custom.table-responsive
           table.table
             thead
@@ -117,7 +59,7 @@ input#menu-toggle(type='checkbox' name='')
                 th Số thiết bị
             tbody#table1-body
               // Table 1 Body
-        h3 QUÁ HẠN CHƯA TRẢ
+        h3.ps-4 QUÁ HẠN CHƯA TRẢ
         .table-container.table.table-custom.table-responsive
           table.table
             thead
@@ -125,6 +67,7 @@ input#menu-toggle(type='checkbox' name='')
                 th Tên đầy đủ
                 th Tên người dùng
                 th Tên thiết bị
+                th Số điện thoại
                 th Mượn vào lúc
                 th Ngày trả dự kiến
             tbody#loan-list

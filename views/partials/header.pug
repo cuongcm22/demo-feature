@@ -20,10 +20,10 @@ header.header
         #navbarNav.collapse.navbar-collapse
           ul.navbar-nav.ms-auto
             li.nav-item
-              a.nav-link#userNameID.text-primary
+              a(style="color: #f15822;").nav-link#userNameID
             each route, nameRoute in routes
               li.nav-item
-                a.nav-link(href=route) #{nameRoute}
+                a.nav-link(href=route style="color: #f15822;") #{nameRoute}
             li#btnLogout.nav-item
               a.nav-link.text-danger(href='/user/logout') 
                 strong Đăng xuất
