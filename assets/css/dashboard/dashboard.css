@@ -429,3 +429,25 @@ main {
     display: none;
   }
 }
+
+.container {
+  max-width: 998.99px;
+}
+
+@media (min-width: 768px) { 
+  .container {
+    max-width: 100%;
+    
+  }
+}
+
+#searchButton, #searchButton1 {
+  background-color: #f16022;
+  border-color: #f16022;
+}
+
+#pagination > li.active a,
+#pagination1 > li.active a {
+  background-color: #f16022;
+  border-color: #f16022;
+}
