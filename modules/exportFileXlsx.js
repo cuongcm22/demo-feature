@@ -2,10 +2,6 @@ const ExcelJS = require('exceljs');
 const fs = require('fs');
 const path = require('path');
 
-// Tên file Excel ban đầu và file mới cần tạo
-// const inputFile = 'headerXlsxFile.xlsx';
-// const outputFile = 'newfile.xlsx';
-
 const pathFolderWorking = '/assets/public/csv'
 
 async function exportHeaderLayout(inputFile, outputFile) {
@@ -34,7 +30,6 @@ async function exportHeaderLayout(inputFile, outputFile) {
                 cellI.style = Object.assign({}, cell.style);
             });
     
-            // Lưu vào file mới
             return workbook.xlsx.writeFile(outputFile);
         })
         .then(() => {

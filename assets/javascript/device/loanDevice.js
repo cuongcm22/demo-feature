@@ -9,7 +9,7 @@ function createDeviceCard(device, index) {
     card.innerHTML = `
     <div class="card h-100">
     <p class="idDevice" hidden>${device._id}</p>
-    <img style="height: 200px; object-fit: cover" src="${device.imageUrl ? device.imageUrl : '/public/images/image_placeholder.jpg'}" class="card-img-top" alt="Device Image">
+    <img style="height: 200px; object-fit: contain" src="${device.imageUrl ? device.imageUrl : '/public/images/image_placeholder.jpg'}" class="card-img-top" alt="Device Image">
     <div class="card-body">
     <h5 class="card-title">${device.name}</h5>
     <p class="card-text">Description: ${device.description}</p>
@@ -19,7 +19,7 @@ function createDeviceCard(device, index) {
     <p class="card-text">Warranty Date: ${new Date(
         device.warrantyExpiry
     ).toLocaleDateString()}</p>
-    <button type="button" style="background-color: #f16022; color: white;" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal"  onclick="populateTable(event)">Mượn thiết bị</button>
+    <button type="button" style="background-color: #f16022; color: white;" class="btn w-100" data-bs-toggle="modal" data-bs-target="#exampleModal"  onclick="populateTable(event)">Mượn thiết bị</button>
     </div>
     </div>
     `;

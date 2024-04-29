@@ -1,5 +1,6 @@
 
 const express = require("express");
+const fs = require('fs').promises;
 const app = express();
 
 // import .env
@@ -76,6 +77,124 @@ app.get("/demo", (req, res) => {
     }
 });
 })
+
+async function listFilesWithExtension(directory, extensions) {
+  try {
+      // Kiểm tra xem directory có tồn tại không
+      await fs.access(directory, fs.constants.F_OK);
+
+      // Tách các phần mở rộng trong biến extensions
+      const allowedExtensions = extensions.split(', ');
+
+      // Lấy danh sách các file trong thư mục
+      const files = await fs.readdir(directory);
+
+      // Danh sách kết quả
+      let resultList = [];
+
+      // Lặp qua từng file
+      for (const file of files) {
+          const filePath = path.join(directory, file);
+          // Kiểm tra thông tin về file
+          const stats = await fs.stat(filePath);
+
+          if (stats.isFile()) {
+              // Lấy phần mở rộng của file
+              const fileExtension = path.extname(file).slice(1);
+              // Kiểm tra xem phần mở rộng có trong danh sách cho phép không
+              if (allowedExtensions.includes(fileExtension.toLowerCase())) {
+                  // Lấy thông tin về file
+                  const fileInfo = {
+                      name: file,
+                      size: stats.size,
+                      created: stats.birthtime
+                  };
+                  resultList.push(fileInfo);
+              }
+          }
+      }
+      return resultList;
+  } catch (error) {
+      throw new Error(`Thư mục '${directory}' không tồn tại.`);
+  }
+}
+
+// // Endpoint API để lấy danh sách các file với phần mở rộng đã cho
+// app.get('/api/v1/exports', async (req, res) => {
+//   const directory = 'assets/public/csv/export';
+//   const extensions = 'xlsx, csv, xls, doc, docx';
+
+//   try {
+//       const result = await listFilesWithExtension(directory, extensions);
+//       res.json(result);
+//   } catch (error) {
+//       res.status(500).json({ error: error.message });
+//   }
+// });
+
+// app.use(express.json());
+
+// async function listFilesWithExtension() {
+//     try {
+//         const files = await fs.readdir(directory);
+//         const resultList = [];
+//         for (const file of files) {
+//             const filePath = path.join(directory, file);
+//             const stats = await fs.stat(filePath);
+//             if (stats.isFile()) {
+//                 const fileInfo = {
+//                     name: file,
+//                     size: stats.size,
+//                     created: stats.birthtime
+//                 };
+//                 resultList.push(fileInfo);
+//             }
+//         }
+//         return resultList;
+//     } catch (error) {
+//         throw new Error(`Error reading directory: ${error.message}`);
+//     }
+// }
+
+app.get('/api/v1/exports', async (req, res) => {
+    const directory = 'assets/public/csv/export';
+    const extensions = 'xlsx, csv, xls, doc, docx';
+
+    try {
+      console.log('Exports routing');
+      const result = await listFilesWithExtension(directory, extensions);
+      console.log(result);
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/api/v1/show', async (req, res) => {
+    try {
+      res.render("./contents/exportFiles.pug")
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.delete('/api/v1/exports/:fileName', async (req, res) => {
+    const fileName = req.params.fileName;
+    const filePath = path.join(directory, fileName);
+    try {
+        await fs.unlink(filePath);
+        res.json({ message: 'File deleted successfully.' });
+    } catch (error) {
+        res.status(500).json({ error: `Error deleting file: ${error.message}` });
+    }
+});
+
+app.get('/api/v1/exports/:fileName/download', (req, res) => {
+  const directory = 'assets/public/csv/export';
+  const fileName = req.params.fileName;
+  const filePath = path.join(directory, fileName);
+  res.download(filePath, fileName);
+});
 
 // huet.devicemanage.com.vn
 // Kết nối tới cổng máy chủ

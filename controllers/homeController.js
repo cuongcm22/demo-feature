@@ -400,6 +400,8 @@ module.exports.exportFileCSV = async (req, res, next) => {
     }
 };
 module.exports.updateXlsxFile = async (req, res, next) => {
+    const timestamp = moment().format('YYYYMMDDTHHmmss');
+
     const inputLayoutFile = path.join(
         __dirname,
         "../",
@@ -415,7 +417,7 @@ module.exports.updateXlsxFile = async (req, res, next) => {
         "../",
         pathFolderXlsxWorking,
         "export",
-        `${tableNames}.xlsx`
+        `${tableNames}-${timestamp}.xlsx`
     );
 
     try {
