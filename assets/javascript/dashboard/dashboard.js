@@ -17,7 +17,7 @@ $(document).ready(function() {
     }
   });
   const pagination = $("#pagination");
-  const itemsPerPage = 2;
+  const itemsPerPage = 5;
   let currentPage = 1;
   var filteredData = arrUserIdsNotReturned; // Make a copy of the data to search
   
@@ -29,11 +29,12 @@ $(document).ready(function() {
       const endIndex = startIndex + itemsPerPage;
       const paginatedData = filteredData.slice(startIndex, endIndex);
   
-      paginatedData.forEach(function (userObj) {
+      paginatedData.forEach(function (userObj, index) {
           var user = userObj.user;
           var numDevice = userObj.numDevice;
           var row = `
               <tr>
+                  <td>${startIndex + index + 1}</td>
                   <td>${user.fullname}</td>
                   <td>${user.username}</td>
                   <td>${user.email}</td>
@@ -51,7 +52,7 @@ $(document).ready(function() {
           userList.append(row);
       });
   
-      document.getElementById("showingInfo").textContent = `Showing ${paginatedData.length} of ${filteredData.length} total Users`;
+      document.getElementById("showingInfo").textContent = `Showing ${paginatedData.length} of ${filteredData.length} totals`;
   }
   
   function renderPagination() {
@@ -135,7 +136,7 @@ $(document).ready(function() {
   
   // Render second table
   const pagination1 = $("#pagination1");
-  const itemsPerPage1 = 2;
+  const itemsPerPage1 = 5;
   let currentPage1 = 1;
   var filteredData1 = arrDeviceIdsDue; // Make a copy of the data to search
   
@@ -147,9 +148,10 @@ $(document).ready(function() {
       const endIndex1 = startIndex1 + itemsPerPage1;
       const paginatedData1 = filteredData1.slice(startIndex1, endIndex1);
   
-      paginatedData1.forEach(function (loan) {
+      paginatedData1.forEach(function (loan, index) {
           var row = `
               <tr>
+                  <td>${startIndex1 + index + 1}</td>
                   <td>${loan.fullname}</td>
                   <td>${loan.borrower}</td>
                   <td>${loan.device}</td>
@@ -168,7 +170,7 @@ $(document).ready(function() {
           loanList.append(row);
       });
   
-      document.getElementById("showingInfo1").textContent = `Showing ${paginatedData1.length} of ${filteredData1.length} total Loans`;
+      document.getElementById("showingInfo1").textContent = `Showing ${paginatedData1.length} of ${filteredData1.length} totals`;
   }
   
   function renderPagination1() {
