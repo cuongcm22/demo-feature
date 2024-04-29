@@ -83,13 +83,13 @@ input#menu-toggle(type='checkbox' name='')
           input.dial(data-readonly="true" type='text' value=data.arrDeviceIdsNotReturned data-max=data.totalDevices data-width='100' data-height='100' data-fgcolor='#ffb515' data-thickness='.3')
           .analytic-info
             h4.analytic-info_desc Nh&#x1EEF;ng thi&#x1EBF;t b&#x1ECB; ch&#x1B0;a tr&#x1EA3;
-            h1.analytic-info_primary(style='color: #ffb515;') #{data.arrDeviceIdsNotReturned}/#{data.totalDevices}
+            h1.analytic-info_primary(style='color: #ffb515;') #{data.arrDeviceIdsNotReturned}
         .analytic
           input.dial(data-readonly="true" type='text' value=data.arrDeviceIdsDue data-max=data.arrDeviceIdsNotReturned data-width='100' data-height='100' data-fgcolor='#ff0000' data-thickness='.3')
           .analytic-info
             h4.analytic-info_desc Nh&#x1EEF;ng thi&#x1EBF;t b&#x1ECB; qu&aacute; h&#x1EA1;n nh&#x1B0;ng ch&#x1B0;a tr&#x1EA3;
             h1.analytic-info_primary(style='color: #ff0000;')
-              | #{data.arrDeviceIdsDue}/#{data.arrDeviceIdsNotReturned}
+              | #{data.arrDeviceIdsDue}
         .analytic
           input.dial(data-readonly="true" type='text' value=data.arrDeviceNotWorking data-max=data.totalDevices data-width='100' data-height='250' data-fgcolor='#66EE66' data-thickness='.3')
           .analytic-info
@@ -105,27 +105,28 @@ input#menu-toggle(type='checkbox' name='')
           padding: 15px
         }
       .container
-        .table-container.table.table-custom
-          h3 Những người mượn thiêt bị chưa trả
+        h3 MƯỢN CHƯA TRẢ
+        .table-container.table.table-custom.table-responsive
           table.table
             thead
               tr
-                th Fullname
-                th Username
+                th Tên đầy đủ
+                th Tên người dùng
                 th Email
-                th Phone
-                th Number of Devices
+                th Số điện thoại
+                th Số thiết bị
             tbody#table1-body
               // Table 1 Body
-          h3 Những người mượn quá hạn nhưng chưa trả
+        h3 QUÁ HẠN CHƯA TRẢ
+        .table-container.table.table-custom.table-responsive
           table.table
             thead
               tr
-                th Fullname
-                th Borrower
-                th Device
-                th Borrowed At
-                th Expected Return Date
+                th Tên đầy đủ
+                th Tên người dùng
+                th Tên thiết bị
+                th Mượn vào lúc
+                th Ngày trả dự kiến
             tbody#loan-list
               // Device loan data will be inserted here
 
