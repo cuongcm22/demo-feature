@@ -488,27 +488,27 @@ function renderImageVideo() {
 
 // === req Download xlsx file ===
 
-$(document).ready(function() {
-    document.getElementById('downloadBtn').addEventListener('click', function() {
-        axios.post('/xlsx/download', { filename: 'Devices.xlsx' }, { responseType: 'blob' })
-            .then(function(response) {
-                const timestamp = new Date().toISOString().replace(/[-T:]/g, '').slice(0, 15); // Tạo timestamp theo định dạng YYYYMMDDTHHMMSS
-                const filename = 'Devices-' + timestamp + '.xlsx'; // Tạo tên file mới
-                // Tạo một URL tạm thời từ dữ liệu blob để tạo ra liên kết tải xuống
-                const url = window.URL.createObjectURL(new Blob([response.data]));
-                const link = document.createElement('a');
-                link.href = url;
-                // Đặt tên file tải xuống
-                link.setAttribute('download', filename);
-                // Thêm link vào DOM và kích hoạt sự kiện click để bắt đầu tải xuống
-                document.body.appendChild(link);
-                link.click();
-                // Xóa URL tạm thời sau khi tải xuống hoàn tất
-                window.URL.revokeObjectURL(url);
-            })
-            .catch(function(error) {
-                // Xử lý lỗi nếu có
-                console.error('Lỗi khi gửi yêu cầu:', error);
-            });
-    });
-});
+// $(document).ready(function() {
+//     document.getElementById('downloadBtn').addEventListener('click', function() {
+//         axios.post('/xlsx/download', { filename: 'Devices.xlsx' }, { responseType: 'blob' })
+//             .then(function(response) {
+//                 const timestamp = new Date().toISOString().replace(/[-T:]/g, '').slice(0, 15); // Tạo timestamp theo định dạng YYYYMMDDTHHMMSS
+//                 const filename = 'Devices-' + timestamp + '.xlsx'; // Tạo tên file mới
+//                 // Tạo một URL tạm thời từ dữ liệu blob để tạo ra liên kết tải xuống
+//                 const url = window.URL.createObjectURL(new Blob([response.data]));
+//                 const link = document.createElement('a');
+//                 link.href = url;
+//                 // Đặt tên file tải xuống
+//                 link.setAttribute('download', filename);
+//                 // Thêm link vào DOM và kích hoạt sự kiện click để bắt đầu tải xuống
+//                 document.body.appendChild(link);
+//                 link.click();
+//                 // Xóa URL tạm thời sau khi tải xuống hoàn tất
+//                 window.URL.revokeObjectURL(url);
+//             })
+//             .catch(function(error) {
+//                 // Xử lý lỗi nếu có
+//                 console.error('Lỗi khi gửi yêu cầu:', error);
+//             });
+//     });
+// });

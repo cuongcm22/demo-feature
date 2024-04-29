@@ -48,6 +48,7 @@ app.use(bodyParser.json());
 const colors = require('colors');
 
 // Import routers
+const authenToken = require("./modules/authServer");
 const homeRouter = require('./routers/home.route')
 const deviceRouter = require('./routers/device.route')
 const userRouter = require('./routers/user.route')
@@ -119,7 +120,13 @@ async function listFilesWithExtension(directory, extensions) {
   }
 }
 
-app.get('/api/v1/exports', async (req, res) => {
+app.get('/api/v1/exports',authenToken.authenToken, async (req, res) => {
+    const { role } = req.userId;
+
+    if (role != 'admin') {
+        return res.redirect('/404')
+    }
+
     const directory = 'assets/public/csv/export';
     const extensions = 'xlsx, csv, xls, doc, docx';
 
@@ -132,15 +139,31 @@ app.get('/api/v1/exports', async (req, res) => {
     }
 });
 
-app.get('/api/v1/show', async (req, res) => {
+app.get('/api/v1/show',authenToken.authenToken, async (req, res) => {
     try {
-      res.render("./contents/exportFiles.pug")
+      const { role } = req.userId;
+
+      if (role != 'admin') {
+          return res.redirect('/404')
+      }
+
+      res.render("./contents/exportFiles.pug", {
+        title: 'Thiết bị',
+        routes: {
+            'Trang chủ': '/',
+            'Thông tin thiết bị': '/device/report',
+            'Tạo thiết bị': '/device/create',
+            'Mượn thiết bị': '/device/loan',
+            'Đã mượn': '/device/return',
+            'Quản lý lịch sử mượn trả': '/record/loanrecord'
+        },
+      })
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
-app.delete('/api/v1/exports/:fileName', async (req, res) => {
+app.delete('/api/v1/exports/:fileName',authenToken.authenToken, async (req, res) => {
     const directory = 'assets/public/csv/export';
     const fileName = req.params.fileName;
     const filePath = path.join(directory, fileName);
@@ -152,7 +175,7 @@ app.delete('/api/v1/exports/:fileName', async (req, res) => {
     }
 });
 
-app.get('/api/v1/exports/:fileName/download', (req, res) => {
+app.get('/api/v1/exports/:fileName/download',authenToken.authenToken, (req, res) => {
   const directory = 'assets/public/csv/export';
   const fileName = req.params.fileName;
   const filePath = path.join(directory, fileName);

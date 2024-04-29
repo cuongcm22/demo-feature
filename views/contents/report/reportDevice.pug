@@ -7,8 +7,9 @@ section.container
     input#searchInput.form-control(type='text' placeholder='Search...' aria-label='Search')
     button#searchButton.btn.btn-outline-success(type='button') T&igrave;m ki&#x1EBF;m
   .d-flex.mb-3
-    button#downloadBtn.btn.badge.bg-primary() Export xlsx file
-    button#downloadBtn.btn.badge.bg-info.ms-3(onclick="window.location.href = '/sendemail'") Send email
+    button.btn.badge.bg-primary(onclick="window.location.href = '/api/v1/show'") Export xlsx file
+    //- button#downloadBtn.btn.badge.bg-primary() Export xlsx file
+    button.btn.badge.bg-info.ms-3(onclick="window.location.href = '/sendemail'") Send email
   .table-responsive
     table.table.table-striped
       thead
