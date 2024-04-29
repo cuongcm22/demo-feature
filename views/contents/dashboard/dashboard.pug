@@ -13,7 +13,7 @@ link(href='/css/dashboard/dashboard.css' rel='stylesheet')
 input#menu-toggle(type='checkbox' name='')
 .overlay
   label(for='menu-toggle')  
-.main-content
+.main-content.container
   header
     
   main
@@ -23,21 +23,21 @@ input#menu-toggle(type='checkbox' name='')
         .analytic
           input.dial(data-readonly="true" type='text' value=`${(data.arrDeviceIdsNotReturned/data.totalDevices*100).toFixed(0)}` data-max=`${(data.totalDevices/data.arrDeviceIdsNotReturned*100).toFixed(0)}` data-width='100' data-height='100' data-fgcolor='#ffb515' data-thickness='.3')
           .analytic-info
-            h4.analytic-info_desc Nh&#x1EEF;ng thi&#x1EBF;t b&#x1ECB; ch&#x1B0;a tr&#x1EA3;
+            h4.analytic-info_desc Thi&#x1EBF;t b&#x1ECB; ch&#x1B0;a tr&#x1EA3;
 
             h1.analytic-info_primary(style='color: #ffb515;') #{data.arrDeviceIdsNotReturned}
 
         .analytic
           input.dial(data-readonly="true" type='text' value=`${(data.arrDeviceIdsDue/data.arrDeviceIdsNotReturned*100).toFixed(0)}` data-max=`${(data.arrDeviceIdsNotReturned/data.arrDeviceIdsDue*100).toFixed(0)}` data-width='100' data-height='100' data-fgcolor='#ff0000' data-thickness='.3')
           .analytic-info
-            h4.analytic-info_desc Nh&#x1EEF;ng thi&#x1EBF;t b&#x1ECB; qu&aacute; h&#x1EA1;n nh&#x1B0;ng ch&#x1B0;a tr&#x1EA3;
+            h4.analytic-info_desc Qu&aacute; h&#x1EA1;n ch&#x1B0;a tr&#x1EA3;
             h1.analytic-info_primary(style='color: #ff0000;')
               | #{data.arrDeviceIdsDue}
         .analytic
-          input.dial(data-readonly="true" type='text' value=`${(data.arrDeviceNotWorking/data.totalDevices*100).toFixed(0)}` data-max=`${(data.totalDevices/data.arrDeviceNotWorking*100).toFixed(0)}` data-width='100' data-height='250' data-fgcolor='#66EE66' data-thickness='.3')
+          input.dial(data-readonly="true" type='text' value=`${(data.arrDeviceNotWorking/data.totalDevices*100).toFixed(0)}` data-max=`${(data.totalDevices/data.arrDeviceNotWorking*100).toFixed(0)}` data-width='100' data-height='250' data-fgcolor='#671067' data-thickness='.3')
           .analytic-info
-            h4.analytic-info_desc Nh&#x1EEF;ng thi&#x1EBF;t b&#x1ECB; kh&ocirc;ng c&ograve;n ho&#x1EA1;t &dstrok;&#x1ED9;ng
-            h1.analytic-info_primary(style='color: #66EE66;')
+            h4.analytic-info_desc Kh&ocirc;ng c&ograve;n ho&#x1EA1;t &dstrok;&#x1ED9;ng
+            h1.analytic-info_primary(style='color: #671067;')
               | #{data.arrDeviceNotWorking}
     section 
       style.
@@ -47,12 +47,12 @@ input#menu-toggle(type='checkbox' name='')
           border-radius: 10px;
           padding: 15px
         }
-      .container
-        .table-container.table.table-custom.table-responsive.bg-white
-          h3.ps-4 M&#x1AF;&#x1EE2;N CH&#x1AF;A TR&#x1EA2;
-          .input-group
-            input#searchInput.form-control(type='text' placeholder='Search...' aria-label='Search')
-            button#searchButton.btn.btn-danger(type='button') T&igrave;m ki&#x1EBF;m
+      div.container-inner
+        h3.ps-4 M&#x1AF;&#x1EE2;N CH&#x1AF;A TR&#x1EA2;
+        .input-group.mt-3
+          input#searchInput.form-control(type='text' placeholder='Search...' aria-label='Search')
+          button#searchButton.btn.btn-danger(type='button') T&igrave;m ki&#x1EBF;m
+        .table-container.table.table-custom.table-responsive.bg-white.mt-3
           table.table.mt-3
             thead
               tr
@@ -73,11 +73,11 @@ input#menu-toggle(type='checkbox' name='')
               input#pageInput.form-control(type='number' min='1' max='1' value='1')
               button.btn.btn-primary(onclick='goToPage()') Go
               // Data will be dynamically inserted here
-        .table-container.table.table-custom.table-responsive.bg-white
-          h3.ps-4 QU&Aacute; H&#x1EA0;N CH&#x1AF;A TR&#x1EA2;
-          .input-group
-            input#searchInput1.form-control(type='text' placeholder='Search...' aria-label='Search')
-            button#searchButton1.btn.btn-danger(type='button') T&igrave;m ki&#x1EBF;m
+        h3.ps-4 QU&Aacute; H&#x1EA0;N CH&#x1AF;A TR&#x1EA2;
+        .input-group.mt-3
+          input#searchInput1.form-control(type='text' placeholder='Search...' aria-label='Search')
+          button#searchButton1.btn.btn-danger(type='button') T&igrave;m ki&#x1EBF;m
+        .table-container.table.table-custom.table-responsive.bg-white.mt-3
           table.table.mt-3
             thead
               tr
@@ -98,26 +98,7 @@ input#menu-toggle(type='checkbox' name='')
             .input-group(style='width: 100px;')
               input#pageInput1.form-control(type='number' min='1' max='1' value='1')
               button.btn.btn-primary(onclick='goToPage1()') Go
-        // Data will be dynamically inserted here
-
-          //- table.table
-          //-   thead
-          //-     tr
-          //-       th Username
-          //-       th Email
-          //-       th Phone
-          //-       th Fullname
-          //-   tbody#table2-body
-          //-     // Table 2 Body
-          //- table.table
-          //-   thead
-          //-     tr
-          //-       th Username
-          //-       th Email
-          //-       th Phone
-          //-       th Fullname
-          //-   tbody#table3-body
-              // Table 3 Body
+        
 
     
 

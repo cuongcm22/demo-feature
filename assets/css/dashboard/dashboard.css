@@ -19,6 +19,9 @@ Basic
   list-style-type: none;
   box-sizing: border-box;
 }
+body * {
+  color: #f16022;
+}
 body {
   background-color: var(--bg);
   overflow-x: hidden;
@@ -439,6 +442,10 @@ main {
     max-width: 100%;
     
   }
+}
+
+#searchInput, #searchInput1 {
+  border-radius: 10px 0 0 10px;
 }
 
 #searchButton, #searchButton1 {
