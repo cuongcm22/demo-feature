@@ -240,7 +240,7 @@ function updateRenderDevice(deviceInfo) {
 <div class="mb-3">
 <label for="supplier" class="form-label">Supplier</label>
 <select class="form-select" id="supplier" name="supplier" required>
-    ${forLoopArrayTypeReturnOpt(suppliers, deviceInfo.supplier.name)}
+    ${forLoopArrayTypeReturnOpt(suppliers, deviceInfo.supplier)}
 </select>
 </div>
 <div class="mb-3">
