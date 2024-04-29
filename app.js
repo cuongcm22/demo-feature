@@ -125,8 +125,8 @@ app.get('/api/v1/exports', async (req, res) => {
 
     try {
       const result = await listFilesWithExtension(directory, extensions);
-      
-        res.json(result);
+      console.log(result);
+      res.json(result);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

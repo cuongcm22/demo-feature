@@ -8,6 +8,11 @@ head
     /* Additional styles can be added here */
 .container
   h2.mt-4 File List
+  .mb-3
+    button.btn.btn-primary.me-2(onclick="filterFiles('Dụng cụ lâu bền')") D&#x1EE5;ng c&#x1EE5; l&acirc;u b&#x1EC1;n
+    button.btn.btn-primary.me-2(onclick="filterFiles('Tài sản cố định')") T&agrave;i s&#x1EA3;n c&#x1ED1; &dstrok;&#x1ECB;nh
+    button.btn.btn-success.me-2(onclick="sendRequest('Dụng cụ lâu bền')") Update dụng cụ lâu bền
+    button.btn.btn-success.me-2(onclick="sendRequest('Tài sản cố định')") Update dụng cụ cố định
   table#fileTable.table.table-striped.table-responsive
     thead
       tr
@@ -19,40 +24,64 @@ head
       // File list will be rendered here
 script.
   async function fetchFiles() {
-  const response = await fetch('/api/v1/exports');
-  const data = await response.json();
-  return data;
-  }
-  async function deleteFile(fileName) {
-  const response = await fetch(`/api/v1/exports/${fileName}`, { method: 'DELETE' });
-  const result = await response.json();
-  console.log(result.message);
-  // Reload the file list after deletion
-  renderFiles();
-  }
-  function downloadFile(fileName) {
-  window.location.href = `/api/v1/exports/${fileName}/download`;
-  }
-  function renderFiles() {
-  const fileTableBody = document.getElementById('fileTableBody');
-  fileTableBody.innerHTML = '';
-  fetchFiles().then(files => {
-  files.forEach(file => {
-  const row = `
-  <tr>
-  <td>${file.name}</td>
-  <td>${file.size}</td>
-  <td>${file.created}</td>
-  <td>
-  <button class="btn btn-primary btn-sm me-1" onclick="downloadFile('${file.name}')">Download</button>
-  <button class="btn btn-danger btn-sm" onclick="deleteFile('${file.name}')">Delete</button>
-  <!-- Add buttons for other CRUD operations -->
-  </td>
-  </tr>
-  `;
-  fileTableBody.innerHTML += row;
-  });
-  });
-  }
-  // Initial rendering
-  renderFiles();
+      const response = await fetch('/api/v1/exports');
+      const data = await response.json();
+      return data;
+    }
+
+    async function deleteFile(fileName) {
+      const response = await fetch(`/api/v1/exports/${fileName}`, { method: 'DELETE' });
+      const result = await response.json();
+      console.log(result.message);
+      // Reload the file list after deletion
+      renderFiles(await fetchFiles());
+    }
+
+    function downloadFile(fileName) {
+      window.location.href = `/api/v1/exports/${fileName}/download`;
+    }
+
+    function renderFiles(files) {
+      const fileTableBody = document.getElementById('fileTableBody');
+      fileTableBody.innerHTML = '';
+      files.forEach(file => {
+        const row = `
+          <tr>
+            <td>${file.name}</td>
+            <td>${file.size}</td>
+            <td>${file.created}</td>
+            <td>
+              <button class="btn btn-primary btn-sm me-1" onclick="downloadFile('${file.name}')">Download</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteFile('${file.name}')">Delete</button>
+              <!-- Add buttons for other CRUD operations -->
+            </td>
+          </tr>
+        `;
+        fileTableBody.innerHTML += row;
+      });
+    }
+
+    async function filterFiles(keyword) {
+      const files = await fetchFiles();
+      const filteredFiles = files.filter(file => file.name.startsWith(keyword));
+      renderFiles(filteredFiles);
+    }
+
+    async function sendRequest(deviceTypes) {
+      try {
+        const response = await fetch('/xlsx/update', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ deviceTypes })
+        });
+        const data = await response.json();
+        window.location.assign(window.location.origin  + '/api/v1/show');
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    // Initial rendering
+    fetchFiles().then(renderFiles);

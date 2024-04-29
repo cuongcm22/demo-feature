@@ -67,10 +67,10 @@ function populateTable(devices) {
         var row = document.createElement("tr");
         row.innerHTML = `
             <td>${device.name}</td>
-            <td>${device.deviceType.name}</td>
+            <td>${device.deviceType}</td>
             <td>${device.status}</td>
             <td>${device.initStatus}</td>
-            <td>${device.location.name}</td>
+            <td>${device.location}</td>
             <td>${convertDateTime(device.purchaseDate)}</td>
             <td>${convertDateTime(device.warrantyExpiry)}</td>
             <td>
@@ -136,7 +136,7 @@ Your browser does not support the video tag.
         </tr>
         <tr>
           <th scope="row">Loại:</th>
-          <td>${deviceInfo.deviceType.name}</td>
+          <td>${deviceInfo.deviceType}</td>
         </tr>
         <tr>
           <th scope="row">Tình trạng:</th>
@@ -144,7 +144,7 @@ Your browser does not support the video tag.
         </tr>
         <tr>
           <th scope="row">Vị trí:</th>
-          <td>${deviceInfo.location.name}</td>
+          <td>${deviceInfo.location}</td>
         </tr>
         <tr>
           <th scope="row">Giá:</th>
@@ -208,7 +208,7 @@ function updateRenderDevice(deviceInfo) {
 <div class="mb-3">
 <label for="type" class="form-label">Loại thiết bị</label>
 <select class="form-select" id="deviceType" name="deviceType" required>
-    ${forLoopArrayTypeReturnOpt(devicetypes, deviceInfo.deviceType.name)}
+    ${forLoopArrayTypeReturnOpt(devicetypes, deviceInfo.deviceType)}
 </select>
 </div>
 <div class="mb-3">
@@ -234,7 +234,7 @@ function updateRenderDevice(deviceInfo) {
 <div class="mb-3">
 <label for="location" class="form-label">Location</label>
 <select class="form-select" id="location" name="location" required>
-    ${forLoopArrayTypeReturnOpt(locations, deviceInfo.location.name)}
+    ${forLoopArrayTypeReturnOpt(locations, deviceInfo.location)}
 </select>
 </div>
 <div class="mb-3">
@@ -356,10 +356,10 @@ document.getElementById("searchButton").addEventListener("click", function() {
         const row = document.createElement("tr");
         row.innerHTML = `
             <td>${device.name}</td>
-            <td>${device.deviceType.name}</td>
+            <td>${device.deviceType}</td>
             <td>${device.status}</td>
             <td>${device.initStatus}</td>
-            <td>${device.location.name}</td>
+            <td>${device.location}</td>
             <td>${convertDateTime(device.purchaseDate)}</td>
             <td>${convertDateTime(device.warrantyExpiry)}</td>
             <td>

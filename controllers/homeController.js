@@ -399,7 +399,11 @@ module.exports.exportFileCSV = async (req, res, next) => {
         res.status(404);
     }
 };
+
 module.exports.updateXlsxFile = async (req, res, next) => {
+    const deviceTypesName = req.body.deviceTypes
+    // const deviceTypesName = "Dụng cụ lâu bền"
+    // const deviceTypesName = "Tài sản cố định"
     const timestamp = moment().format('YYYYMMDDTHHmmss');
 
     const inputLayoutFile = path.join(
@@ -417,7 +421,7 @@ module.exports.updateXlsxFile = async (req, res, next) => {
         "../",
         pathFolderXlsxWorking,
         "export",
-        `${tableNames}-${timestamp}.xlsx`
+        `${deviceTypesName}-${timestamp}.xlsx`
     );
 
     try {
@@ -542,7 +546,7 @@ module.exports.updateXlsxFile = async (req, res, next) => {
                 )
                     .populate({
                         path: 'deviceType',
-                        match: { name: "Tài sản cố định" },
+                        match: { name: deviceTypesName },
                         select: 'name'
                     })
                     .populate('location', 'name')

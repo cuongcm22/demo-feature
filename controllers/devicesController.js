@@ -80,10 +80,38 @@ module.exports.ShowReportDevicePage = async (req, res, next) => {
               $unwind: '$supplier'
             },
             {
+              $set: {
+                deviceType: '$deviceType.name',
+                location: '$location.name',
+                supplier: '$supplier.name',
+                purchaseDate: { $toDate: '$purchaseDate' },
+                warrantyExpiry: { $toDate: '$warrantyExpiry' },
+                createDate: { $toDate: '$createDate' }
+              }
+            },
+            {
               $project: {
                 serialNumber: 1,
                 name: 1,
-                'deviceType.name': 1,
+                deviceType: 1,
+                initStatus: {
+                    $switch: {
+                        branches: [
+                        { case: { $eq: ['$initStatus', 'notUsed'] }, then: 'Chưa được sử dụng' },
+                        { case: { $eq: ['$initStatus', 'used'] }, then: 'Đã được sử dụng' }
+                        ],
+                        default: '$initStatus'
+                    }
+                },
+                imageUrl: 1,
+                videoUrl: 1,
+                location: 1,
+                supplier: 1,
+                description: 1,
+                price: 1,
+                purchaseDate: { $dateToString: { format: '%Y-%m-%dT%H:%M:%S.%LZ', date: '$purchaseDate' } },
+                warrantyExpiry: { $dateToString: { format: '%Y-%m-%dT%H:%M:%S.%LZ', date: '$warrantyExpiry' } },
+                createDate: { $dateToString: { format: '%Y-%m-%dT%H:%M:%S.%LZ', date: '$createDate' } },
                 status: {
                   $switch: {
                     branches: [
@@ -93,17 +121,7 @@ module.exports.ShowReportDevicePage = async (req, res, next) => {
                     ],
                     default: '$status'
                   }
-                },
-                initStatus: 1,
-                imageUrl: 1,
-                videoUrl: 1,
-                'location.name': 1,
-                'supplier.name': 1,
-                price: 1,
-                description: 1,
-                purchaseDate: 1,
-                warrantyExpiry: 1,
-                createDate: 1
+                }
               }
             }
           ]).then((devices) => {

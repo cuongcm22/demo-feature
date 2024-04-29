@@ -18,7 +18,7 @@ router.post('/export', homeController.exportFileCSV)
 
 // Route export xlsx
 
-router.get('/xlsx/update', homeController.updateXlsxFile)
+router.post('/xlsx/update', homeController.updateXlsxFile)
 router.get('/xlsx/get', homeController.ShowDownloadXlsxFile)
 router.post('/xlsx/download', homeController.downloadXlsxFile)
 
