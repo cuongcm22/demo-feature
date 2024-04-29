@@ -119,51 +119,13 @@ async function listFilesWithExtension(directory, extensions) {
   }
 }
 
-// // Endpoint API để lấy danh sách các file với phần mở rộng đã cho
-// app.get('/api/v1/exports', async (req, res) => {
-//   const directory = 'assets/public/csv/export';
-//   const extensions = 'xlsx, csv, xls, doc, docx';
-
-//   try {
-//       const result = await listFilesWithExtension(directory, extensions);
-//       res.json(result);
-//   } catch (error) {
-//       res.status(500).json({ error: error.message });
-//   }
-// });
-
-// app.use(express.json());
-
-// async function listFilesWithExtension() {
-//     try {
-//         const files = await fs.readdir(directory);
-//         const resultList = [];
-//         for (const file of files) {
-//             const filePath = path.join(directory, file);
-//             const stats = await fs.stat(filePath);
-//             if (stats.isFile()) {
-//                 const fileInfo = {
-//                     name: file,
-//                     size: stats.size,
-//                     created: stats.birthtime
-//                 };
-//                 resultList.push(fileInfo);
-//             }
-//         }
-//         return resultList;
-//     } catch (error) {
-//         throw new Error(`Error reading directory: ${error.message}`);
-//     }
-// }
-
 app.get('/api/v1/exports', async (req, res) => {
     const directory = 'assets/public/csv/export';
     const extensions = 'xlsx, csv, xls, doc, docx';
 
     try {
-      console.log('Exports routing');
       const result = await listFilesWithExtension(directory, extensions);
-      console.log(result);
+      
         res.json(result);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -179,6 +141,7 @@ app.get('/api/v1/show', async (req, res) => {
 });
 
 app.delete('/api/v1/exports/:fileName', async (req, res) => {
+    const directory = 'assets/public/csv/export';
     const fileName = req.params.fileName;
     const filePath = path.join(directory, fileName);
     try {

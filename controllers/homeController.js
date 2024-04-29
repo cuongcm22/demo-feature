@@ -529,27 +529,48 @@ module.exports.updateXlsxFile = async (req, res, next) => {
 
                 await exportHeaderLayout(inputLayoutFile, outputFile);
 
+                // const devices = await Device.find(
+                //     {},
+                //     { _id: 0, __v: 0, loans: 0, logs: 0 }
+                // )
+                //     .populate("deviceType", "name")
+                //     .populate("location", "name")
+                //     .populate("supplier", "name");
                 const devices = await Device.find(
                     {},
                     { _id: 0, __v: 0, loans: 0, logs: 0 }
                 )
-                    .populate("deviceType", "name")
-                    .populate("location", "name")
-                    .populate("supplier", "name");
+                    .populate({
+                        path: 'deviceType',
+                        match: { name: "Tài sản cố định" },
+                        select: 'name'
+                    })
+                    .populate('location', 'name')
+                    .populate('supplier', 'name');
+                console.log(devices);
 
-                formattedDevices = devices.map((device) => ({
+                // formattedDevices = devices.map((device) => ({
+                //     ...device.toObject(),
+                //     deviceType: device.deviceType.name,
+                //     location: device.location.name,
+                //     supplier: device.supplier.name,
+                // }));
+                const formattedDevices = devices.map((device) => ({
                     ...device.toObject(),
-                    deviceType: device.deviceType.name,
-                    location: device.location.name,
-                    supplier: device.supplier.name,
+                    deviceType: device.deviceType ? device.deviceType.name : null,
+                    location: device.location ? device.location.name : null,
+                    supplier: device.supplier ? device.supplier.name : null,
                 }));
 
+                const filteredDevices = formattedDevices.filter(device => device.deviceType !== null);
+                // console.log(formattedDevices);
+                // console.log(formattedDevices);
                 setTimeout(() => {
                     exportDataToXlsxFile(
                         tableNames,
                         headerRowOrigin,
                         headerRow,
-                        formattedDevices,
+                        filteredDevices,
                         outputFile
                     );
                 }, 1000);

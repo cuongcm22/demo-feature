@@ -46,7 +46,7 @@ async function exportHeaderLayout(inputFile, outputFile) {
 
 async function exportDataToXlsxFile(tableNames, headerRowOrigin, headerRow, myData, inputFile) {
     console.log(headerRowOrigin);
-    // console.log(myData);
+    console.log(myData);
     // myData = [tensp,masp,soluong,dongia,v.v]
     // inputFile cần chèn và sao lưu lại
     // inputFile = /assets/public/csv/export/[nametable]-YYYYMMDDTHHmmss.xlsx
@@ -59,7 +59,7 @@ async function exportDataToXlsxFile(tableNames, headerRowOrigin, headerRow, myDa
 
             // Add header
             worksheet.addRow(headerRow);
-            console.log(myData);
+            // console.log(myData);
             // Thêm dữ liệu từ mảng myData vào file Excel
             switch (tableNames) {
                 case 'Loans':
