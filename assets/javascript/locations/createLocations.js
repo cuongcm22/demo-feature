@@ -109,7 +109,7 @@ function submitLocationForm() {
         .then(function (response) {
             // Handle success
             if (response.data.success) {
-                alert('Thêm mới thiết bị thành công!')
+                alert('Thêm mới vị trí thành công!')
                 window.location.assign(window.location.origin  + '/locations/detail');
             } else {
                 alert('Thêm mới không thành công!')

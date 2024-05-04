@@ -107,7 +107,7 @@ $(document).ready(function () {
     }
 
     function deleteLocations(locationName) {
-        var confirmation = confirm("Are you sure you want to delete this location?");
+        var confirmation = confirm("Bạn chắc chắc muốn xóa phòng này?");
         if (confirmation) {
             handleDelete(locationName);
         }
@@ -124,7 +124,7 @@ $(document).ready(function () {
             },
             success: function (res) {
                 if (res) {
-                    alert("Location deleted successfully");
+                    alert("Xóa thành công!");
                     window.location.assign(window.location.origin + "/locations/detail");
                 }
             },

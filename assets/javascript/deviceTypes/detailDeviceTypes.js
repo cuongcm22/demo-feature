@@ -105,7 +105,7 @@ $(document).ready(function () {
     }
 
     function deleteDeviceType(deviceTypeName) {
-        var confirmation = confirm("Are you sure you want to delete this device type?");
+        var confirmation = confirm("Xác nhận bạn muốn xóa loại thiết bị này?");
         if (confirmation) {
             handleDelete(deviceTypeName);
         }
@@ -122,7 +122,7 @@ $(document).ready(function () {
             },
             success: function (res) {
                 if (res) {
-                    alert("Device type deleted successfully");
+                    alert("Xóa loại thiết bị thành công!");
                     window.location.assign(window.location.origin + "/devicetypes/detail");
                 }
             },
@@ -139,14 +139,14 @@ $(document).ready(function () {
             <form id="deviceTypeForm" action="/devicetypes/update" method="post">
                 <div class="mb-3">
                     <input name="nameholder" type="text" class="form-control" hidden readonly value="${deviceType.name}" required>
-                    <label for="nameInput" class="form-label">Name</label>
+                    <label for="nameInput" class="form-label">Tên</label>
                     <input name="name" type="text" class="form-control" id="nameInput" value="${deviceType.name}" required>
                 </div>
                 <div class="mb-3">
-                    <label for="descriptionInput" class="form-label">Description</label>
+                    <label for="descriptionInput" class="form-label">Mô tả</label>
                     <textarea name="description" class="form-control" id="descriptionInput">${deviceType.description}</textarea>
                 </div>
-                <button class="btn btn-primary" type="submit">Submit</button>
+                <button class="btn btn-primary w-100" type="submit">Sửa</button>
             </form>
         `);
         $("#deviceTypeModal").modal("show");

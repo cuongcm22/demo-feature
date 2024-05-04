@@ -51,16 +51,15 @@ module.exports.showBioPage = async (req, res, next) => {
         const roleUserId = req.userId.role
         if (roleUserId != 'admin') {
             routesTemp = {
-                'Home': '/',
-                'User': '/user/login',
-                'Register': '/user/register'
+                'Về trang chủ': '/',
+                'Trang thông tin người dùng': '/user/login'
             }
         } else {
             routesTemp = {
-                'Home': '/',
-                'User': '/user/login',
+                'Về trang chủ': '/',
                 'Quản trị viên': '/user/manage',
-                'Register': '/user/register'
+                'Đăng nhập': '/user/login',
+                'Đăng ký': '/user/register'
             }
         }
 
@@ -83,8 +82,8 @@ module.exports.showLoginForm = async (req, res, next) => {
             title: 'Home page',
             routes: {
                 'Home': '/',
-                'User': '/user',
-                'Register': '/user/register'
+                'Trang người dùng': '/user',
+                'Đăng ký': '/user/register'
             }
         });
     } catch (error) {
@@ -136,8 +135,8 @@ module.exports.showRegisterForm = async (req, res, next) => {
             title: 'Home page',
             routes: {
                 'Home': '/',
-                'Login': '/user/login',
-                'Register': '/user/register'
+                'Đăng nhập': '/user/login',
+                'Đăng ký': '/user/register'
             }
         });
     } catch (error) {
@@ -196,7 +195,7 @@ module.exports.ShowManageUserPage = async (req, res, next) => {
             return res.redirect('/404')
         }
 
-        const users = await User.find({}, { _id: 0, __v: 0, password: 0 })
+        const users = await User.find({}, { _id: 0, __v: 0 })
 
         res.render("./contents/admin/manageUser.pug", {
             title: 'Home page',
@@ -219,13 +218,14 @@ module.exports.manageUserDB = async (req, res, next) => {
         if (roleUserId != 'admin') {
             return res.redirect('/404')
         }
-
-        const { username, fullname, email, phone, role } = req.body
-        console.log({ username, fullname, email, phone, role });
+        // console.log(req.body);
+        const { username, fullname, email, password, phone, role } = req.body
+        // console.log({ username, fullname, email, password, phone, role });
         const updatedUser = await User.findOneAndUpdate({username: username}, 
             {$set: {
                 fullname: fullname,
                 email: email,
+                password: password,
                 phone: phone,
                 role: role
             }}

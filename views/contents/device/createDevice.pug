@@ -15,16 +15,16 @@ section.container
   .form-container
     form#deviceRegistrationForm(action='./add' method='post' enctype='application/json')
       .mb-3
-        label.form-label(for='serialNumber') S&#x1ED1; Serial: (devices.serialNumber)
-        input#serialNumber.form-control(value='TV000001' type='text' name='serialNumber' required='')
+        label.form-label(for='serialNumber') S&#x1ED1; Serial: 
+        input#serialNumber.form-control(value='' type='text' name='serialNumber' required='')
       .mb-3
         #qr-reader(style='max-width: 100%;')
         #qr-reader-results
       .mb-3
-        label.form-label(for='deviceName') T&ecirc;n thi&#x1EBF;t b&#x1ECB;: (devices.name)
-        input#deviceName.form-control(value='Tivi Sam sung' type='text' name='name' required='')
+        label.form-label(for='deviceName') T&ecirc;n thi&#x1EBF;t b&#x1ECB;: 
+        input#deviceName.form-control(value='' type='text' name='name' required='')
       .mb-3
-        label.form-label(for='deviceType') Lo&#x1EA1;i thi&#x1EBF;t b&#x1ECB;: (devices.deviceType)
+        label.form-label(for='deviceType') Lo&#x1EA1;i thi&#x1EBF;t b&#x1ECB;: 
         //- input#deviceType.form-control(value='Tivi' type='text' name='deviceType' required='')
         select#deviceType.form-select.js-example-theme-single(name='deviceType' required='' style='width: 100%')
           option(value='' disabled='' selected='') --Ch&#x1ECD;n--
@@ -32,7 +32,7 @@ section.container
             option(value=devicetype) #{devicetype}
 
       .mb-3
-        label.form-label(for='status') Tr&#x1EA1;ng th&aacute;i thi&#x1EBF;t b&#x1ECB;: (devices.status)
+        label.form-label(for='status') Tr&#x1EA1;ng th&aacute;i thi&#x1EBF;t b&#x1ECB;: 
         select#status.form-select(name='status' required='')
           option(value='Active' selected='') Hoạt động
           option(value='Repair') Đang sữa chữa
@@ -46,7 +46,7 @@ section.container
           option(value='/public/images/tivi3.jpg') &#x1EA2;nh 3
 
       .mb-3
-        label.form-label(for='deviceUrlImg') &#x1EA2;nh thi&#x1EBF;t b&#x1ECB;: (devices.imageUrl)
+        label.form-label(for='deviceUrlImg') &#x1EA2;nh thi&#x1EBF;t b&#x1ECB;: 
         //- accept='image/*'
         .input-group
           input#deviceUrlImg.form-control(type='file' accept=".jpg, .jpeg, .png")
@@ -57,7 +57,7 @@ section.container
           img#imageRender.img-fluid(style='width: 100%; min-height: 500px; object-fit: cover;' src='/public/images/image-placeholder02.png' alt='')
       
       .mb-3
-        label.form-label(for='deviceVideo') Video thi&#x1EBF;t b&#x1ECB;: (devices.videoUrl)
+        label.form-label(for='deviceVideo') Video thi&#x1EBF;t b&#x1ECB;: 
         .input-group
           input#deviceVideo.form-control(type='file' accept='video/*')
           button#deleteUrlVideoBtn.btn.btn-outline-danger(type='button') Xóa
@@ -69,28 +69,28 @@ section.container
             | Tr&igrave;nh duy&#x1EC7;t c&#x1EE7;a b&#x1EA1;n kh&ocirc;ng h&#x1ED7; tr&#x1EE3; ph&aacute;t video.
       
       .mb-3
-        label.form-label(for='deviceLocation') Vị trí: (devices.location)
+        label.form-label(for='deviceLocation') Vị trí: 
         select#deviceLocation.form-select.js-example-theme-single(name='location' required='' style='width: 100%')
           option(value='' disabled='' selected='') --Ch&#x1ECD;n--
           each location in locations 
             option(value=location) #{location}
       .mb-3
-        label.form-label(for='deviceSupplier') Nhà cung cấp: (devices.supplier)
+        label.form-label(for='deviceSupplier') Nhà cung cấp: 
         select#deviceSupplier.form-select.js-example-theme-single(name='supplier' required='' style='width: 100%')
           option(value='' disabled='' selected='') --Ch&#x1ECD;n--
           each supplier in suppliers 
             option(value=supplier) #{supplier}
       .mb-3
-        label.form-label(for='descriptionDevice') Ghi chú: (devices.description)
-        input#descriptionDevice.form-control(value='Thiết bị mới mua về không hư hỏng' type='text' name='description')
+        label.form-label(for='descriptionDevice') Ghi chú: 
+        input#descriptionDevice.form-control(value='' type='text' name='description')
       .mb-3
         label.form-label(for='price') Giá: (device.price)
         input#price.form-control(type='text' value='2000' name='price' required='')
       .mb-3
-        label.form-label(for='purchaseDate') Ng&agrave;y mua thi&#x1EBF;t b&#x1ECB;: (device.purchaseDate)
+        label.form-label(for='purchaseDate') Ng&agrave;y mua thi&#x1EBF;t b&#x1ECB;: 
         input#purchaseDate.form-control(type='date' name='purchaseDate' required='')
       .mb-3
-        label.form-label(for='warrantyExpiry') Ng&agrave;y h&#x1EBF;t h&#x1EA1;n: (device.warrantyExpiry)
+        label.form-label(for='warrantyExpiry') Ng&agrave;y h&#x1EBF;t h&#x1EA1;n: 
         input#warrantyExpiry.form-control(type='date' name='warrantyExpiry' required='')
       input#localStorageDataImage(type='hidden' name='imageUrl')
       input#localStorageDataVideo(type='hidden' name='videoUrl')

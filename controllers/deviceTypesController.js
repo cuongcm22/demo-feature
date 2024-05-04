@@ -22,7 +22,7 @@ module.exports.showCreateDeviceTypesPage = async (req, res, next) => {
             routes: {
                 'Trang chủ': '/',
                 'Tạo loại thiết bị': '/devicetypes/create',
-                'Sủa loại thiết bị': '/devicetypes/detail'
+                'Sửa loại thiết bị': '/devicetypes/detail'
             }
         });
     } catch (error) {
@@ -67,7 +67,7 @@ module.exports.showDetailDeviceTypesPage = async (req, res, next) => {
             routes: {
                 'Trang chủ': '/',
                 'Tạo loại thiết bị': '/devicetypes/create',
-                'Sủa loại thiết bị': '/devicetypes/detail'
+                'Sửa loại thiết bị': '/devicetypes/detail'
             },
             deviceTypes: JSON.stringify(deviceTypes),
         });

@@ -28,7 +28,7 @@ function renderTable(page) {
     <td>
     <button class="btn badge bg-primary" onclick="openEditModal(event, '${user.fullname}', '${
         user.username
-    }', '${user.email}', '${user.phone}', '${user.role}')">Edit</button>
+    }', '${user.email}', '${user.password}', '${user.phone}', '${user.role}')">Edit</button>
     <button class="btn badge bg-danger">Delete</button>
     </td>
     `;
@@ -115,12 +115,13 @@ function searchFunction() {
     renderTable(currentPage);
     renderPagination();
 }
-function openEditModal(event, fullname, username, email, phone, role) {
+function openEditModal(event, fullname, username, email, password, phone, role) {
     updateRoleUserCurrent = event.target.parentElement.parentElement.querySelector('.user-role')
     
     document.getElementById("editUsername").value = username;
     document.getElementById("editUserFullName").value = fullname;
     document.getElementById("editEmail").value = email;
+    document.getElementById("editPassword").value = password;
     document.getElementById("editPhone").value = phone;
     document.getElementById("wrapperEditRole").innerHTML = `
     <label class="form-label" for="editRole">Role</label>
@@ -151,6 +152,7 @@ async function editUser(event) {
             username: document.getElementById("editUsername").value,
             fullname: document.getElementById("editUserFullName").value,
             email: document.getElementById("editEmail").value,
+            password: document.getElementById("editPassword").value,
             phone: document.getElementById("editPhone").value,
             role: document.getElementById("editRole").value
         };

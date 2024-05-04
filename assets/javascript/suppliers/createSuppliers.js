@@ -133,7 +133,7 @@ function submitForm() {
         .then((response) => {
             // Handle success
             if (response.data.success) {
-                alert('Thêm mới thiết bị thành công!')
+                alert('Thêm mới nhà cung cấp thành công!')
                 window.location.assign(window.location.origin  + '/suppliers/detail');
             } else {
                 alert('Thêm mới không thành công!')

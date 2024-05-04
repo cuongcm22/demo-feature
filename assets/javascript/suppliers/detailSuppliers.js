@@ -111,9 +111,9 @@ $(document).ready(function () {
     }
 
     function deleteSupplier(index, supplierName) {
-        console.log(supplierName);
+        // console.log(supplierName);
         var confirmation = confirm(
-            "Are you sure you want to delete this supplier?"
+            "Bạn có chắc muốn xóa nhà cung cấp này?"
         );
         if (confirmation) {
             handleDelete(supplierName);
@@ -129,7 +129,7 @@ $(document).ready(function () {
             },
             success: function (res) {
                 if (res) {
-                    alert("Supplier deleted successfully");
+                    alert("Xóa nhà cung cấp thành công!");
                     window.location.assign(
                         window.location.origin + "/suppliers/detail"
                     );
@@ -144,7 +144,7 @@ $(document).ready(function () {
     window.deleteSupplier = deleteSupplier;
 
     window.showSupplierDetails = function (index) {
-        console.log(index);
+        // console.log(index);
         const supplier = filteredData[index];
         $("#name-holder").val(supplier.name);
         $("#name").val(supplier.name);
