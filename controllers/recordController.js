@@ -40,9 +40,10 @@ module.exports.ShowLoanRecordPage = async (req, res, next) => {
         .sort({ _id: -1 }) // Sắp xếp theo _id giảm dần để lấy 20 phần tử cuối cùng
         .limit(20) 
         .then(records => {
-
+            
             const formattedDevices = records.map((record) => {
-                const device = record.device.name
+                
+                const device = record?.device?.name ?? 'Thiết bị đã bị xóa'
                 const username = record.borrower.username
                 const fullname = record.borrower.fullname
                 const phone = record.borrower.phone

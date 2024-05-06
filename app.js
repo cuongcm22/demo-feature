@@ -184,5 +184,5 @@ app.get('/api/v1/exports/:fileName/download',authenToken.authenToken, (req, res)
 
 // huet.devicemanage.com.vn
 // Kết nối tới cổng máy chủ
-const PORT = process.env.PORT || 80; // Sử dụng cổng mặc định 3100 nếu không được chỉ định
+const PORT = process.env.PORT || 3200; // Sử dụng cổng mặc định 3100 nếu không được chỉ định
 app.listen(PORT, () => console.log(`Máy chủ đang chạy trên cổng ${PORT}`));
