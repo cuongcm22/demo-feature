@@ -234,12 +234,12 @@ $(document).ready(function () {
         const input = $("#searchInput").val().trim().toLowerCase();
         filteredData = mockData.filter(
             (device) =>
-            device.name.toLowerCase().includes(input) ||
-            device.description.toLowerCase().includes(input) ||
-            device.purchaseDate.toLowerCase().includes(input) ||
-            device.deviceType.toLowerCase().includes(input) ||
-            device.location.toLowerCase().includes(input) ||
-            device.supplier.toLowerCase().includes(input)
+            device?.name?.toLowerCase().includes(input) ||
+            device?.description?.toLowerCase().includes(input) ||
+            device?.purchaseDate?.toLowerCase().includes(input) ||
+            device?.deviceType?.toLowerCase().includes(input) ||
+            device?.location?.toLowerCase().includes(input) ||
+            device?.supplier?.toLowerCase().includes(input)
         );
         currentPage = 1; // Reset to the first page after each search
         renderDeviceCards(getCurrentPageData());

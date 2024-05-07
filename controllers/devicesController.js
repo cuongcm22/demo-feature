@@ -41,9 +41,9 @@ module.exports.ShowReportDevicePage = async (req, res, next) => {
             return res.redirect('/404')
         }
 
-        const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype?.name));
-        const locations = await Location.find({}, 'name').then(locations => locations.map(location => location?.name));
-        const suppliers = await Supplier.find({}, 'name').then(suppliers => suppliers.map(supplier => supplier?.name));
+        const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
+        const locations = await Location.find({}, 'name').then(locations => locations.map(location => location.name));
+        const suppliers = await Supplier.find({}, 'name').then(suppliers => suppliers.map(supplier => supplier.name));
 
         await Device.aggregate([
             {
