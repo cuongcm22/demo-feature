@@ -105,7 +105,7 @@ module.exports.retrieveAllSuppliersTable = async (req, res, next) => {
 
 module.exports.updateSuppliers = async (req, res, next) => {
     try {
-        console.log(req.body);
+        // console.log(req.body);
         // Tìm và cập nhật nhà cung cấp dựa trên name
         const updatedSupplier = await Supplier.findOneAndUpdate(
         { name: req.body.nameholder }, // Điều kiện tìm kiếm

@@ -8,8 +8,8 @@ link(href='/css/report/loanRecord.css' rel='stylesheet')
       input#searchInput.form-control(type='text' placeholder='Search...')
       button#searchButton.btn.btn-outline-success Tìm kiếm
     .d-flex.mb-3.mt-3
-      button#downloadBtn.btn.badge.bg-primary() Export xlsx file
-      button#downloadBtn.btn.badge.bg-info.ms-3(onclick="window.location.href = '/sendemail'") Send email
+      button#downloadBtn.btn.badge.bg-primary() Xuất xlsx file
+      button#downloadBtn.btn.badge.bg-info.ms-3(onclick="window.location.href = '/sendemail'") Gửi email
   .form-check.form-switch
     .mt-3
       input#flexSwitchCheckDefault.switchRetrieveAllData.form-check-input(type='checkbox' role='switch')
@@ -19,12 +19,12 @@ link(href='/css/report/loanRecord.css' rel='stylesheet')
       thead
         tr
           th #
-          th Device
-          th Username
-          th Borrowed At
-          th Expected Return Date
-          th Actual Return Date
-          th Status
+          th Thiết bị
+          th Tên người dùng
+          th Ngày mượn
+          th Ngày trả (dự kiến)
+          th Ngày trả (thực tế)
+          th Trạng thái
           th Chức năng
       tbody#loanTableBody
         .warrper.text-center
@@ -72,25 +72,25 @@ link(href='/css/report/loanRecord.css' rel='stylesheet')
 
               span.ms-2 Gửi email
           .mb-3
-            label.form-label(for='fullname') Full Name
+            label.form-label(for='fullname') Tên đầy đủ
             input#fullname.form-control(type='text' name='fullname' readonly='')
           .mb-3
-            label.form-label(for='username') Username
+            label.form-label(for='username') Tên người dùng
             input#username.form-control(type='text' name='username' readonly='')
           .mb-3
-            label.form-label(for='device') Device
+            label.form-label(for='device') Thiết bị 
             input#device.form-control(type='text' name='device' readonly='')
           .mb-3
-            label.form-label(for='borrowedAt') Borrowed At
+            label.form-label(for='borrowedAt') Mượn vào lúc
             input#borrowedAt.form-control(type='text' name='borrowedAt' readonly='')
           .mb-3
-            label.form-label(for='expectedReturnDate') Expected Return Date
+            label.form-label(for='expectedReturnDate') Ngày trả dự kiến
             input#expectedReturnDate.form-control(type='text' name='expectedReturnDate' readonly='')
           .mb-3
-            label.form-label(for='actualReturnDate') Actual Return Date
+            label.form-label(for='actualReturnDate') Ngày trả (thực tế)
             input#actualReturnDate.form-control(type='text' name='actualReturnDate' readonly='')
           .mb-3
-            label.form-label(for='transactionStatus') Transaction Status
+            label.form-label(for='transactionStatus') Trạng thái
             input#transactionStatus.form-control(type='text' name='transactionStatus' readonly='')
           .mb-3
             .form-image

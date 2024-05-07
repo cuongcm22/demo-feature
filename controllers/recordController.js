@@ -44,10 +44,10 @@ module.exports.ShowLoanRecordPage = async (req, res, next) => {
             const formattedDevices = records.map((record) => {
                 
                 const device = record?.device?.name ?? 'Thiết bị đã bị xóa'
-                const username = record.borrower.username
-                const fullname = record.borrower.fullname
-                const phone = record.borrower.phone
-                const email = record.borrower.email
+                const username = record?.borrower?.username
+                const fullname = record?.borrower?.fullname
+                const phone = record?.borrower?.phone
+                const email = record?.borrower?.email
                 
                 const borrowedAt = formatDateTime(record.borrowedAt)
 
@@ -60,11 +60,11 @@ module.exports.ShowLoanRecordPage = async (req, res, next) => {
                 }
 
                 
-                const transactionStatus = record.transactionStatus
+                const transactionStatus = record?.transactionStatus
                 
-                const proofImageUrl = record.proofImageUrl
+                const proofImageUrl = record?.proofImageUrl
 
-                const proofVideoUrl = record.proofVideoUrl
+                const proofVideoUrl = record?.proofVideoUrl
                 
                 return {
                     device,
@@ -118,21 +118,21 @@ module.exports.retrieveAllLoanRecordTable = async (req, res, next) => {
         .populate('borrower', 'username')
         .then(records => {
             const formattedDevices = records.map((record) => {
-                const device = record.device.name
-                const username = record.borrower.username
+                const device = record?.device?.name
+                const username = record?.borrower?.username
                 
-                const borrowedAt = formatDateTime(record.borrowedAt)
+                const borrowedAt = formatDateTime(record?.borrowedAt)
 
-                const expectedReturnDate = formatDateTime(record.expectedReturnDate)
+                const expectedReturnDate = formatDateTime(record?.expectedReturnDate)
 
                 if (record.actualReturnDate) {
-                    var actualReturnDate = formatDateTime(record.actualReturnDate)
+                    var actualReturnDate = formatDateTime(record?.actualReturnDate)
                 } else {
                     var actualReturnDate = '-'
                 }
 
                 
-                const transactionStatus = record.transactionStatus
+                const transactionStatus = record?.transactionStatus
                 return {
                     device,
                     username,

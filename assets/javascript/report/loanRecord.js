@@ -130,7 +130,9 @@ $(document).ready(function () {
         document.querySelector('.form-image').innerHTML = `
         <img style="width: 100%; height: 220px; object-fit: contain;" id="deviceImage" src="${record.proofImageUrl ? record.proofImageUrl : '/public/images/image_placeholder.jpg'}" alt="Proof Image">
         `
-        if (record.proofVideoUrl != undefined) {
+        document.querySelector('.form-video').querySelector("#deviceVideo")?.remove()
+        
+        if (record.proofVideoUrl != undefined || record.proofVideoUrl != null) {
             document.querySelector('.form-video').innerHTML = `
             <video style="width: 100%; height: 220px; object-fit: contain;" id="deviceVideo" controls style="display: none;">
             <source src="${record.proofVideoUrl}" type="video/mp4">

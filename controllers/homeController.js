@@ -62,7 +62,7 @@ module.exports.homePage = async (req, res, next) => {
             },
         });
     } catch (err) {
-        console.log(err);
+        // console.log(err);
         res.status(404);
     }
 };
@@ -79,7 +79,7 @@ module.exports.showDashBoard = async (req, res, next) => {
         var arrDeviceIdsNotReturned = [];
         var arrUserIdsNotReturned = [];
         let arrDeviceIdsUsed = await Device.find({ initStatus: "used" }).then(
-            (device) => device.map((device) => device._id)
+            (device) => device.map((device) => device?._id)
         );
 
         // Thực hiện lượt qua tất cả các deviceIds có trong arrDeviceIdsUsed trong bảng loan table
@@ -89,15 +89,15 @@ module.exports.showDashBoard = async (req, res, next) => {
                 device: deviceId,
             }).populate("borrower", "username");
             const arrDeviceIdsBorrowed = arrDeviceIdsBorrowedReturn
-                .filter((item) => item.transactionStatus == "Borrowed")
-                .map((item) => item.device);
+                .filter((item) => item?.transactionStatus == "Borrowed")
+                .map((item) => item?.device);
             const arrDeviceIdsReturned = arrDeviceIdsBorrowedReturn
-                .filter((item) => item.transactionStatus == "Returned")
-                .map((item) => item.device);
+                .filter((item) => item?.transactionStatus == "Returned")
+                .map((item) => item?.device);
             if (arrDeviceIdsBorrowed.length != arrDeviceIdsReturned.length) {
                 arrDeviceIdsNotReturned.push(deviceId);
                 arrUserIdsNotReturned.push(
-                    arrDeviceIdsBorrowedReturn[0].borrower.username
+                    arrDeviceIdsBorrowedReturn[0]?.borrower?.username
                 );
             }
         };
@@ -105,11 +105,11 @@ module.exports.showDashBoard = async (req, res, next) => {
         await Promise.all(arrDeviceIdsUsed.map(processDeviceId));
 
         // ==== Task 1: Thống kê những thiết bị được mượn nhưng chưa được trả => done
-        console.log("Thống kê những thiết bị được mượn nhưng chưa được trả");
-        console.log(
-            "arrDeviceIdsNotReturned: ",
-            arrDeviceIdsNotReturned.length
-        );
+        // console.log("Thống kê những thiết bị được mượn nhưng chưa được trả");
+        // console.log(
+        //     "arrDeviceIdsNotReturned: ",
+        //     arrDeviceIdsNotReturned.length
+        // );
         async function getUserDataAndCount(arrUserIdsNotReturned) {
             try {
                 // Truy vấn cơ sở dữ liệu để lấy thông tin người dùng
@@ -128,7 +128,7 @@ module.exports.showDashBoard = async (req, res, next) => {
                         // Nếu chưa, thêm người dùng vào userDataWithCount và đặt số lần lặp là 1
                         userDataWithCount[username] = {
                             user: users.find(
-                                (user) => user.username === username
+                                (user) => user?.username === username
                             ),
                             numDevice: 1,
                         };
@@ -257,8 +257,8 @@ module.exports.showDashBoard = async (req, res, next) => {
                 }
             });
         });
-        console.log(arrDevice.length);
-        console.log("arrDeviceNotWorking: ", arrDeviceNotWorking.length);
+        // console.log(arrDevice.length);
+        // console.log("arrDeviceNotWorking: ", arrDeviceNotWorking.length);
 
         res.render("./contents/dashboard/dashboard.pug", {
             title: "Home page",
@@ -379,12 +379,12 @@ module.exports.exportFileCSV = async (req, res, next) => {
 
         let { data, fileName } = await getObjectList(req); // Await getObjectList to get the data and file name
         const outputPath = csvDir;
-        console.log(typeof data);
-        console.log(data);
+        // console.log(typeof data);
+        // console.log(data);
 
         exportFileCSV(fileName, data, outputPath)
             .then((filePath) => {
-                console.log("CSV file saved at:", filePath);
+                // console.log("CSV file saved at:", filePath);
                 // Return path of CSV file to client
                 res.download(filePath);
             })
@@ -451,8 +451,8 @@ module.exports.updateXlsxFile = async (req, res, next) => {
 
                 formattedLoans = loans.map((loan) => ({
                     ...loan.toObject(),
-                    device: loan.device.name,
-                    borrower: loan.borrower.username,
+                    device: loan?.device?.name,
+                    borrower: loan?.borrower?.username,
                 }));
 
                 setTimeout(() => {
@@ -563,9 +563,9 @@ module.exports.updateXlsxFile = async (req, res, next) => {
                 // }));
                 const formattedDevices = devices.map((device) => ({
                     ...device.toObject(),
-                    deviceType: device.deviceType ? device.deviceType.name : null,
-                    location: device.location ? device.location.name : null,
-                    supplier: device.supplier ? device.supplier.name : null,
+                    deviceType: device?.deviceType ? device?.deviceType.name : null,
+                    location: device?.location ? device?.location.name : null,
+                    supplier: device?.supplier ? device?.supplier.name : null,
                 }));
 
                 const filteredDevices = formattedDevices.filter(device => device.deviceType !== null);
@@ -635,7 +635,7 @@ module.exports.ShowDownloadXlsxFile = async (req, res, next) => {
 module.exports.downloadXlsxFile = async (req, res, next) => {
     const { filename } = req.body; // Get the filename from query parameters
     const timestamp = moment().format("YYYYMMDDTHHmmss");
-    console.log(filename);
+    // console.log(filename);
     // Check if filename is provided
     if (!filename) {
         return res.status(400).send("Filename is required");

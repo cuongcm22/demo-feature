@@ -109,7 +109,7 @@ module.exports.login = async (req, res, next) => {
 
         await User.find({email: email, password: password}).then(user => {
             const fullname = encodeURIComponent(user[0].fullname);
-            console.log(`User ${user[0].username} just login!`.bgBlue);
+            // console.log(`User ${user[0].username} just login!`.bgBlue);
 
             const sessionId = `sessionId=${req.sessionID}; Max-Age=${expireTimeSession}; HttpOnly; SameSite=Strict; Path=/`;
             const sessionUserName = `sessionUserName=${fullname}; Max-Age=${expireTimeSession}; SameSite=Strict; Path=/`;

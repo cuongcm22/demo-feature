@@ -32,7 +32,7 @@ function handleAlertWithRedirectPage(alertString, redirect) {
 }
 
 module.exports.ShowReportDevicePage = async (req, res, next) => {
-    console.log("Get device routers".blue.bold);
+    // console.log("Get device routers".blue.bold);
 
     try {
         const { role } = req.userId;
@@ -41,9 +41,9 @@ module.exports.ShowReportDevicePage = async (req, res, next) => {
             return res.redirect('/404')
         }
 
-        const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
-        const locations = await Location.find({}, 'name').then(locations => locations.map(location => location.name));
-        const suppliers = await Supplier.find({}, 'name').then(suppliers => suppliers.map(supplier => supplier.name));
+        const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype?.name));
+        const locations = await Location.find({}, 'name').then(locations => locations.map(location => location?.name));
+        const suppliers = await Supplier.find({}, 'name').then(suppliers => suppliers.map(supplier => supplier?.name));
 
         await Device.aggregate([
             {
@@ -147,7 +147,7 @@ module.exports.ShowReportDevicePage = async (req, res, next) => {
 };
 
 module.exports.showCreateDevicePage = async (req, res, next) => {
-    console.log("Create device routers".blue.bold);
+    // console.log("Create device routers".blue.bold);
     try {
         const { role } = req.userId;
 
@@ -155,9 +155,9 @@ module.exports.showCreateDevicePage = async (req, res, next) => {
             return res.redirect('/404')
         }
 
-        const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
-        const locations = await Location.find({}, 'name').then(locations => locations.map(location => location.name));
-        const suppliers = await Supplier.find({}, 'name').then(suppliers => suppliers.map(supplier => supplier.name));
+        const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype?.name));
+        const locations = await Location.find({}, 'name').then(locations => locations.map(location => location?.name));
+        const suppliers = await Supplier.find({}, 'name').then(suppliers => suppliers.map(supplier => supplier?.name));
 
         res.render("./contents/device/createDevice.pug", {
             title: 'Thiết bị',
@@ -203,14 +203,14 @@ module.exports.createDeviceDB = async (req, res, next) => {
         await device
             .save()
             .then((result) => {
-                console.log(result);
-                console.log('Lưu thiết bị thành công'.blue.bold);
+                // console.log(result);
+                // console.log('Lưu thiết bị thành công'.blue.bold);
                 const handleReturn = handleAlertWithRedirectPage('Lưu thiết bị thành công!','/device/report')
                 res.send(handleReturn)
             })
             .catch((error) => {
-                console.log(error);
-                console.log('ID thiết bị đã tồn tại, vui lòng thử id khác'.red.bold);
+                // console.log(error);
+                // console.log('ID thiết bị đã tồn tại, vui lòng thử id khác'.red.bold);
                 const handleReturn = handleAlertWithRedirectPage('Đã xảy ra lỗi khi thêm thiết bị, có thể id thiết bị đã tồn tại, vui lòng thử lại!','/device/create')
                 res.send(handleReturn);
             });
@@ -220,7 +220,7 @@ module.exports.createDeviceDB = async (req, res, next) => {
 };
 
 module.exports.updateDeviceDB = async (req, res, next) => {
-  console.log('Update device route'.yellow.bold)
+//   console.log('Update device route'.yellow.bold)
   try {
     const { role } = req.userId;
 
@@ -242,7 +242,8 @@ module.exports.updateDeviceDB = async (req, res, next) => {
       { serialNumber: req.body.serialNumber }, // Điều kiện tìm kiếm - ở đây sử dụng trường id để tìm kiếm thiết bị cần cập nhật
       data, // Dữ liệu mới sẽ được cập nhật từ req.body
       { new: true, upsert: true } // Tùy chọn để trả về bản ghi mới sau khi cập nhật và tạo bản ghi mới nếu không tìm thấy
-    ).then(updatedDevice => {console.log("Update device successfully!!!".bgYellow.bold);
+    ).then(updatedDevice => {
+        // console.log("Update device successfully!!!".bgYellow.bold);
         const handleReturn = handleAlertWithRedirectPage('Cập nhật thiết bị thành công!','/device/report')
         res.send(handleReturn)
     })
@@ -267,8 +268,10 @@ module.exports.deleteDeviceDB = async (req, res, next) => {
         }
 
         Device.deleteOne({ serialNumber: req.body.serialNumber }).then(result => {
-            console.log('Delete device successfully!'.bgRed)
-        }).catch(err => {console.log(`Đã xảy ra lỗi khi xóa thiết bị trong bảng device ${req.body.id}`.yellow)})
+            // console.log('Delete device successfully!'.bgRed)
+        }).catch(err => {
+            // console.log(`Đã xảy ra lỗi khi xóa thiết bị trong bảng device ${req.body.id}`.yellow)
+        })
         res.status(200).json({
             success: true,
             message: 'Deleted device'
@@ -282,14 +285,14 @@ module.exports.deleteDeviceDB = async (req, res, next) => {
 
 module.exports.ShowLoanDevicePage = async (req, res, next) => {
     try {
-            
+        
         const { role } = req.userId;
 
         if (role != 'admin' && role != 'moderator') {
             return res.redirect('/404')
         }
 
-        const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
+        const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype?.name));
 
         // Khai báo các biến cần sử dụng
         let arrDeviceIdsNotUsed, arrDeviceIdsUsed, Data;
@@ -303,18 +306,18 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
             .populate('supplier', 'name')
         // console.log('arrDeviceIdsNotUsed: ', arrDeviceIdsNotUsed);
         // Task 2: Kiểm tra bảng deviceId lấy ra tất cả các deviceId với trạng thái 'used' => arrDeviceIdsUsed
-        arrDeviceIdsUsed = await Device.find({ initStatus: 'used' }).then(device => device.map(device => device._id))
+        arrDeviceIdsUsed = await Device.find({ initStatus: 'used' }).then(device => device.map(device => device?._id))
 
         // Task 3: Thực hiện lượt qua tất cả các deviceIds có trong arrDeviceIdsUsed trong bảng loan table
         // Để kiểm tra thiết bị nào đã được trả
         const processDeviceId = async (deviceId) => {
             let arrDeviceIdsBorrowedReturn = await Loan.find({ device: deviceId });
             const arrDeviceIdsBorrowed = arrDeviceIdsBorrowedReturn
-                .filter(item => item.transactionStatus == 'Borrowed')
-                .map(item => item.device);
+                .filter(item => item?.transactionStatus == 'Borrowed')
+                .map(item => item?.device);
             const arrDeviceIdsReturned = arrDeviceIdsBorrowedReturn
-                .filter(item => item.transactionStatus == 'Returned')
-                .map(item => item.device);
+                .filter(item => item?.transactionStatus == 'Returned')
+                .map(item => item?.device);
             if (arrDeviceIdsBorrowed.length == arrDeviceIdsReturned.length) {
                 arrDeviceIdsLoanChecked.push(deviceId);
             }
@@ -332,9 +335,9 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
         
         const formattedDevices = Data.map(device => ({
             ...device.toObject(),
-            deviceType: device.deviceType.name,
-            location: device.location.name,
-            supplier: device.supplier.name
+            deviceType: device?.deviceType?.name,
+            location: device?.location?.name,
+            supplier: device?.supplier?.name
         }));
         
         res.render("./contents/device/loanDevice.pug", {
@@ -361,7 +364,7 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
 module.exports.loanDeviceDB = async (req, res, next) => {
     try {
         const { role } = req.userId;
-
+        
         if (role != 'admin' && role != 'moderator') {
             return res.redirect('/404')
         }
@@ -422,14 +425,14 @@ module.exports.ShowReturnDevicePage = async (req, res, next) => {
             return res.redirect('/404')
         }
 
-        const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
+        const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype?.name));
 
         const userId = req.userId;
 
         // T1: Lưu một biến để nhận các deviceId mà người dùng đã mượn sau khi kiểm tra là thiết bị đã trả
         var arrDeviceIdsReuturnChecked = []
         
-        let arrDeviceIdsBorrowedReturn = await Loan.find({ borrower: userId }).then(loan => loan.map(loan => loan.device))
+        let arrDeviceIdsBorrowedReturn = await Loan.find({ borrower: userId }).then(loan => loan.map(loan => loan?.device))
         // console.log(arrDeviceIdsBorrowedReturn);
 
         var arrDeviceIdCount = {};
@@ -456,9 +459,9 @@ module.exports.ShowReturnDevicePage = async (req, res, next) => {
         
         const formattedDevices = devices.map(device => ({
             ...device.toObject(),
-            deviceType: device.deviceType.name,
-            location: device.location.name,
-            supplier: device.supplier.name
+            deviceType: device?.deviceType?.name,
+            location: device?.location?.name,
+            supplier: device?.supplier?.name
         }));
         
         res.render("./contents/device/returnDevice.pug", {

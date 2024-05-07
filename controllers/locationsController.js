@@ -17,7 +17,7 @@ module.exports.showCreateLocationsPage = async (req, res, next) => {
             return res.redirect('/404')
         }
 
-        const locations = await Location.find({}, 'name').then(location => location.map(location => location.name));
+        const locations = await Location.find({}, 'name').then(location => location.map(location => location?.name));
         res.render("./contents/locations/createLocations.pug", {
             title: 'Vị trí',
             routes: {
