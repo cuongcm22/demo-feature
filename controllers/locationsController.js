@@ -107,7 +107,7 @@ module.exports.updateLocations = async (req, res, next) => {
     try {
         const { role } = req.userId;
 
-        if (role != 'admin' && role != 'moderator') {
+        if (role != 'admin') {
             return res.redirect('/404')
         }
 
@@ -136,7 +136,7 @@ module.exports.deleteLocations = async (req, res, next) => {
     try {
         const { role } = req.userId;
 
-        if (role != 'admin' && role != 'moderator') {
+        if (role != 'admin') {
             return res.redirect('/404')
         }
         
