@@ -262,7 +262,7 @@ renderImageVideo()
 // Delete function
 async function deleteDevice(event, index, id) {
     // Prompt the user for confirmation
-    var confirmation = confirm("Are you sure you want to delete this device?");
+    var confirmation = confirm("Xác nhận bạn muốn xóa thiết bị này?");
     // If the user confirms the deletion
     if (confirmation) {
 
@@ -275,9 +275,9 @@ function handleDelete(serialNumber, index) {
     axios.post('/device/delete', {
         serialNumber: `${serialNumber}`
     }).then(res => {
-        console.log(res)
-        if (!res.data.success) {
-            alert('Không thể xóa thiết bị đã có người mượn')
+        
+        if (res.data.success == false) {
+            alert('Bạn không đủ thẩm quyền để thực hiện chức năng này!')
         } else {
             /*
             Tham số đầu tiên (1) là chỉ mục của phần tử bạn muốn bắt đầu xóa.

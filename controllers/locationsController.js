@@ -21,7 +21,6 @@ module.exports.showCreateLocationsPage = async (req, res, next) => {
         res.render("./contents/locations/createLocations.pug", {
             title: 'Vị trí',
             routes: {
-                'Trang chủ': '/',
                 'Tạo vị trí': '/locations/create',
                 'Sửa vị trí': '/locations/detail'
             },
@@ -73,7 +72,6 @@ module.exports.showDetailLocationsPage = async (req, res, next) => {
         res.render("./contents/locations/detailLocations.pug", {
             title: 'Vị trí',
             routes: {
-                'Trang chủ': '/',
                 'Tạo vị trí': '/locations/create',
                 'Sửa vị trí': '/locations/detail'
             },
@@ -137,13 +135,15 @@ module.exports.deleteLocations = async (req, res, next) => {
         const { role } = req.userId;
 
         if (role != 'admin') {
-            return res.redirect('/404')
+            return res.status(200).json({
+                success: false
+            })
         }
         
         const deletedLocation = await Location.deleteOne({ name: req.body.locationName });
-        res.status(200).json(
-            success = true
-        )
+        res.status(200).json({
+            success: true
+        })
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'Lỗi server' });

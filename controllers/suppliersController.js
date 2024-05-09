@@ -21,7 +21,6 @@ module.exports.showCreateSuppliersPage = async (req, res, next) => {
         res.render("./contents/suppliers/createSuppliers.pug", {
             title: 'Nhà cung cấp',
             routes: {
-                'Trang chủ': '/',
                 'Tạo nhà cung cấp': '/suppliers/create',
                 'Sửa nhà cung cấp': '/suppliers/detail'
             },
@@ -73,7 +72,6 @@ module.exports.showDetailSuppliersPage = async (req, res, next) => {
         res.render("./contents/suppliers/detailSuppliers.pug", {
             title: 'Nhà cung cấp',
             routes: {
-                'Trang chủ': '/',
                 'Tạo nhà cung cấp': '/suppliers/create',
                 'Sửa nhà cung cấp': '/suppliers/detail'
             },
@@ -105,6 +103,13 @@ module.exports.retrieveAllSuppliersTable = async (req, res, next) => {
 
 module.exports.updateSuppliers = async (req, res, next) => {
     try {
+
+        const { role } = req.userId;
+
+        if (role != 'admin') {
+            return res.redirect('/404')
+        }
+
         // console.log(req.body);
         // Tìm và cập nhật nhà cung cấp dựa trên name
         const updatedSupplier = await Supplier.findOneAndUpdate(
@@ -129,10 +134,20 @@ module.exports.updateSuppliers = async (req, res, next) => {
 
 module.exports.deleteSuppliers = async (req, res, next) => {
     try {
+
+        const { role } = req.userId;
+
+        if (role != 'admin') {
+            return res.status(200).json({
+                success: false
+            })
+        }
+        
+
         const deletedSupplier = await Supplier.deleteOne({ name: req.body.supplierName });
-        res.status(200).json(
-            success = true
-        )
+        res.status(200).json({
+            success: true
+        })
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'Lỗi server' });

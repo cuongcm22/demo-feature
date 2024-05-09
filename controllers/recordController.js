@@ -85,8 +85,6 @@ module.exports.ShowLoanRecordPage = async (req, res, next) => {
             res.render("./contents/report/loanRecord.pug", {
                 title: 'Home page',
                 routes: {
-                    'Trang chủ': '/',
-                    'Thông tin thiết bị': '/device/report',
                     'Tạo thiết bị': '/device/create',
                     'Mượn thiết bị': '/device/loan',
                     'Trả thiết bị': '/device/return',

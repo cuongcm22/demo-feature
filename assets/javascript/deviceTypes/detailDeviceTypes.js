@@ -121,9 +121,14 @@ $(document).ready(function () {
                 deviceTypeName: deviceTypeName,
             },
             success: function (res) {
-                if (res) {
-                    alert("Xóa loại thiết bị thành công!");
-                    window.location.assign(window.location.origin + "/devicetypes/detail");
+                if (res?.success == true) {
+                    alert("Xóa loại thiêt bị thành công!");
+                    window.location.assign(
+                        window.location.origin + "/devicetypes/detail"
+                    );
+                } else {
+                    alert("Bạn không đủ thẩm quyền để thực hiện chức năng này!");
+                        
                 }
             },
             error: function (err) {

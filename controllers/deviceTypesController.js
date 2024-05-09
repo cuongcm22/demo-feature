@@ -20,7 +20,6 @@ module.exports.showCreateDeviceTypesPage = async (req, res, next) => {
         res.render("./contents/deviceTypes/createDeviceTypes.pug", {
             title: 'Loại thiết bị',
             routes: {
-                'Trang chủ': '/',
                 'Tạo loại thiết bị': '/devicetypes/create',
                 'Sửa loại thiết bị': '/devicetypes/detail'
             }
@@ -65,7 +64,6 @@ module.exports.showDetailDeviceTypesPage = async (req, res, next) => {
         res.render("./contents/deviceTypes/detailDeviceTypes.pug", {
             title: 'Loại thiết bị',
             routes: {
-                'Trang chủ': '/',
                 'Tạo loại thiết bị': '/devicetypes/create',
                 'Sửa loại thiết bị': '/devicetypes/detail'
             },
@@ -129,13 +127,15 @@ module.exports.deleteDeviceTypes = async (req, res, next) => {
         const { role } = req.userId;
 
         if (role != 'admin') {
-            return res.redirect('/404')
+            return res.status(200).json({
+                success: false
+            })
         }
         
         const deleteDeviceType = await DeviceType.deleteOne({ name: req.body.deviceTypeName });
-        res.status(200).json(
-            success = true
-        )
+        res.status(200).json({
+            success: true
+        })
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'Lỗi server' });

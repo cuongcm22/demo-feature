@@ -263,9 +263,6 @@ module.exports.showDashBoard = async (req, res, next) => {
         res.render("./contents/dashboard/dashboard.pug", {
             title: "Home page",
             routes: {
-                "Trang chủ": "/",
-                "Quản lý profile": "/user",
-                "Quản lý thiết bị": "/device/report",
                 "Quản lý nhà cung cấp": "/suppliers/detail",
                 "Quản lý vị trí": "/locations/detail",
                 "Quản lý loại thiết bị": "/devicetypes/detail",
@@ -615,7 +612,6 @@ module.exports.ShowDownloadXlsxFile = async (req, res, next) => {
             res.render("./contents/showDownloadXlsxFile.pug", {
                 title: "Download xlsx file",
                 routes: {
-                    "Trang chủ": "/",
                     "Thông tin thiết bị": "/device/report",
                     "Tạo thiết bị": "/device/create",
                     "Mượn thiết bị": "/device/loan",

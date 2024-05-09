@@ -123,9 +123,14 @@ $(document).ready(function () {
                 locationName: locationName,
             },
             success: function (res) {
-                if (res) {
-                    alert("Xóa thành công!");
-                    window.location.assign(window.location.origin + "/locations/detail");
+                if (res?.success == true) {
+                    alert("Xóa vị trí thành công!");
+                    window.location.assign(
+                        window.location.origin + "/locations/detail"
+                    );
+                } else {
+                    alert("Bạn không đủ thẩm quyền để thực hiện chức năng này!");
+                        
                 }
             },
             error: function (err) {

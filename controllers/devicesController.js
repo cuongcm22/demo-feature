@@ -128,8 +128,6 @@ module.exports.ShowReportDevicePage = async (req, res, next) => {
             res.render("./contents/report/reportDevice.pug", {
                 title: 'Thiết bị',
                 routes: {
-                    'Trang chủ': '/',
-                    'Thông tin thiết bị': '/device/report',
                     'Tạo thiết bị': '/device/create',
                     'Mượn thiết bị': '/device/loan',
                     'Đã mượn': '/device/return',
@@ -162,8 +160,6 @@ module.exports.showCreateDevicePage = async (req, res, next) => {
         res.render("./contents/device/createDevice.pug", {
             title: 'Thiết bị',
             routes: {
-                'Trang chủ': '/',
-                'Thông tin thiết bị': '/device/report',
                 'Tạo thiết bị': '/device/create',
                 'Mượn thiết bị': '/device/loan',
                 'Đã mượn': '/device/return',
@@ -264,7 +260,9 @@ module.exports.deleteDeviceDB = async (req, res, next) => {
         const { role } = req.userId;
 
         if (role != 'admin') {
-            return res.redirect('/404')
+            return res.status(200).json({
+                success: false
+            })
         }
 
         Device.deleteOne({ serialNumber: req.body.serialNumber }).then(result => {
@@ -277,7 +275,7 @@ module.exports.deleteDeviceDB = async (req, res, next) => {
             message: 'Deleted device'
         })
     } catch (error) {
-        res.status(401).json({
+        res.status(400).json({
             message: error
         })
     }
@@ -343,8 +341,6 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
         res.render("./contents/device/loanDevice.pug", {
             title: 'Thiết bị',
             routes: {
-                'Trang chủ': '/',
-                'Thông tin thiết bị': '/device/report',
                 'Tạo thiết bị': '/device/create',
                 'Mượn thiết bị': '/device/loan',
                 'Đã mượn': '/device/return',
@@ -467,8 +463,6 @@ module.exports.ShowReturnDevicePage = async (req, res, next) => {
         res.render("./contents/device/returnDevice.pug", {
             title: 'Thiết bị',
             routes: {
-                'Trang chủ': '/',
-                'Thông tin thiết bị': '/device/return',
                 'Tạo thiết bị': '/device/create',
                 'Mượn thiết bị': '/device/loan',
                 'Đã mượn': '/device/return',

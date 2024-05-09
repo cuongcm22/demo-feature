@@ -98,8 +98,8 @@ module.exports.login = async (req, res, next) => {
 
         var { email, password } = req.body
         
-        email = email.toLowerCase()
-        password = password.toLowerCase()
+        email = email
+        password = password
         
         // Lưu ý, cần phải đặt thời gian hết hạn token và cookie trùng nhau, tránh lỗi
         const expireTimeSession = 3000
@@ -108,6 +108,12 @@ module.exports.login = async (req, res, next) => {
         });
 
         await User.find({email: email, password: password}).then(user => {
+            if (!user) {
+                return res.status(200).json({
+                    success: false
+                })
+            }
+
             const fullname = encodeURIComponent(user[0].fullname);
             // console.log(`User ${user[0].username} just login!`.bgBlue);
 

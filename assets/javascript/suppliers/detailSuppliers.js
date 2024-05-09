@@ -128,11 +128,14 @@ $(document).ready(function () {
                 supplierName: supplierName,
             },
             success: function (res) {
-                if (res) {
+                if (res?.success == true) {
                     alert("Xóa nhà cung cấp thành công!");
                     window.location.assign(
                         window.location.origin + "/suppliers/detail"
                     );
+                } else {
+                    alert("Bạn không đủ thẩm quyền để thực hiện chức năng này!");
+                        
                 }
             },
             error: function (err) {
