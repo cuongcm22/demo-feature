@@ -63,9 +63,10 @@ header.header
 
 
 
-          form.d-flex
-            input.form-control.me-2(type='search' placeholder='Search' aria-label='Search')
-            button.btn.btn-outline-success(type='submit') Search
+          div.d-flex.form-search_device
+            input.getDetailDevice.form-control.me-2(type='search' placeholder='Nhập mã thiết bị' aria-label='Search')
+            button.btnGetDetailDevice.btn.btn-outline-success() Search
+            
 
 // Bootstrap Bundle with Popper
 script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js')
@@ -98,3 +99,28 @@ script.
           option.classList.add("active")
       })
   })
+
+   // Bắt sự kiện khi nhấn nút Search
+  document.querySelector('.btnGetDetailDevice').addEventListener('click', function() {
+      // Lấy giá trị của input
+      const deviceId = document.querySelector('.getDetailDevice').value;
+
+      // Gửi yêu cầu GET sử dụng Axios
+      axios.get(`/device/get/deviceid=${deviceId}`)
+          .then(response => {
+              // Xử lý phản hồi ở đây
+              console.log(response.data);
+              if (response.data.success == true) {
+                alert(`Đã tìm thấy ${deviceId} thiết bị trong kho!`)
+                window.location.assign(window.location.origin  + `/device/deviceid=${deviceId}`);
+              } else {
+                alert(`Không tìm thấy thiết bị ${deviceId}`)
+              }
+          })
+          .catch(error => {
+              // Xử lý lỗi ở đây
+              console.error('Error fetching device details:', error);
+          });
+  });
+
+ 

@@ -209,3 +209,8 @@ thead {
 .navbar-nav > li:hover * {
     color: #fff !important;
 }
+
+.form-search_device > button:hover {
+    background-color: #f16022;
+    border-color: #f16022;
+}

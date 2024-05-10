@@ -1,6 +1,7 @@
 const path = require("path");
 const devicePathUpload = '/public/uploads/devices/'
-
+// Import thư viện Moment.js để làm việc với ngày giờ
+const moment = require('moment');
 // Import device model
 
 const { 
@@ -24,11 +25,84 @@ function convertDatetoString(dateString) {
     return formattedDate;
   }
 
+function formatDateTime(inputDateTime) {
+    // Sử dụng Moment.js để parse và format ngày giờ
+    const formattedDateTime = moment(inputDateTime).format('DD/MM/YYYY-HH:mm');
+    return formattedDateTime;
+}
+
 function handleAlertWithRedirectPage(alertString, redirect) {
     return `<script>
         alert('${alertString}')
         window.location.assign(window.location.origin  + '${redirect}');
     </script>`
+}
+
+module.exports.readIdDevice = async (req, res, next) => {
+    try {
+
+        const { id } = req.params
+
+        const device = await Device.findOne({serialNumber: id})
+
+        if (!device) {
+            return res.status(200).json({
+                success: false
+            })
+        }
+
+        res.status(200).json({
+            success: true
+        })
+    } catch {
+        res.status(400).json({})
+    }
+}
+
+module.exports.showPageGetDetailDevice = async (req, res, next) => {
+    try {
+
+        const { id } = req.params
+
+        const devices = await Device.find({serialNumber: id}, { __v: 0})
+            .populate('deviceType', 'name')
+            .populate('location', 'name')
+            .populate('supplier', 'name')
+            
+        let statusLoanDevice = false;
+
+        const existingLoanBorrowed = await Loan.find({ device: devices, transactionStatus: 'Borrowed' })
+        
+        const existingLoanReturned = await Loan.find({ device: devices, transactionStatus: 'Returned' })
+        
+        if (existingLoanBorrowed.length > existingLoanReturned.length) {
+            statusLoanDevice = true
+        }
+
+        const formattedDevices = devices.map(device => ({
+            ...device.toObject(),
+            deviceType: device?.deviceType?.name,
+            location: device?.location?.name,
+            supplier: device?.supplier?.name,
+            purchaseDate: formatDateTime(device?.purchaseDate),
+            warrantyExpiry: formatDateTime(device?.warrantyExpiry)
+        }));
+        
+        res.render("./contents/device/getDevice.pug", {
+            title: 'Thiết bị',
+            routes: {
+                'Tạo thiết bị': '/device/create',
+                'Mượn thiết bị': '/device/loan',
+                'Đã mượn': '/device/return',
+                'Quản lý lịch sử mượn trả': '/record/loanrecord'
+            },
+            data: JSON.stringify(formattedDevices[0]),
+            statusLoanDevice: statusLoanDevice
+        });
+    } catch(err) {
+        console.log(err);
+        res.status(400).json({})
+    }
 }
 
 module.exports.ShowReportDevicePage = async (req, res, next) => {
