@@ -1,6 +1,6 @@
 
 const express = require("express");
-const fs = require('fs').promises;
+var fs = require('fs').promises;
 const app = express();
 
 // import .env
@@ -182,7 +182,34 @@ app.get('/api/v1/exports/:fileName/download',authenToken.authenToken, (req, res)
   res.download(filePath, fileName);
 });
 
+const https = require('https');
+var fs = require('fs');
 // huet.devicemanage.com.vn
 // Kết nối tới cổng máy chủ
-const PORT = process.env.PORT || 80; // Sử dụng cổng mặc định 3100 nếu không được chỉ định
-app.listen(PORT, () => console.log(`Máy chủ đang chạy trên cổng ${PORT}`));
+const PORT = process.env.PORT || 443; // Sử dụng cổng mặc định 3100 nếu không được chỉ định
+// app.listen(PORT, () => console.log(`Máy chủ đang chạy trên cổng ${PORT}`));
+
+
+// const options = {
+//     key: fs.readFileSync('./server.key'), // replace it with your key path
+//     cert: fs.readFileSync('./server.crt'), // replace it with your certificate path
+// }
+
+// https.createServer(options, (req, res) => {
+//   res.writeHead(200);
+//   res.end('Hello, HTTPS World!');
+// }).listen(80, () => {
+//   console.log('Server is running on port 443');
+// });
+const options = {
+  key: fs.readFileSync('./server.key'), // Path to your private key file
+  cert: fs.readFileSync('./server.crt'), // Path to your certificate file
+};
+
+// Create HTTPS server
+const server = https.createServer(options, app);
+
+// Listen on port
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
