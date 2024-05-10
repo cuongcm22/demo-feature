@@ -214,3 +214,67 @@ thead {
     background-color: #f16022;
     border-color: #f16022;
 }
+
+/* Double button  */
+
+.double-buttons {
+    display: inline-block;
+    background-color: #fff;
+    border: 3px solid #b2976a;
+    position: relative;
+    border-radius: 20px;
+    height: 40px;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    overflow: hidden;
+  }
+  .double-buttons:hover .or {
+    background: #fff;
+    color: #b2976a;
+    border-color: #b2976a;
+  }
+  .double-buttons a {
+    display: inline-block;
+    padding: 0 30px;
+    line-height: 40px;
+    color: #444;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    width: 100px;
+  }
+  .double-buttons a:first-child {
+    border-right: 1px solid #b2976a;
+  }
+  .double-buttons a:hover {
+    background-color: #b2976a;
+    color: #fff;
+  }
+  .double-buttons a:active {
+    background-color: #444;
+    color: #fff;
+  }
+  .double-buttons .or {
+    position: absolute;
+    text-align: center;
+    display: block;
+    width: 26px;
+    height: 26px;
+    line-height: 26px;
+    background-color: #b2976a;
+    border-radius: 100%;
+    border: 1px solid #fff;
+    font-style: italic;
+    color: #fff;
+    top: 50%;
+    left: 50%;
+    margin-top: -13px;
+    margin-left: -13px;
+    cursor: default;
+  }
+  .arabic {
+    font-family: 'Amiri';
+    font-size: 1.5em;
+  }
+  

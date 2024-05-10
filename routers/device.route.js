@@ -6,6 +6,8 @@ const devicesController = require("../controllers/devicesController");
 // Get detail device
 router.get('/get/deviceid=:id', devicesController.readIdDevice);
 router.get('/deviceid=:id', devicesController.showPageGetDetailDevice);
+router.get('/qrcode', devicesController.showGetDetailDeviceByQrCode);
+
 
 // Define routes with HTTP methods and corresponding controller functions
 router.get('/create', authenToken.authenToken, devicesController.showCreateDevicePage);

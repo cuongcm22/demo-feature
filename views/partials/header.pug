@@ -52,6 +52,8 @@ header.header
               ul.menu
                 li.nav-item
                   a.nav-link(href='/device/report') Quản lý thiết bị
+                li.nav-item
+                  a.nav-link(href='/device/qrcode') Quét mã thiết bị
                 each route, nameRoute in routes
                   li
                     a.nav-link(href=route) #{nameRoute}
@@ -66,6 +68,8 @@ header.header
           div.d-flex.form-search_device
             input.getDetailDevice.form-control.me-2(type='search' placeholder='Nhập mã thiết bị' aria-label='Search')
             button.btnGetDetailDevice.btn.btn-outline-success() Search
+
+
             
 
 // Bootstrap Bundle with Popper

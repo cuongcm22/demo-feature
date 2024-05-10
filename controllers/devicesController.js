@@ -105,6 +105,25 @@ module.exports.showPageGetDetailDevice = async (req, res, next) => {
     }
 }
 
+module.exports.showGetDetailDeviceByQrCode = async (req, res) => {
+    try {
+
+
+        res.render("./contents/device/qrDevice.pug", {
+            title: 'Thiết bị',
+            routes: {
+                'Tạo thiết bị': '/device/create',
+                'Mượn thiết bị': '/device/loan',
+                'Đã mượn': '/device/return',
+                'Quản lý lịch sử mượn trả': '/record/loanrecord'
+            }
+        })
+    } catch(err) {
+        console.log(err);
+        res.status(400).json({error: err})
+    }
+}
+
 module.exports.ShowReportDevicePage = async (req, res, next) => {
     // console.log("Get device routers".blue.bold);
 
