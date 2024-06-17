@@ -87,13 +87,15 @@ async function exportDataToXlsxFile(tableNames, headerRowOrigin, headerRow, myDa
                         const deviceMap = new Map();
                         let totalPrice = myData.map(item => parseInt(item.price));
                         let totalDepreciation = myData.map(item => parseInt(item.depreciation));
+                        let totalRemainValue = myData.map(item => parseInt(item.remainValue));
                         let totalQuantity = 0;
 
                         totalPrice = totalPrice.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
                         totalDepreciation = totalDepreciation.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+                        totalRemainValue = totalRemainValue.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
                         
                         myData.forEach((data, index) => {
-                            const { name, serialNumber, purchaseDate, price, depreciation } = data;
+                            const { name, serialNumber, purchaseDate, price, depreciation, remainValue } = data;
                             
                             if (!deviceMap.has(name)) {
                               deviceMap.set(name, {
@@ -101,6 +103,7 @@ async function exportDataToXlsxFile(tableNames, headerRowOrigin, headerRow, myDa
                                 price: parseInt(price),
                                 purchaseDate: new Date(purchaseDate).getFullYear(),
                                 depreciation: parseInt(depreciation),
+                                remainValue: parseInt(remainValue),
                                 index: deviceMap.size + 1
                               });
                             } else {
@@ -108,6 +111,7 @@ async function exportDataToXlsxFile(tableNames, headerRowOrigin, headerRow, myDa
                               device.quantity += 1;
                               device.price += parseInt(price);
                               device.depreciation += parseInt(depreciation)
+                              device.remainValue += parseInt(remainValue)
                             }
 
                             totalQuantity += 1;
@@ -122,13 +126,13 @@ async function exportDataToXlsxFile(tableNames, headerRowOrigin, headerRow, myDa
                               device.purchaseDate, // Năm
                               device.quantity,
                               device.price,
-                              '', // Nguyên giá
+                              device.remainValue, // Nguyên giá
                               device.quantity,
                               device.price,
-                              '', // Nguyên giá
+                              device.remainValue, // Nguyên giá
                               device.quantity,
                               device.price,
-                              '', // Nguyên giá,
+                              device.remainValue, // Nguyên giá,
                               device.depreciation
                             ];
                             // console.log(rowData);
@@ -138,10 +142,10 @@ async function exportDataToXlsxFile(tableNames, headerRowOrigin, headerRow, myDa
                             '',      'Cộng',
                             '',     '',
                             totalQuantity,      totalPrice,
-                            '',     totalQuantity,
-                            totalPrice, '',
+                            totalRemainValue,     totalQuantity,
+                            totalPrice, totalRemainValue,
                             totalQuantity,      totalPrice,
-                            '',     totalDepreciation
+                            totalRemainValue,     totalDepreciation
                           ]
                         worksheet.addRow(rowTotal);
 

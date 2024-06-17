@@ -44,6 +44,22 @@ function calculateDepreciation(cost, year, depreciationRate) {
     return remainingValue.toString();
 }
 
+function calculateRemainingValue(initialValue, depreciationRate) {
+    // Validate input values
+    if (typeof initialValue !== 'number' || typeof depreciationRate !== 'number') {
+        throw new Error("Initial value and depreciation rate must be numbers.");
+    }
+    
+    if (initialValue < 0 || depreciationRate < 0 || depreciationRate > 1) {
+        throw new Error("Initial value must be non-negative and depreciation rate must be between 0 and 1.");
+    }
+    
+    // Calculate remaining value
+    var remainingValue = initialValue * (1 - depreciationRate);
+    
+    return remainingValue;
+}
+
 function getStringDateTime() {
     const currentTime = Date.now();
 
@@ -591,12 +607,16 @@ module.exports.updateXlsxFile = async (req, res, next) => {
                     
                     const depreciation = calculateDepreciation(cost, purchaseYear, depreciationRate);
                     
+                    // console.log(device);
+                    const remainValue = calculateRemainingValue(parseInt(device.price), depreciationRate)
+                    
                     return {
                         ...device.toObject(),
                         deviceType: device?.deviceType ? device?.deviceType.name : null,
                         location: device?.location ? device?.location.name : null,
                         supplier: device?.supplier ? device?.supplier.name : null,
-                        depreciation
+                        depreciation,
+                        remainValue
                     };
                 });
 
