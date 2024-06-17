@@ -20,4 +20,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     } else {
         btnLogout.style.display = 'none';
     }
+
 });
+

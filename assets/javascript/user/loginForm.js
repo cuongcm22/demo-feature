@@ -24,6 +24,9 @@ async function handleLogin(event) {
         console.log(result)
         if (result.data.success) {
             alert('Đăng nhập thành công!')
+            if (result.data.notReturn == true) {
+                localStorage.setItem("notReturn", "false");
+            } 
             window.location.assign(window.location.origin + '/');
         }
 

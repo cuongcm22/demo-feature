@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 
 // Import device model
 // const User = require("../models/usersSchema.js");
-const { User, Config } = require('../models/models')
+const { User, Config, Loan, Device } = require('../models/models')
 
 const bcrypt = require('bcrypt');
 const { match } = require("assert");
@@ -81,7 +81,6 @@ module.exports.showLoginForm = async (req, res, next) => {
         res.render("./contents/user/loginForm.pug", {
             title: 'Home page',
             routes: {
-                'Home': '/',
                 'Trang người dùng': '/user',
                 'Đăng ký': '/user/register'
             }
@@ -95,6 +94,8 @@ module.exports.showLoginForm = async (req, res, next) => {
 
 module.exports.login = async (req, res, next) => {
     try {
+        // Check user has return device or not
+        let notReturn = false;
 
         var { email, password } = req.body
         
@@ -107,12 +108,187 @@ module.exports.login = async (req, res, next) => {
             expiresIn: "3000s",
         });
 
-        await User.find({email: email, password: password}).then(user => {
+        await User.find({email: email, password: password}).then(async user => {
             if (!user) {
                 return res.status(200).json({
                     success: false
                 })
+            } else {
+                
+                // #### Check user return device ####
+                
+                var arrDeviceIdsNotReturned = [];
+                var arrUserIdsNotReturned = [];
+                let arrDeviceIdsUsed = await Device.find({ initStatus: "used" }).then(
+                    (device) => device.map((device) => device?._id)
+                );
+
+                // Thực hiện lượt qua tất cả các deviceIds có trong arrDeviceIdsUsed trong bảng loan table
+                // Để kiểm tra thiết bị nào đã được trả
+                const processDeviceId = async (deviceId) => {
+                    let arrDeviceIdsBorrowedReturn = await Loan.find({
+                        device: deviceId,
+                    }).populate("borrower", "username");
+                    const arrDeviceIdsBorrowed = arrDeviceIdsBorrowedReturn
+                        .filter((item) => item?.transactionStatus == "Borrowed")
+                        .map((item) => item?.device);
+                    const arrDeviceIdsReturned = arrDeviceIdsBorrowedReturn
+                        .filter((item) => item?.transactionStatus == "Returned")
+                        .map((item) => item?.device);
+                    if (arrDeviceIdsBorrowed.length != arrDeviceIdsReturned.length) {
+                        arrDeviceIdsNotReturned.push(deviceId);
+                        arrUserIdsNotReturned.push(
+                            arrDeviceIdsBorrowedReturn[0]?.borrower?.username
+                        );
+                    }
+                };
+
+                await Promise.all(arrDeviceIdsUsed.map(processDeviceId));
+
+                // ==== Task 1: Thống kê những thiết bị được mượn nhưng chưa được trả => done
+                // console.log("Thống kê những thiết bị được mượn nhưng chưa được trả");
+                // console.log(
+                //     "arrDeviceIdsNotReturned: ",
+                //     arrDeviceIdsNotReturned.length
+                // );
+                async function getUserDataAndCount(arrUserIdsNotReturned) {
+                    try {
+                        // Truy vấn cơ sở dữ liệu để lấy thông tin người dùng
+                        const users = await User.find(
+                            { username: { $in: arrUserIdsNotReturned } },
+                            { _id: 0, __v: 0, role: 0, createdAt: 0, password: 0 }
+                        );
+
+                        // Tạo đối tượng để lưu thông tin và số lần lặp
+                        let userDataWithCount = {};
+
+                        // Lặp qua mảng arrUserIdsNotReturned để đếm số lần lặp của mỗi người dùng
+                        arrUserIdsNotReturned.forEach((username) => {
+                            // Kiểm tra xem người dùng đã tồn tại trong userDataWithCount chưa
+                            if (!userDataWithCount[username]) {
+                                // Nếu chưa, thêm người dùng vào userDataWithCount và đặt số lần lặp là 1
+                                userDataWithCount[username] = {
+                                    user: users.find(
+                                        (user) => user?.username === username
+                                    ),
+                                    numDevice: 1,
+                                };
+                            } else {
+                                // Nếu đã có, tăng số lần lặp lên 1
+                                userDataWithCount[username].numDevice++;
+                            }
+                        });
+
+                        // Chuyển đổi đối tượng thành mảng và trả về
+                        const userDataArray = Object.values(userDataWithCount);
+
+                        // In ra mảng userDataArray để kiểm tra
+                        // console.log(userDataArray);
+
+                        // Trả về mảng userDataArray
+                        return userDataArray;
+                    } catch (error) {
+                        console.error("Error:", error);
+                        return null;
+                    }
+                }
+
+                // Sử dụng hàm để lấy dữ liệu và đếm số lần lặp
+                arrUserIdsNotReturned = await getUserDataAndCount(
+                    arrUserIdsNotReturned
+                );
+                // console.log(arrUserIdsNotReturned);
+
+                // ==== Task 2: Thống kê những người mượn quá hạn nhưng chưa trả
+                //T1: Đầu tiên phải lấy ra được các thiết bị đã mượn nhưng chưa trả
+                // => arrDeviceIdsNotReturned <=
+
+                // Sau đó tìm kiếm trong bảng loan với những deviceId này, những deviceId nào với expectedReturnDate < now
+
+                let arrDeviceIdsDue;
+
+                // Bước 1: Tìm kiếm và lọc các bản ghi trong bảng Loan dựa trên arrDeviceIdsNotReturned
+                await Loan.aggregate([
+                    // Match records based on arrDeviceIdsNotReturned
+                    {
+                        $match: {
+                            device: { $in: arrDeviceIdsNotReturned },
+                        },
+                    },
+                    // Group by device, select the latest record based on idRecord
+                    {
+                        $group: {
+                            _id: "$device",
+                            latestRecord: { $max: "$idRecord" },
+                            records: { $push: "$$ROOT" },
+                        },
+                    },
+                    // Unwind the grouped records
+                    {
+                        $unwind: "$records",
+                    },
+                    // Match records with the latest idRecord
+                    {
+                        $match: {
+                            $expr: { $eq: ["$records.idRecord", "$latestRecord"] },
+                        },
+                    },
+                    // Filter overdue loans
+                    {
+                        $match: {
+                            "records.transactionStatus": "Borrowed",
+                            "records.expectedReturnDate": { $lt: new Date() },
+                        },
+                    },
+                    // Lookup device information
+                    {
+                        $lookup: {
+                            from: "devices", // Assuming the collection name is "devices"
+                            localField: "records.device",
+                            foreignField: "_id",
+                            as: "device_info",
+                        },
+                    },
+                    // Lookup borrower information
+                    {
+                        $lookup: {
+                            from: "users", // Assuming the collection name is "users"
+                            localField: "records.borrower",
+                            foreignField: "_id",
+                            as: "borrower_info",
+                        },
+                    },
+                    // Project to reshape the output documents
+                    {
+                        $project: {
+                            _id: "$records._id",
+                            idRecord: "$records.idRecord",
+                            device: { $arrayElemAt: ["$device_info.name", 0] }, // Assuming device name is in the "name" field
+                            borrower: { $arrayElemAt: ["$borrower_info.username", 0] }, // Assuming borrower username is in the "username" field
+                            fullname: { $arrayElemAt: ["$borrower_info.fullname", 0] }, // Assuming borrower username is in the "username" field
+                            phone: { $arrayElemAt: ["$borrower_info.phone", 0] }, // Assuming borrower username is in the "username" field
+                            borrowedAt: "$records.borrowedAt",
+                            expectedReturnDate: "$records.expectedReturnDate",
+                            actualReturnDate: "$records.actualReturnDate",
+                            transactionStatus: "$records.transactionStatus",
+                        },
+                    },
+                ])
+                .then((result) => {
+                    // console.log(result);
+                    // console.log(user);
+                    const userExists = result.some(userRecord => userRecord.borrower === user[0].username);
+                    // console.log(userExists);
+                    if (userExists == true) {
+                        notReturn = true
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+                // #### --- ####
             }
+
 
             const fullname = encodeURIComponent(user[0].fullname);
             // console.log(`User ${user[0].username} just login!`.bgBlue);
@@ -125,7 +301,8 @@ module.exports.login = async (req, res, next) => {
 
             res.status(200).json({
                 success: true,
-                message: 'Login success'
+                message: 'Login success',
+                notReturn: notReturn
             })
         })
     } catch (error) {
@@ -187,8 +364,14 @@ module.exports.logOut = async (req, res, next) => {
     
         res.setHeader('Set-Cookie', [sessionId, sessionUserName, sessionToken]);
     
-        const handleReturn = handleAlertWithRedirectPage('Đăng xuất thành công!', '/')
-        res.send(handleReturn)
+        const handleReturn = handleAlertWithRedirectPage('', '/')
+        res.send(
+            `<script>
+                localStorage.setItem("notReturn", "true");
+                alert('Đăng xuất thành công!')
+                window.location.assign(window.location.origin  + '/');
+            </script>`
+        )
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
