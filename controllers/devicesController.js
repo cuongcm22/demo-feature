@@ -11,7 +11,8 @@ const {
     User,
     Loan,
     Log,
-    DeviceType
+    DeviceType,
+    Config
  } = require('../models/models.js')
 
 function convertDatetoString(dateString) {
@@ -134,6 +135,7 @@ module.exports.ShowReportDevicePage = async (req, res, next) => {
             return res.redirect('/404')
         }
 
+        const configSchema = await Config.findOne();
         const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
         const locations = await Location.find({}, 'name').then(locations => locations.map(location => location.name));
         const suppliers = await Supplier.find({}, 'name').then(suppliers => suppliers.map(supplier => supplier.name));
@@ -229,7 +231,9 @@ module.exports.ShowReportDevicePage = async (req, res, next) => {
                 formattedDevices: JSON.stringify(devices),
                 devicetypes: JSON.stringify(devicetypes),
                 locations: JSON.stringify(locations),
-                suppliers: JSON.stringify(suppliers)
+                suppliers: JSON.stringify(suppliers),
+                settingSizeImg: JSON.stringify(configSchema.settingSizeImg),
+                settingSizeVideo: JSON.stringify(configSchema.settingSizeVideo)
             });
         })
     } catch (error) {
@@ -383,6 +387,7 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
             return res.redirect('/404')
         }
 
+        const configSchema = await Config.findOne();
         const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype?.name));
 
         // Khai báo các biến cần sử dụng
@@ -440,7 +445,9 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
                 'Quản lý lịch sử mượn trả': '/record/loanrecord'
             },
             data: JSON.stringify(formattedDevices),
-            deviceTypes: JSON.stringify(devicetypes)
+            deviceTypes: JSON.stringify(devicetypes),
+            settingSizeImg: JSON.stringify(configSchema.settingSizeImg),
+            settingSizeVideo: JSON.stringify(configSchema.settingSizeVideo)
         });
 
     } catch (error) {
@@ -514,6 +521,7 @@ module.exports.ShowReturnDevicePage = async (req, res, next) => {
             return res.redirect('/404')
         }
 
+        const configSchema = await Config.findOne();
         const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype?.name));
 
         const userId = req.userId;
@@ -562,7 +570,9 @@ module.exports.ShowReturnDevicePage = async (req, res, next) => {
                 'Quản lý lịch sử mượn trả': '/record/loanrecord'
             },
             data: JSON.stringify(formattedDevices),
-            deviceTypes: JSON.stringify(devicetypes)
+            deviceTypes: JSON.stringify(devicetypes),
+            settingSizeImg: JSON.stringify(configSchema.settingSizeImg),
+            settingSizeVideo: JSON.stringify(configSchema.settingSizeVideo)
         });
         
     } catch (error) {

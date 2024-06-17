@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 
 // Import device model
 // const User = require("../models/usersSchema.js");
-const { User } = require('../models/models')
+const { User, Config } = require('../models/models')
 
 const bcrypt = require('bcrypt');
 const { match } = require("assert");
@@ -253,3 +253,68 @@ module.exports.manageUserDB = async (req, res, next) => {
         res.status(400).json({ message: error.message });
     }
 }
+
+
+module.exports.ShowConfigPage = async (req, res, next) => {
+    try {
+        const roleUserId = req.userId.role
+        if (roleUserId != 'admin') {
+            return res.redirect('/404')
+        }
+
+        const configSchema = await Config.findOne({}, { _id: 0, __v: 0 });
+
+        res.render("./contents/admin/configSetting.pug", {
+            title: 'Config',
+            routes: {
+                'Home': '/',
+                'Login': '/user/login',
+                'Register': '/user/register'
+            },
+            configSetting: configSchema
+        });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+}
+
+module.exports.saveConfig = async (req, res, next) => {
+    try {
+        const roleUserId = req.userId.role
+        if (roleUserId != 'admin') {
+            return res.redirect('/404')
+        }
+        
+        const { depreciationRate, settingSizeImg, settingSizeVideo } = req.body;
+
+        // Kiểm tra tỷ lệ khấu hao
+        if (0 < depreciationRate && depreciationRate < 1) {}
+        else {return  res.status(200).json({
+            success: false
+        })}
+        console.log(depreciationRate, settingSizeImg, settingSizeVideo );
+        const updatedConfig = await Config.findOneAndUpdate(
+            {},
+            {
+              depreciationRate,
+              settingSizeImg,
+              settingSizeVideo
+            },
+            {
+              new: true, // Trả về tài liệu đã cập nhật
+              upsert: true // Tạo mới nếu không tìm thấy
+            }
+        ).then(() => {
+            res.status(200).json({
+                success: true
+            })
+        }).catch(err => {
+            res.status(200).json({
+                success: false
+            })
+        })
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+}
+

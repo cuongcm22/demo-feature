@@ -72,8 +72,8 @@ function populateTable(event) {
     const device = mockData.find(item => item._id === id);
     modalBody.innerHTML = `
     <h3 class="card-title">${device.name}</h3>
-    <img style="width: 100%; height: 220px; object-fit: contain;" id="deviceImage" src="${device.imageUrl ? device.imageUrl : '/public/images/image_placeholder.jpg'}" alt="Tivi Image">
-    <video style="width: 100%; height: 220px; object-fit: contain;" id="deviceVideo" controls ${device.videoUrl ? '' : 'hidden'}>
+    <img style="width: 100%; max-height: ${settingSizeImg.height}; object-fit: contain; margin-top: 30px" id="deviceImage" src="${device.imageUrl ? device.imageUrl : '/public/images/image_placeholder.jpg'}" alt="Tivi Image">
+    <video style="width: 100%; height: 220px; object-fit: contain; margin-top: 30px" id="deviceVideo" controls ${device.videoUrl ? '' : 'hidden'}>
     <source src="${device.videoUrl}" type="video/mp4">
     Your browser does not support the video tag.
     </video>

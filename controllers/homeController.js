@@ -19,6 +19,7 @@ const {
     Loan,
     Log,
     DeviceType,
+    Config
 } = require("../models/models.js");
 
 // Module
@@ -28,6 +29,20 @@ const {
     exportHeaderLayout,
     exportDataToXlsxFile,
 } = require("../modules/exportFileXlsx.js");
+const { findOne } = require("../models/devices.schema.js");
+
+function calculateDepreciation(cost, year, depreciationRate) {
+    // Lấy năm hiện tại theo múi giờ của server
+    const currentYear = new Date().getFullYear();
+
+    // Tính số năm kể từ khi tài sản được mua
+    const years = currentYear - year;
+
+    // Tính giá trị còn lại của tài sản sau khi khấu hao
+    const remainingValue = cost * Math.pow(1 - depreciationRate, years);
+
+    return remainingValue.toString();
+}
 
 function getStringDateTime() {
     const currentTime = Date.now();
@@ -398,6 +413,9 @@ module.exports.exportFileCSV = async (req, res, next) => {
 };
 
 module.exports.updateXlsxFile = async (req, res, next) => {
+    const configSchema = await Config.findOne()
+    const depreciationRate = configSchema.depreciationRate
+
     const deviceTypesName = req.body.deviceTypes
     // const deviceTypesName = "Dụng cụ lâu bền"
     // const deviceTypesName = "Tài sản cố định"
@@ -526,7 +544,8 @@ module.exports.updateXlsxFile = async (req, res, next) => {
                     'Giá trị còn lại',
                     'Số lượng',
                     'Nguyên giá',
-                    'Giá trị còn lại'
+                    'Giá trị còn lại',
+                    'Tỷ lệ khấu hao'
                   ]
                 // console.log(headerRow);
 
@@ -558,12 +577,28 @@ module.exports.updateXlsxFile = async (req, res, next) => {
                 //     location: device.location.name,
                 //     supplier: device.supplier.name,
                 // }));
-                const formattedDevices = devices.map((device) => ({
-                    ...device.toObject(),
-                    deviceType: device?.deviceType ? device?.deviceType.name : null,
-                    location: device?.location ? device?.location.name : null,
-                    supplier: device?.supplier ? device?.supplier.name : null,
-                }));
+                // const formattedDevices = devices.map((device) => ({
+                //     ...device.toObject(),
+                //     deviceType: device?.deviceType ? device?.deviceType.name : null,
+                //     location: device?.location ? device?.location.name : null,
+                //     supplier: device?.supplier ? device?.supplier.name : null,
+                // }));
+                
+                const formattedDevices = devices.map((device) => {
+                    // Lấy năm từ chuỗi purchaseDate
+                    const purchaseYear = new Date(device.purchaseDate).getFullYear();
+                    const cost = parseFloat(device.price.replace(/[^0-9.-]+/g,"")); // Chuyển đổi price thành số
+                    
+                    const depreciation = calculateDepreciation(cost, purchaseYear, depreciationRate);
+                    
+                    return {
+                        ...device.toObject(),
+                        deviceType: device?.deviceType ? device?.deviceType.name : null,
+                        location: device?.location ? device?.location.name : null,
+                        supplier: device?.supplier ? device?.supplier.name : null,
+                        depreciation
+                    };
+                });
 
                 const filteredDevices = formattedDevices.filter(device => device.deviceType !== null);
                 // console.log(formattedDevices);

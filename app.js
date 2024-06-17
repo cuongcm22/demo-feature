@@ -83,10 +83,10 @@ async function listFilesWithExtension(directory, extensions) {
   try {
       // Kiểm tra xem directory có tồn tại không
       await fs.access(directory, fs.constants.F_OK);
-
+    
       // Tách các phần mở rộng trong biến extensions
       const allowedExtensions = extensions.split(', ');
-
+     
       // Lấy danh sách các file trong thư mục
       const files = await fs.readdir(directory);
 
@@ -116,17 +116,18 @@ async function listFilesWithExtension(directory, extensions) {
       }
       return resultList;
   } catch (error) {
+      console.log(error);
       throw new Error(`Thư mục '${directory}' không tồn tại.`);
   }
 }
 
 app.get('/api/v1/exports',authenToken.authenToken, async (req, res) => {
     const { role } = req.userId;
-
+   
     if (role != 'admin') {
-        return res.redirect('/404')
+      return res.redirect('/404')
     }
-
+    
     const directory = 'assets/public/csv/export';
     const extensions = 'xlsx, csv, xls, doc, docx';
 
@@ -135,7 +136,7 @@ app.get('/api/v1/exports',authenToken.authenToken, async (req, res) => {
       // console.log(result[0]);
       res.json(result);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+      res.status(500).json({ error: error.message });
     }
 });
 
@@ -183,7 +184,7 @@ app.get('/api/v1/exports/:fileName/download',authenToken.authenToken, (req, res)
 });
 
 const https = require('https');
-var fs = require('fs');
+var fsNoneAsync = require('fs');
 // huet.devicemanage.com.vn
 // Kết nối tới cổng máy chủ
 const PORT = process.env.PORT || 443; // Sử dụng cổng mặc định 3100 nếu không được chỉ định
@@ -202,8 +203,8 @@ const PORT = process.env.PORT || 443; // Sử dụng cổng mặc định 3100 n
 //   console.log('Server is running on port 443');
 // });
 const options = {
-  key: fs.readFileSync('./server.key'), // Path to your private key file
-  cert: fs.readFileSync('./server.crt'), // Path to your certificate file
+  key: fsNoneAsync.readFileSync('./server.key'), // Path to your private key file
+  cert: fsNoneAsync.readFileSync('./server.crt'), // Path to your certificate file
 };
 
 // Create HTTPS server

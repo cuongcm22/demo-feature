@@ -26,4 +26,9 @@ router.get('/logout', authController.logOut);
 router.get('/manage', authenToken.authenToken, authController.ShowManageUserPage);
 router.post('/update', authenToken.authenToken, authController.manageUserDB);
 
+
+// Route quản lý thiết lập 
+router.get('/config', authenToken.authenToken, authController.ShowConfigPage);
+router.post('/config/save', authenToken.authenToken, authController.saveConfig);
+
 module.exports = router;

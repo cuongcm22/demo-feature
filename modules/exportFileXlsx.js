@@ -85,24 +85,35 @@ async function exportDataToXlsxFile(tableNames, headerRowOrigin, headerRow, myDa
                         
                         // worksheet.addRow(rowData);
                         const deviceMap = new Map();
+                        let totalPrice = myData.map(item => parseInt(item.price));
+                        let totalDepreciation = myData.map(item => parseInt(item.depreciation));
+                        let totalQuantity = 0;
 
+                        totalPrice = totalPrice.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+                        totalDepreciation = totalDepreciation.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+                        
                         myData.forEach((data, index) => {
-                            const { name, serialNumber, purchaseDate, price } = data;
+                            const { name, serialNumber, purchaseDate, price, depreciation } = data;
                             
                             if (!deviceMap.has(name)) {
                               deviceMap.set(name, {
                                 quantity: 1,
                                 price: parseInt(price),
                                 purchaseDate: new Date(purchaseDate).getFullYear(),
+                                depreciation: parseInt(depreciation),
                                 index: deviceMap.size + 1
                               });
                             } else {
                               const device = deviceMap.get(name);
                               device.quantity += 1;
                               device.price += parseInt(price);
+                              device.depreciation += parseInt(depreciation)
                             }
+
+                            totalQuantity += 1;
                           });
-                          
+                        //   console.log(deviceMap);
+                        // console.log(totalQuantity);
                           deviceMap.forEach((device, name) => {
                             const rowData = [
                               device.index,
@@ -117,10 +128,22 @@ async function exportDataToXlsxFile(tableNames, headerRowOrigin, headerRow, myDa
                               '', // Nguyên giá
                               device.quantity,
                               device.price,
-                              '' // Nguyên giá
+                              '', // Nguyên giá,
+                              device.depreciation
                             ];
+                            // console.log(rowData);
                             worksheet.addRow(rowData);
-                          });
+                        });
+                        const rowTotal = [
+                            '',      'Cộng',
+                            '',     '',
+                            totalQuantity,      totalPrice,
+                            '',     totalQuantity,
+                            totalPrice, '',
+                            totalQuantity,      totalPrice,
+                            '',     totalDepreciation
+                          ]
+                        worksheet.addRow(rowTotal);
 
                         // Add header row
                         // worksheet.getRow(1).values = headerRowOrigin;
