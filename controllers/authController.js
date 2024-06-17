@@ -471,11 +471,11 @@ module.exports.saveConfig = async (req, res, next) => {
         const { depreciationRate, settingSizeImg, settingSizeVideo } = req.body;
 
         // Kiểm tra tỷ lệ khấu hao
-        if (0 < depreciationRate && depreciationRate < 1) {}
+        if (0 < depreciationRate && depreciationRate < 100) {}
         else {return  res.status(200).json({
             success: false
         })}
-        console.log(depreciationRate, settingSizeImg, settingSizeVideo );
+        // console.log(depreciationRate, settingSizeImg, settingSizeVideo );
         const updatedConfig = await Config.findOneAndUpdate(
             {},
             {
