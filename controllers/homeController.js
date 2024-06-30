@@ -431,7 +431,7 @@ module.exports.exportFileCSV = async (req, res, next) => {
 module.exports.updateXlsxFile = async (req, res, next) => {
     const configSchema = await Config.findOne()
     const depreciationRate = configSchema.depreciationRate
-
+    
     const deviceTypesName = req.body.deviceTypes
     // const deviceTypesName = "Dụng cụ lâu bền"
     // const deviceTypesName = "Tài sản cố định"
@@ -601,15 +601,14 @@ module.exports.updateXlsxFile = async (req, res, next) => {
                 // }));
                 
                 const formattedDevices = devices.map((device) => {
+             
                     // Lấy năm từ chuỗi purchaseDate
                     const purchaseYear = new Date(device.purchaseDate).getFullYear();
                     const cost = parseFloat(device.price.replace(/[^0-9.-]+/g,"")); // Chuyển đổi price thành số
                     
-                    const depreciation = calculateDepreciation(cost, purchaseYear, depreciationRate);
+                    const depreciation = calculateDepreciation(cost, purchaseYear, (depreciationRate/100))
                     
-                    // console.log(device);
-                    const remainValue = calculateRemainingValue(parseInt(device.price), depreciationRate)
-                    
+                    const remainValue = calculateRemainingValue(parseInt(device.price), (depreciationRate/100))
                     return {
                         ...device.toObject(),
                         deviceType: device?.deviceType ? device?.deviceType.name : null,
@@ -619,8 +618,9 @@ module.exports.updateXlsxFile = async (req, res, next) => {
                         remainValue
                     };
                 });
-
+                
                 const filteredDevices = formattedDevices.filter(device => device.deviceType !== null);
+                
                 // console.log(formattedDevices);
                 // console.log(formattedDevices);
                 setTimeout(() => {
