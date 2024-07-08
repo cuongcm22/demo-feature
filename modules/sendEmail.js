@@ -4,11 +4,11 @@ const nodemailer = require('nodemailer')
 const path = require('path');
 
 module.exports.sendMail = async (req, res, next) => {
-    console.log('Send mail route');
+    // console.log('Send mail route');
     const { userEmail, csvFile } = req.body;
     
-    console.log('csvPath: ', csvFile);
-    const csvPath = path.join(__dirname, '../assets/public', 'csv', csvFile);
+    // console.log('csvPath: ', csvFile);
+    const csvPath = path.join(__dirname, '../assets/public/csv/export', csvFile);
     // Send email
     const transporter = nodemailer.createTransport({
         // Your SMTP configuration here
@@ -44,7 +44,7 @@ More infomation, please contact us!
             );
             return;
         }
-        console.log('Email sent: ' + info.response);
+        // console.log('Email sent: ' + info.response);
         res.send(
             `<script>
                 alert('Gửi mail thành công, vui lòng kiểm tra hộp thư của bạn!')

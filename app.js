@@ -151,12 +151,12 @@ app.get('/api/v1/show',authenToken.authenToken, async (req, res) => {
       res.render("./contents/exportFiles.pug", {
         title: 'Thiết bị',
         routes: {
-            'Trang chủ': '/',
-            'Thông tin thiết bị': '/device/report',
-            'Tạo thiết bị': '/device/create',
-            'Mượn thiết bị': '/device/loan',
-            'Đã mượn': '/device/return',
-            'Quản lý lịch sử mượn trả': '/record/loanrecord'
+            // 'Trang chủ': '/',
+            // 'Thông tin thiết bị': '/device/report',
+            // 'Tạo thiết bị': '/device/create',
+            // 'Mượn thiết bị': '/device/loan',
+            // 'Đã mượn': '/device/return',
+            // 'Quản lý lịch sử mượn trả': '/record/loanrecord'
         },
       })
     } catch (error) {

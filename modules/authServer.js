@@ -18,7 +18,16 @@ module.exports.authenToken = async (req, res, next) => {
         const cookies = req.headers.cookie;
         // console.log(cookies);
         const cookiesArray = cookies.split("; ");
-        const sessionToken = cookiesArray[2].split("=")[1];
+        // console.log(cookiesArray);
+        // const sessionToken = cookiesArray[2].split("=")[1];
+        let sessionToken = null;
+
+        cookiesArray.forEach(cookie => {
+            const [key, value] = cookie.split('=');
+            if (key.trim() === 'token') {
+                sessionToken = value;
+            }
+        });
         
         jwt.verify(sessionToken, process.env.ACCESS_TOKEN_SECRET, async (err, decodedData) => {
             // console.log(err, decodedData);

@@ -56,10 +56,9 @@ module.exports.showBioPage = async (req, res, next) => {
             }
         } else {
             routesTemp = {
-                'Về trang chủ': '/',
                 'Quản trị viên': '/user/manage',
-                'Đăng nhập': '/user/login',
-                'Đăng ký': '/user/register'
+                // 'Đăng nhập': '/user/login',
+                // 'Đăng ký': '/user/register'
             }
         }
 

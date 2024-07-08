@@ -45,21 +45,29 @@ header.header
               a.nav-link.active(aria-current='page' href='/') Trang chủ
             li.nav-item
               a.nav-link(href='/user') Quản lý profile
-            .dropdown
-              .select
-                //- span.selected Youtube
-                li.nav-item.selected Chức năng
-                .caret
-              ul.menu
+
+            if Object.keys(routes).length < 3
+              each route, nameRoute in routes
                 li.nav-item
-                  a.nav-link(href='/device/report') Quản lý thiết bị
-                li.nav-item
-                  a.nav-link(href='/device/qrcode') Quét mã thiết bị
-                each route, nameRoute in routes
-                  li
-                    a.nav-link(href=route) #{nameRoute}
-                li 
-                  a#btnLogout.nav-link(href='/user/logout') Đăng xuất
+                  a.nav-link(href=href=route) #{nameRoute}
+              li.nav-item
+                a#btnLogout.nav-link(href='/user/logout') Đăng xuất
+            else 
+              .dropdown
+                .select
+                  //- span.selected Youtube
+                  li.nav-item.selected Chức năng
+                  .caret
+                ul.menu
+                  li.nav-item
+                    a.nav-link(href='/device/report') Quản lý thiết bị
+                  li.nav-item
+                    a.nav-link(href='/device/qrcode') Quét mã thiết bị
+                  each route, nameRoute in routes
+                    li
+                      a.nav-link(href=route) #{nameRoute}
+                  li 
+                    a#btnLogout.nav-link(href='/user/logout') Đăng xuất
                 //- li Instagram
                 //- li Twitter
                 //- li Github

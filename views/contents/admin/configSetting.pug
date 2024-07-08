@@ -95,18 +95,18 @@ span.btn-setting.mt-2.btn(type='button' data-bs-toggle='offcanvas' data-bs-targe
   form#configForm
     .mb-3
       label.form-label(for='depreciationRate') Tỷ lệ khấu hao tài sản (phần trăm)
-      input#depreciationRate.form-control(type='number' step='0' required='' value=configSetting.depreciationRate)
+      input#depreciationRate.form-control(type='number' step='0' min='10' required='' value=configSetting.depreciationRate)
     .mb-3
-      label.form-label(for='heightImg') Chiều cao ảnh
+      label.form-label(for='heightImg') Chiều cao ảnh (px)
       input#heightImg.form-control(type='number' required='' value=configSetting.settingSizeImg.height)
     .mb-3
-      label.form-label(for='widthImg') Chiều rộng ảnh
+      label.form-label(for='widthImg') Chiều rộng ảnh (px)
       input#widthImg.form-control(type='number' required='' value=configSetting.settingSizeImg.width)
     .mb-3
-      label.form-label(for='heightVideo') Chiều cao ảnh
+      label.form-label(for='heightVideo') Chiều cao video (px)
       input#heightVideo.form-control(type='number' required='' value=configSetting.settingSizeImg.height)
     .mb-3
-      label.form-label(for='widthVideo') Chiều rộng ảnh
+      label.form-label(for='widthVideo') Chiều rộng video (px)
       input#widthVideo.form-control(type='number' required='' value=configSetting.settingSizeImg.width)
     
     button.btn.btn-primary.w-100(type='submit') Lưu thiết lập
