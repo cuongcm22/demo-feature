@@ -175,7 +175,7 @@ async function editUser(event) {
                 cancelButton.click()
                 
                 alert('Cập nhật trạng thái người dùng thành công!')
-
+                window.location.assign(window.location.origin  + '/user/manage');
                 
             } else {
                 alert('Có lỗi xảy ra khi cập nhật trạng thái người dùng.')

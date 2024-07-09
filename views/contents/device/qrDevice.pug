@@ -6,6 +6,27 @@ section.container
         .mb-3
             #qr-reader(style='max-width: 100%;')
             #qr-reader-results
+    
+    div.wrapper-handle-qr(style='display: none')
+        h2 Mã của bạn
+        .input-group.mb-3
+            input.form-control#handle-qr-code(type='text' value='Sample QR Code')
+            .input-group-append
+                button.btn.btn-success(onclick='copyInputValue()') Copy
+
+    script.
+        function copyInputValue() {
+        // Get the input element
+        var input = document.getElementById('handle-qr-code');
+        // Select the text inside the input element
+        input.select();
+        input.setSelectionRange(0, 99999); // For mobile devices
+        // Copy the text to the clipboard
+        document.execCommand('copy');
+        // Optionally, provide feedback to the user
+        alert('Đã copy mã của bạn: ' + input.value);
+        }
+
 
 
 script(src='https://unpkg.com/html5-qrcode')
@@ -23,6 +44,8 @@ script.
             // Handle on success condition with the decoded message.
             // console.log(`Scan result ${decodedText}`, decodedResult);
             document.querySelector(".getDetailDevice").value = decodedText;
+            document.querySelector("#handle-qr-code").value = decodedText;
+            document.querySelector(".wrapper-handle-qr").style.display = 'block'
         }
     }
     var html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", {

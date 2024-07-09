@@ -14,6 +14,7 @@ section.container
     table.table.table-striped
       thead
         tr
+          th(scope='col') STT
           th(scope='col') Tên thiết bị
           th(scope='col') Loại thiết bị
           th(scope='col') Tình trạng
@@ -50,7 +51,7 @@ style.
   .modal-dialog.modal-lg
     .modal-content
       .modal-header
-        h5.modal-title Device Information
+        h5.modal-title Thông tin thiết bị
         button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
       #modalBody.modal-body
         // Device information will be displayed here

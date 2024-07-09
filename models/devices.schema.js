@@ -20,6 +20,7 @@ const deviceSchema = new mongoose.Schema({
   assignedUser: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   loans: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Loan' }],
   logs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Log' }],
+  depreciationRate: { type: Number, require: true },
 });
 
 module.exports = mongoose.model('Device', deviceSchema);

@@ -188,25 +188,13 @@ var fsNoneAsync = require('fs');
 // huet.devicemanage.com.vn
 // Kết nối tới cổng máy chủ
 const PORT = process.env.PORT || 443; // Sử dụng cổng mặc định 3100 nếu không được chỉ định
-// app.listen(PORT, () => console.log(`Máy chủ đang chạy trên cổng ${PORT}`));
+// const PORT = process.env.PORT || 80; // Sử dụng cổng mặc định 3100 nếu không được chỉ định
 
-
-// const options = {
-//     key: fs.readFileSync('./server.key'), // replace it with your key path
-//     cert: fs.readFileSync('./server.crt'), // replace it with your certificate path
-// }
-
-// https.createServer(options, (req, res) => {
-//   res.writeHead(200);
-//   res.end('Hello, HTTPS World!');
-// }).listen(80, () => {
-//   console.log('Server is running on port 443');
-// });
 const options = {
   key: fsNoneAsync.readFileSync('./server.key'), // Path to your private key file
   cert: fsNoneAsync.readFileSync('./server.crt'), // Path to your certificate file
 };
-
+// const options = {}
 // Create HTTPS server
 const server = https.createServer(options, app);
 

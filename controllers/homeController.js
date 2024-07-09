@@ -36,27 +36,18 @@ function calculateDepreciation(cost, year, depreciationRate) {
     const currentYear = new Date().getFullYear();
 
     // Tính số năm kể từ khi tài sản được mua
-    const years = currentYear - year;
-
+    const years = parseInt(currentYear - year);
+    const tongLuongKhauHao = years * (depreciationRate / 100)
     // Tính giá trị còn lại của tài sản sau khi khấu hao
-    const remainingValue = cost * Math.pow(1 - depreciationRate, years);
+    const depreciationValue = cost * tongLuongKhauHao
 
-    return remainingValue.toString();
+    return depreciationValue.toString()
 }
 
-function calculateRemainingValue(initialValue, depreciationRate) {
-    // Validate input values
-    if (typeof initialValue !== 'number' || typeof depreciationRate !== 'number') {
-        throw new Error("Initial value and depreciation rate must be numbers.");
-    }
-    
-    if (initialValue < 0 || depreciationRate < 0 || depreciationRate > 1) {
-        throw new Error("Initial value must be non-negative and depreciation rate must be between 0 and 1.");
-    }
-    
-    // Calculate remaining value
-    var remainingValue = initialValue * (1 - depreciationRate);
-    
+function calculateRemainingValue(initValue, depreciationValue) {
+  
+    var remainingValue = initValue - depreciationValue
+
     return remainingValue;
 }
 
@@ -429,8 +420,8 @@ module.exports.exportFileCSV = async (req, res, next) => {
 };
 
 module.exports.updateXlsxFile = async (req, res, next) => {
-    const configSchema = await Config.findOne()
-    const depreciationRate = configSchema.depreciationRate
+    // const configSchema = await Config.findOne()
+    // const depreciationRate = configSchema.depreciationRate
     
     const deviceTypesName = req.body.deviceTypes
     // const deviceTypesName = "Dụng cụ lâu bền"
@@ -606,9 +597,9 @@ module.exports.updateXlsxFile = async (req, res, next) => {
                     const purchaseYear = new Date(device.purchaseDate).getFullYear();
                     const cost = parseFloat(device.price.replace(/[^0-9.-]+/g,"")); // Chuyển đổi price thành số
                     
-                    const depreciation = calculateDepreciation(cost, purchaseYear, (depreciationRate/100))
+                    const depreciation = calculateDepreciation(cost, purchaseYear, device.depreciationRate)
                     
-                    const remainValue = calculateRemainingValue(parseInt(device.price), (depreciationRate/100))
+                    const remainValue = calculateRemainingValue(cost, depreciation)
                     return {
                         ...device.toObject(),
                         deviceType: device?.deviceType ? device?.deviceType.name : null,

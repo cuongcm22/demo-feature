@@ -79,7 +79,7 @@ $(document).ready(function() {
     $('#deviceUrlImg').on('change', function(event) {
 
         var file = this.files[0];
-        var maxSize = 2 * 1024 * 1024; // Giới hạn kích thước tập tin là 1MB
+        var maxSize = 10 * 1024 * 1024; // Giới hạn kích thước tập tin là 1MB
         if (file.size > maxSize) {
             alert('Kích thước ảnh tối thiểu 2mb.');
             this.value = ''; // Xóa lựa chọn tập tin
@@ -118,7 +118,7 @@ $(document).ready(function() {
     $('#deviceVideo').on('change', function(event) {
 
         var file = this.files[0];
-        var maxSize = 25 * 1024 * 1024; // Giới hạn kích thước tập tin là 100MB
+        var maxSize = 100 * 1024 * 1024; // Giới hạn kích thước tập tin là 100MB
         if (file.size > maxSize) {
             alert('Kích thước video tối thiểu 100mb.');
             this.value = ''; // Xóa lựa chọn tập tin

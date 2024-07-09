@@ -92,7 +92,7 @@ module.exports.showPageGetDetailDevice = async (req, res, next) => {
         res.render("./contents/device/getDevice.pug", {
             title: 'Thiết bị',
             routes: {
-                'Tạo thiết bị': '/device/create',
+                'Thêm thiết bị': '/device/create',
                 'Mượn thiết bị': '/device/loan',
                 'Đã mượn': '/device/return',
                 'Quản lý lịch sử mượn trả': '/record/loanrecord'
@@ -113,7 +113,7 @@ module.exports.showGetDetailDeviceByQrCode = async (req, res) => {
         res.render("./contents/device/qrDevice.pug", {
             title: 'Thiết bị',
             routes: {
-                'Tạo thiết bị': '/device/create',
+                'Thêm thiết bị': '/device/create',
                 'Mượn thiết bị': '/device/loan',
                 'Đã mượn': '/device/return',
                 'Quản lý lịch sử mượn trả': '/record/loanrecord'
@@ -207,6 +207,7 @@ module.exports.ShowReportDevicePage = async (req, res, next) => {
                 purchaseDate: { $dateToString: { format: '%Y-%m-%dT%H:%M:%S.%LZ', date: '$purchaseDate' } },
                 warrantyExpiry: { $dateToString: { format: '%Y-%m-%dT%H:%M:%S.%LZ', date: '$warrantyExpiry' } },
                 createDate: { $dateToString: { format: '%Y-%m-%dT%H:%M:%S.%LZ', date: '$createDate' } },
+                depreciationRate: 1,
                 status: {
                   $switch: {
                     branches: [
@@ -223,12 +224,12 @@ module.exports.ShowReportDevicePage = async (req, res, next) => {
             res.render("./contents/report/reportDevice.pug", {
                 title: 'Thiết bị',
                 routes: {
-                    'Tạo thiết bị': '/device/create',
+                    'Thêm thiết bị': '/device/create',
                     'Mượn thiết bị': '/device/loan',
                     'Đã mượn': '/device/return',
                     'Quản lý lịch sử mượn trả': '/record/loanrecord'
                 },
-                formattedDevices: JSON.stringify(devices),
+                formattedDevices: JSON.stringify(devices.reverse()),
                 devicetypes: JSON.stringify(devicetypes),
                 locations: JSON.stringify(locations),
                 suppliers: JSON.stringify(suppliers),
@@ -257,7 +258,7 @@ module.exports.showCreateDevicePage = async (req, res, next) => {
         res.render("./contents/device/createDevice.pug", {
             title: 'Thiết bị',
             routes: {
-                'Tạo thiết bị': '/device/create',
+                'Thêm thiết bị': '/device/create',
                 'Mượn thiết bị': '/device/loan',
                 'Đã mượn': '/device/return',
                 'Quản lý lịch sử mượn trả': '/record/loanrecord'
@@ -289,7 +290,8 @@ module.exports.createDeviceDB = async (req, res, next) => {
             deviceType: deviceType[0],
             location: location[0],
             supplier: supplier[0],
-            createDate: Date.now()
+            createDate: Date.now(),
+            depreciationRate: 15,
         }
 
         const device = new Device(data)
@@ -439,7 +441,7 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
         res.render("./contents/device/loanDevice.pug", {
             title: 'Thiết bị',
             routes: {
-                'Tạo thiết bị': '/device/create',
+                'Thêm thiết bị': '/device/create',
                 'Mượn thiết bị': '/device/loan',
                 'Đã mượn': '/device/return',
                 'Quản lý lịch sử mượn trả': '/record/loanrecord'
@@ -564,7 +566,7 @@ module.exports.ShowReturnDevicePage = async (req, res, next) => {
         res.render("./contents/device/returnDevice.pug", {
             title: 'Thiết bị',
             routes: {
-                'Tạo thiết bị': '/device/create',
+                'Thêm thiết bị': '/device/create',
                 'Mượn thiết bị': '/device/loan',
                 'Đã mượn': '/device/return',
                 'Quản lý lịch sử mượn trả': '/record/loanrecord'

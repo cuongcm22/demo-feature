@@ -22,16 +22,16 @@ module.exports.uploadFile = async (req, res, next) => {
 
 module.exports.deleteFile = async (req, res, next) => {
     const { filename } = req.body;
-
+    
     if (!filename) {
         return res.status(200).json({
             success: false,
             message: 'No filename'
         });
     }
-
+    
     const filePath = path.join(__dirname, '../assets', filename);
-
+   
     fs.access(filePath, fs.constants.F_OK, (err) => {
         if (err) {
             // console.error('Tệp không tồn tại hoặc không thể truy cập:', err);

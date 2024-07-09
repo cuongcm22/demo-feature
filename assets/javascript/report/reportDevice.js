@@ -66,6 +66,7 @@ function populateTable(devices) {
         var device = devices[i];
         var row = document.createElement("tr");
         row.innerHTML = `
+            <td>${i + 1}</td>
             <td>${device.name}</td>
             <td>${device.deviceType}</td>
             <td>${device.status}</td>
@@ -162,6 +163,14 @@ Your browser does not support the video tag.
           <th scope="row">Hết hạn bảo hành:</th>
           <td>${convertDateTime(deviceInfo.warrantyExpiry)}</td>
         </tr>
+        <tr>
+          <th scope="row">Tỷ lệ khấu hao:</th>
+          <td>${deviceInfo.depreciationRate}%</td>
+        </tr>
+        <tr>
+          <th scope="row">Ngày thêm thiết bị:</th>
+          <td>${convertDateTime(deviceInfo.createDate)}</td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -198,7 +207,7 @@ function updateRenderDevice(deviceInfo) {
     modalBody.innerHTML = `
 <form action="/device/update" method="post" enctype="application/json" id="updateDeviceForm">
 <div class="mb-3 center">
-    <h1>Update Device</h1>
+    <h1>Cập nhật thiết bị</h1>
 </div>
 <div class="mb-3">
 <input value="${deviceInfo.serialNumber}" name="serialNumber" hidden>
@@ -217,14 +226,28 @@ function updateRenderDevice(deviceInfo) {
     ${forLoopArrayTypeReturnOpt(['Active', 'Repair', 'Damaged'], deviceInfo.status)}
 </select>
 </div>
-<div class="mb-3"><label class="form-label" for="deviceUrlImg">&#x1EA2;nh thi&#x1EBF;t b&#x1ECB;: (devices.imageUrl)</label><input class="form-control" id="deviceUrlImg" type="file" />
+<div class="mb-3">
+    <label class="form-label" for="deviceUrlImg">&#x1EA2;nh thi&#x1EBF;t b&#x1ECB;: (devices.imageUrl)</label>
+    <div class="input-group">
+        <input class="form-control" id="deviceUrlImg" type="file" />
+        <button class="btn btn-outline-danger" type="button" onClick="
+            handleDeleteFile(document.querySelector('#imageRender').getAttribute('src'))
+        ">Xóa</button>
+    </div>
     <div class="warrper text-center">
         <div class="spinner-border text-primary" id="spinner1" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
         <img class="img-fluid" id="imageRender" style="max-width: 100%" src="${deviceInfo.imageUrl}" alt="" ${!deviceInfo.imageUrl ? 'hidden' : ''}/></div>
 </div>
-<div class="mb-3"><label class="form-label" for="deviceVideo">Video thi&#x1EBF;t b&#x1ECB;: (devices.videoUrl)</label><input class="form-control" id="deviceVideo" type="file" accept="video/*" />
+<div class="mb-3">
+<label class="form-label" for="deviceVideo">Video thi&#x1EBF;t b&#x1ECB;: (devices.videoUrl)</label>
+<div class="input-group">
+    <input class="form-control" id="deviceVideo" type="file" accept="video/*" />
+    <button class="btn btn-outline-danger" type="button" onClick="
+        handleDeleteFile(document.querySelector('#videoRender').getAttribute('src'))
+    ">Xóa</button>
+</div>
     <div class="warrper center-video">
         <div class="spinner-border text-primary" id="spinner2" role="status">
             <span class="visually-hidden">Loading...</span>
@@ -232,28 +255,32 @@ function updateRenderDevice(deviceInfo) {
         <video src="${deviceInfo.videoUrl}" class="img-fluid" id="videoRender" controls="" style="max-width: 100%" ${!deviceInfo.videoUrl ? 'hidden' : ''}><!-- Nếu trình duyệt không hỗ trợ video, thông báo sẽ hiển thị ở đây-->Tr&igrave;nh duy&#x1EC7;t c&#x1EE7;a b&#x1EA1;n kh&ocirc;ng h&#x1ED7; tr&#x1EE3; ph&aacute;t video.</video></div>
 </div>
 <div class="mb-3">
-<label for="location" class="form-label">Location</label>
+<label for="location" class="form-label">Vị trí</label>
 <select class="form-select" id="location" name="location" required>
     ${forLoopArrayTypeReturnOpt(locations, deviceInfo.location)}
 </select>
 </div>
 <div class="mb-3">
-<label for="supplier" class="form-label">Supplier</label>
+<label for="supplier" class="form-label">Nhà cung cấp</label>
 <select class="form-select" id="supplier" name="supplier" required>
     ${forLoopArrayTypeReturnOpt(suppliers, deviceInfo.supplier)}
 </select>
 </div>
 <div class="mb-3">
-<label for="purchaseDate" class="form-label">Purchase Date</label>
+<label for="purchaseDate" class="form-label">Ngày mua</label>
 <input value="${purchaseDate}" type="date" class="form-control" name="purchaseDate" id="purchaseDate">
 </div>
 <div class="mb-3">
-<label for="warrantyExpire" class="form-label">Warranty Expire</label>
+<label for="warrantyExpire" class="form-label">Ngày hết hạn</label>
 <input value="${warrantyExpiry}" type="date" class="form-control" name="warrantyExpiry" id="warrantyExpire">
+</div>
+<div class="mb-3">
+<label for="depreciationRate" class="form-label">Tỷ lệ khấu hao (%)</label>
+<input value="${deviceInfo.depreciationRate}" type="text" class="form-control" name="depreciationRate" id="depreciationRate">
 </div>
 <input id="localStorageDataImage" type="hidden" name="imageUrl" value="${deviceInfo.imageUrl}" />
 <input id="localStorageDataVideo" type="hidden" name="videoUrl" value="${deviceInfo.videoUrl}"/>
-<button type="submit" class="btn btn-primary">Update</button>
+<button type="submit" class="btn btn-primary w-100">Cập nhật</button>
 </form>
 `
 
@@ -351,10 +378,11 @@ document.getElementById("searchButton").addEventListener("click", function() {
 
     // Update table rows based on filtered devices
     tableBody.innerHTML = "";
-    filteredDevices.forEach(device => {
+    filteredDevices.forEach((device, i) => {
         const index = devices.indexOf(device); // Lấy chỉ mục của thiết bị trong mảng gốc
         const row = document.createElement("tr");
         row.innerHTML = `
+            <td>${i + 1}</td>
             <td>${device.name}</td>
             <td>${device.deviceType}</td>
             <td>${device.status}</td>
@@ -512,3 +540,28 @@ function renderImageVideo() {
 //             });
 //     });
 // });
+
+function handleDeleteFile(url) {
+    if (url == '/public/images/image-placeholder02.png') {
+        alert('Bạn cần up ảnh lên trước rồi mới xóa được')
+        
+    } else {
+        
+        axios.post('/image/delete', { filename: url })
+            .then(response => {
+                // Xử lý phản hồi từ server nếu cần
+                console.log(response);
+                if (response.data.success == true) {
+                    document.querySelector('#imageRender').src = '/public/images/image-placeholder02.jpg';
+                    alert('Xóa tệp thành công!')
+                } else {
+                    alert('Xóa tệp không thành công!')
+                    console.log(response.data.message);
+                }
+            })
+            .catch(error => {
+                // Xử lý lỗi nếu có
+                console.error('Có lỗi xảy ra khi gửi yêu cầu:', error);
+            });
+    }
+}
