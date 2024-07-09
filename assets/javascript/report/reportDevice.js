@@ -110,9 +110,9 @@ function populateModal(deviceInfo) {
 <div class="col-md-6">
 <div class="video-container">
 <h2>Hình ảnh và video</h2>
-<img style="max-width: ${settingSizeImg.width}; max-height: ${settingSizeImg.height}; object-fit: contain;" id="deviceImage" src="${deviceInfo.imageUrl ? deviceInfo.imageUrl : '/public/images/image_placeholder.jpg'}" alt="Tivi Image">
+<img style="width: 100%; max-height: ${settingSizeImg.height}; object-fit: contain;" id="deviceImage" src="${deviceInfo.imageUrl ? deviceInfo.imageUrl : '/public/images/image_placeholder.jpg'}" alt="Tivi Image">
 ${deviceInfo.videoUrl ? `
-<video style="max-width: ${settingSizeVideo.width}; max-height: ${settingSizeVideo.height}; object-fit: contain; margin-top: 40px;" id="deviceVideo" controls style="display: none;">
+<video style="width: 100%; max-height: ${settingSizeVideo.height}; object-fit: contain; margin-top: 40px;" id="deviceVideo" controls style="display: none;">
 <source src="${deviceInfo.videoUrl}" type="video/mp4">
 Your browser does not support the video tag.
 </video>

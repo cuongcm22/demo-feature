@@ -134,7 +134,7 @@ module.exports.ShowReportDevicePage = async (req, res, next) => {
         if (role != 'admin' && role != 'moderator') {
             return res.redirect('/404')
         }
-
+        
         const configSchema = await Config.findOne();
         const devicetypes = await DeviceType.find({}, 'name').then(devicetypes => devicetypes.map(devicetype => devicetype.name));
         const locations = await Location.find({}, 'name').then(locations => locations.map(location => location.name));
