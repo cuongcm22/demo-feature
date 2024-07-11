@@ -7,12 +7,12 @@ async function addMockData() {
         const configData = {
             depreciationRate: 10,
             settingSizeImg: {
-                height: 800,
-                width: 1200
+                height: 300,
+                width: 400
             },
             settingSizeVideo: {
-                height: 720,
-                width: 1280
+                height: 300,
+                width: 400
             }
         };
 
@@ -22,27 +22,27 @@ async function addMockData() {
         // Save the new config to the database
         const savedConfig = await newConfig.save();
         console.log('Config data added successfully:', savedConfig);
-        // // Add mock device types
-        // const deviceTypes = [
-        //     { name: 'Laptop', description: 'Portable computers' },
-        //     { name: 'Smartphone', description: 'Mobile phones with advanced features' },
-        //     { name: 'Tablet', description: 'Portable touchscreen devices' }
-        // ];
-        // await DeviceType.insertMany(deviceTypes);
+        // Add mock device types
+        const deviceTypes = [
+            { name: 'Laptop', description: 'Portable computers' },
+            { name: 'Smartphone', description: 'Mobile phones with advanced features' },
+            { name: 'Tablet', description: 'Portable touchscreen devices' }
+        ];
+        await DeviceType.insertMany(deviceTypes);
 
-        // // Add mock suppliers
-        // const suppliers = [
-        //     { name: 'Supplier A', address: '123 Supplier St, City', phone: '123-456-7890', email: 'supplierA@example.com' },
-        //     { name: 'Supplier B', address: '456 Supplier Ave, Town', phone: '987-654-3210', email: 'supplierB@example.com' }
-        // ];
-        // await Supplier.insertMany(suppliers);
+        // Add mock suppliers
+        const suppliers = [
+            { name: 'Supplier A', address: '123 Supplier St, City', phone: '123-456-7890', email: 'supplierA@example.com' },
+            { name: 'Supplier B', address: '456 Supplier Ave, Town', phone: '987-654-3210', email: 'supplierB@example.com' }
+        ];
+        await Supplier.insertMany(suppliers);
 
-        // // Add mock locations
-        // const locations = [
-        //     { name: 'Building A', description: 'Main building', address: '789 Main St, Downtown' },
-        //     { name: 'Warehouse B', description: 'Storage facility', address: '321 Warehouse Ave, Industrial Zone' }
-        // ];
-        // await Location.insertMany(locations);
+        // Add mock locations
+        const locations = [
+            { name: 'Building A', description: 'Main building', address: '789 Main St, Downtown' },
+            { name: 'Warehouse B', description: 'Storage facility', address: '321 Warehouse Ave, Industrial Zone' }
+        ];
+        await Location.insertMany(locations);
 
         console.log('Mock data added successfully!');
     } catch (error) {

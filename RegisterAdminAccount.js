@@ -8,7 +8,7 @@ async function register() {
         username: 'lichnq',
         password: 'lichnq@@',
         email: 'lichnq@gmail.com',
-        phone: '0335538651'
+        phone: '0325433454'
     };
 
     try {
