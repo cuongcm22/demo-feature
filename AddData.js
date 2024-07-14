@@ -1,55 +1,53 @@
 const mongoose = require('mongoose');
 const { User, DeviceType, Supplier, Location, Config } = require('./models/models');
 
-async function addMockData() {
-    try {
-        await mongoose.connect('mongodb://127.0.0.1:27017/CSVC');
-        const configData = {
-            depreciationRate: 10,
-            settingSizeImg: {
-                height: 300,
-                width: 400
-            },
-            settingSizeVideo: {
-                height: 300,
-                width: 400
-            }
-        };
+mongoose.connect('mongodb://127.0.0.1:27017/CSVC', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-        // Create a new config instance
-        const newConfig = new Config(configData);
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'Connection error:'));
+db.once('open', async () => {
+  try {
+    // Example mock data
+    const suppliersData = [
+      { name: 'Supplier 1', address: '123 Supplier St', phone: '123-456-7890', email: 'supplier1@example.com' },
+      { name: 'Supplier 2', address: '456 Supplier St', phone: '456-789-0123', email: 'supplier2@example.com' },
+    ];
 
-        // Save the new config to the database
-        const savedConfig = await newConfig.save();
-        console.log('Config data added successfully:', savedConfig);
-        // Add mock device types
-        const deviceTypes = [
-            { name: 'Laptop', description: 'Portable computers' },
-            { name: 'Smartphone', description: 'Mobile phones with advanced features' },
-            { name: 'Tablet', description: 'Portable touchscreen devices' }
-        ];
-        await DeviceType.insertMany(deviceTypes);
+    const usersData = [
+      { username: 'admin', fullname: 'Admin User', password: 'adminpass', email: 'admin@example.com', phone: '987-654-3210', role: 'admin', createdAt: new Date() },
+      { username: 'moderator', fullname: 'Moderator User', password: 'modpass', email: 'moderator@example.com', phone: '789-012-3456', role: 'moderator', createdAt: new Date() },
+    ];
 
-        // Add mock suppliers
-        const suppliers = [
-            { name: 'Supplier A', address: '123 Supplier St, City', phone: '123-456-7890', email: 'supplierA@example.com' },
-            { name: 'Supplier B', address: '456 Supplier Ave, Town', phone: '987-654-3210', email: 'supplierB@example.com' }
-        ];
-        await Supplier.insertMany(suppliers);
+    const locationsData = [
+      { name: 'Location 1', description: 'First Location', address: '123 Location St' },
+      { name: 'Location 2', description: 'Second Location', address: '456 Location St' },
+    ];
 
-        // Add mock locations
-        const locations = [
-            { name: 'Building A', description: 'Main building', address: '789 Main St, Downtown' },
-            { name: 'Warehouse B', description: 'Storage facility', address: '321 Warehouse Ave, Industrial Zone' }
-        ];
-        await Location.insertMany(locations);
+    const deviceTypesData = [
+      { name: 'Dụng cụ lâu bền', description: 'Dụng cụ lâu bền' },
+      { name: 'Tài sản cố định', description: 'Tài sản cố định' },
+    ];
 
-        console.log('Mock data added successfully!');
-    } catch (error) {
-        console.error('Error adding mock data:', error);
-    } finally {
-        mongoose.connection.close();
-    }
-}
+    const configData = {
+      depreciationRate: 0.1,
+      settingSizeImg: { height: 1024, width: 768 },
+      settingSizeVideo: { height: 720, width: 1280 },
+    };
 
-addMockData();
+    // Insert mock data
+    await Supplier.insertMany(suppliersData);
+    await User.insertMany(usersData);
+    await Location.insertMany(locationsData);
+    await DeviceType.insertMany(deviceTypesData);
+    await Config.create(configData);
+
+    console.log('Mock data inserted successfully!');
+    mongoose.disconnect();
+  } catch (err) {
+    console.error('Error inserting mock data:', err);
+    mongoose.disconnect();
+  }
+});
