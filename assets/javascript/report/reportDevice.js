@@ -221,13 +221,13 @@ function updateRenderDevice(deviceInfo) {
 </select>
 </div>
 <div class="mb-3">
-<label for="deviceStatus" class="form-label">Trạng thái thiết bị: (devices.status)</label>
+<label for="deviceStatus" class="form-label">Trạng thái thiết bị: </label>
 <select class="form-select" id="deviceStatus" name="status" required>
-    ${forLoopArrayTypeReturnOpt(['Active', 'Repair', 'Damaged'], deviceInfo.status)}
+    ${forLoopArrayTypeReturnOpt(['Hoạt động', 'Đang sửa chữa', 'Bị hỏng'], deviceInfo.status)}
 </select>
 </div>
 <div class="mb-3">
-    <label class="form-label" for="deviceUrlImg">&#x1EA2;nh thi&#x1EBF;t b&#x1ECB;: (devices.imageUrl)</label>
+    <label class="form-label" for="deviceUrlImg">&#x1EA2;nh thi&#x1EBF;t b&#x1ECB;: </label>
     <div class="input-group">
         <input class="form-control" id="deviceUrlImg" type="file" />
         <button class="btn btn-outline-danger" type="button" onClick="
@@ -241,7 +241,7 @@ function updateRenderDevice(deviceInfo) {
         <img class="img-fluid" id="imageRender" style="max-width: 100%" src="${deviceInfo.imageUrl}" alt="" ${!deviceInfo.imageUrl ? 'hidden' : ''}/></div>
 </div>
 <div class="mb-3">
-<label class="form-label" for="deviceVideo">Video thi&#x1EBF;t b&#x1ECB;: (devices.videoUrl)</label>
+<label class="form-label" for="deviceVideo">Video thi&#x1EBF;t b&#x1ECB;: </label>
 <div class="input-group">
     <input class="form-control" id="deviceVideo" type="file" accept="video/*" />
     <button class="btn btn-outline-danger" type="button" onClick="

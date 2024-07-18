@@ -24,10 +24,6 @@ $(document).ready(function () {
               <button class="btn badge bg-primary" onclick="showSupplierDetails(${
                   startIndex + index
               })">Sửa</button>
-              <button class="btn badge bg-danger" onclick="deleteSupplier(${
-                  startIndex + index
-              }, '${supplier.name}')">Xóa</button>
-              </td>
           </tr>
           `;
             supplierTableBody.append(row);
@@ -119,32 +115,6 @@ $(document).ready(function () {
             handleDelete(supplierName);
         }
     }
-
-    function handleDelete(supplierName) {
-        $.ajax({
-            url: "/suppliers/delete",
-            method: "POST",
-            data: {
-                supplierName: supplierName,
-            },
-            success: function (res) {
-                if (res?.success == true) {
-                    alert("Xóa nhà cung cấp thành công!");
-                    window.location.assign(
-                        window.location.origin + "/suppliers/detail"
-                    );
-                } else {
-                    alert("Bạn không đủ thẩm quyền để thực hiện chức năng này!");
-                        
-                }
-            },
-            error: function (err) {
-                console.error(err);
-            },
-        });
-    }
-
-    window.deleteSupplier = deleteSupplier;
 
     window.showSupplierDetails = function (index) {
         // console.log(index);

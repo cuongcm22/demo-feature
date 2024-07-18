@@ -3,6 +3,11 @@ link(href='https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.
 script(src='https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js')
 link(href='/css/device/createDevice.css' rel='stylesheet')
 
+style.
+  .highlightRed {
+    color: red
+  }
+
 script.
   const data = {
    imageUrl: [`/public/images/tivi1.jpg`,
@@ -15,16 +20,22 @@ section.container
   .form-container
     form#deviceRegistrationForm(action='./add' method='post' enctype='application/json')
       .mb-3
-        label.form-label(for='serialNumber') S&#x1ED1; Serial: 
+        label.form-label(for='serialNumber') S&#x1ED1; Serial 
+        span.highlightRed  * 
+        span : 
         input#serialNumber.form-control(value='' type='text' name='serialNumber' required='')
       .mb-3
         #qr-reader(style='max-width: 100%;')
         #qr-reader-results
       .mb-3
-        label.form-label(for='deviceName') T&ecirc;n thi&#x1EBF;t b&#x1ECB;: 
+        label.form-label(for='deviceName') Tên thiết bị
+        span.highlightRed  * 
+        span : 
         input#deviceName.form-control(value='' type='text' name='name' required='')
       .mb-3
-        label.form-label(for='deviceType') Lo&#x1EA1;i thi&#x1EBF;t b&#x1ECB;: 
+        label.form-label(for='deviceType') Loại thiết bị
+        span.highlightRed  * 
+        span : 
         //- input#deviceType.form-control(value='Tivi' type='text' name='deviceType' required='')
         select#deviceType.form-select.js-example-theme-single(name='deviceType' required='' style='width: 100%')
           option(value='' disabled='' selected='') --Ch&#x1ECD;n--
@@ -32,7 +43,9 @@ section.container
             option(value=devicetype) #{devicetype}
 
       .mb-3
-        label.form-label(for='status') Tr&#x1EA1;ng th&aacute;i thi&#x1EBF;t b&#x1ECB;: 
+        label.form-label(for='status') Trạng thái thiết bị
+        span.highlightRed  * 
+        span : 
         select#status.form-select(name='status' required='')
           option(value='Active' selected='') Hoạt động
           option(value='Repair') Đang sữa chữa
@@ -69,13 +82,17 @@ section.container
             | Tr&igrave;nh duy&#x1EC7;t c&#x1EE7;a b&#x1EA1;n kh&ocirc;ng h&#x1ED7; tr&#x1EE3; ph&aacute;t video.
       
       .mb-3
-        label.form-label(for='deviceLocation') Vị trí: 
+        label.form-label(for='deviceLocation') Vị trí
+        span.highlightRed  * 
+        span :  
         select#deviceLocation.form-select.js-example-theme-single(name='location' required='' style='width: 100%')
           option(value='' disabled='' selected='') --Ch&#x1ECD;n--
           each location in locations 
             option(value=location) #{location}
       .mb-3
-        label.form-label(for='deviceSupplier') Nhà cung cấp: 
+        label.form-label(for='deviceSupplier') Nhà cung cấp
+        span.highlightRed  * 
+        span : 
         select#deviceSupplier.form-select.js-example-theme-single(name='supplier' required='' style='width: 100%')
           option(value='' disabled='' selected='') --Ch&#x1ECD;n--
           each supplier in suppliers 
@@ -84,13 +101,19 @@ section.container
         label.form-label(for='descriptionDevice') Ghi chú: 
         input#descriptionDevice.form-control(value='' type='text' name='description')
       .mb-3
-        label.form-label(for='price') Giá: (device.price)
+        label.form-label(for='price') Giá
+        span.highlightRed  * 
+        span : 
         input#price.form-control(type='text' value='2000' name='price' required='')
       .mb-3
-        label.form-label(for='purchaseDate') Ng&agrave;y mua thi&#x1EBF;t b&#x1ECB;: 
+        label.form-label(for='purchaseDate') Ngày mua thiết bị
+        span.highlightRed  * 
+        span : 
         input#purchaseDate.form-control(type='date' name='purchaseDate' required='')
       .mb-3
-        label.form-label(for='warrantyExpiry') Ng&agrave;y h&#x1EBF;t h&#x1EA1;n: 
+        label.form-label(for='warrantyExpiry') Ngày hết hạn 
+        span.highlightRed  * 
+        span : 
         input#warrantyExpiry.form-control(type='date' name='warrantyExpiry' required='')
       input#localStorageDataImage(type='hidden' name='imageUrl')
       input#localStorageDataVideo(type='hidden' name='videoUrl')

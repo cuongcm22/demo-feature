@@ -20,7 +20,6 @@ $(document).ready(function () {
                     <td>${deviceType.description}</td>
                     <td>
                         <button class="btn badge bg-primary" onclick="showDeviceTypeDetails('${deviceType.name}')">Sửa</button>
-                        <button class="btn badge bg-danger" onclick="deleteDeviceType('${deviceType.name}')">Xóa</button>
                     </td>
                 </tr>
             `;
@@ -102,39 +101,6 @@ $(document).ready(function () {
         const pages = pagination.find(".page-item");
         pages.removeClass("active");
         pages.eq(currentPage - 1).addClass("active");
-    }
-
-    function deleteDeviceType(deviceTypeName) {
-        var confirmation = confirm("Xác nhận bạn muốn xóa loại thiết bị này?");
-        if (confirmation) {
-            handleDelete(deviceTypeName);
-        }
-    }
-
-    window.deleteDeviceType = deleteDeviceType
-
-    function handleDelete(deviceTypeName) {
-        $.ajax({
-            url: "/devicetypes/delete",
-            method: "POST",
-            data: {
-                deviceTypeName: deviceTypeName,
-            },
-            success: function (res) {
-                if (res?.success == true) {
-                    alert("Xóa loại thiêt bị thành công!");
-                    window.location.assign(
-                        window.location.origin + "/devicetypes/detail"
-                    );
-                } else {
-                    alert("Bạn không đủ thẩm quyền để thực hiện chức năng này!");
-                        
-                }
-            },
-            error: function (err) {
-                console.error(err);
-            },
-        });
     }
 
     window.showDeviceTypeDetails = function (deviceTypeName) {

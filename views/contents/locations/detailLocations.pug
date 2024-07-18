@@ -57,13 +57,13 @@ include ../../main.pug
             input#locationName-holder.form-control(type='text' name='nameholder' hidden readonly="")
             .mb-3
                 label.form-label(for='locationName') Tên vị trí
-                input#locationName.form-control(type='text' name='name')
+                input#locationName.form-control(type='text' name='name' required="")
             .mb-3
                 label.form-label(for='locationDescription') Mô tả
-                input#locationDescription.form-control(type='text' name='description')
+                input#locationDescription.form-control(type='text' name='description' required="")
             .mb-3
                 label.form-label(for='locationAddress') Địa chỉ
-                input#locationAddress.form-control(type='text' name='address')
+                input#locationAddress.form-control(type='text' name='address' required="")
             // Add more fields for location information as needed
             button.btn.btn-primary.w-100(type='submit') Sửa
 

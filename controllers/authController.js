@@ -350,7 +350,10 @@ module.exports.register = async (req, res, next) => {
         const handleReturn = handleAlertWithRedirectPage('Đăng kí thành công!', '/user/login')
         res.send(handleReturn)
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.send(`<script>
+                alert('Tài khoản này đã có người khác sử dụng! Vui lòng sử dụng tên đăng nhập và email là giá trị duy nhất!')
+                window.location.assign(window.location.origin  + '/user/register');
+            </script>`)
     }
 }
 

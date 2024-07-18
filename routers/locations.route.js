@@ -13,6 +13,5 @@ router.get('/detail', authenToken.authenToken, locationsController.showDetailLoc
 router.get('/retrieve', authenToken.authenToken, locationsController.retrieveAllLocationsTable);
 // Route update Locations
 router.post('/update', authenToken.authenToken, locationsController.updateLocations);
-// Delete supplier
-router.post('/delete', authenToken.authenToken, locationsController.deleteLocations);
+
 module.exports = router;

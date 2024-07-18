@@ -13,6 +13,5 @@ router.get('/detail', authenToken.authenToken, deviceTypesController.showDetailD
 router.get('/retrieve', authenToken.authenToken, deviceTypesController.retrieveAllDeviceTypesTable);
 // Route update DeviceTypes
 router.post('/update', authenToken.authenToken, deviceTypesController.updateDeviceTypes);
-// Delete supplier
-router.post('/delete', authenToken.authenToken, deviceTypesController.deleteDeviceTypes);
+
 module.exports = router;

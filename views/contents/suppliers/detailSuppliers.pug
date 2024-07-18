@@ -55,16 +55,16 @@ include ../../main.pug
           input#name-holder.form-control(type='text' name='nameholder' hidden readonly="")
           .mb-3
             label.form-label(for='name') Tên
-            input#name.form-control(type='text' name='name')
+            input#name.form-control(type='text' name='name' required="")
           .mb-3
             label.form-label(for='address') Địa chỉ
-            input#address.form-control(type='text' name='address')
+            input#address.form-control(type='text' name='address' required="")
           .mb-3
             label.form-label(for='phone') Số điện thoại
-            input#phone.form-control(type='text' name='phone')
+            input#phone.form-control(type='text' name='phone' required="")
           .mb-3
             label.form-label(for='email') Địa chỉ email
-            input#email.form-control(type='email' name='email')
+            input#email.form-control(type='email' name='email' required="")
           button.w-100.btn.btn-primary(type='submit') Sửa
 
 script.

@@ -22,7 +22,6 @@ $(document).ready(function () {
                     <td>${location.address}</td>
                     <td>
                         <button class="btn badge bg-primary" onclick="showModal('${location.name}')">Sửa</button>
-                        <button class="btn badge bg-danger" onclick="deleteLocations('${location.name}')">Xóa</button>
                     </td>
                 </tr>
             `;
@@ -104,39 +103,6 @@ $(document).ready(function () {
         const pages = pagination.find(".page-item");
         pages.removeClass("active");
         pages.eq(currentPage - 1).addClass("active");
-    }
-
-    function deleteLocations(locationName) {
-        var confirmation = confirm("Bạn chắc chắc muốn xóa phòng này?");
-        if (confirmation) {
-            handleDelete(locationName);
-        }
-    }
-
-    window.deleteLocations = deleteLocations
-
-    function handleDelete(locationName) {
-        $.ajax({
-            url: "/locations/delete",
-            method: "POST",
-            data: {
-                locationName: locationName,
-            },
-            success: function (res) {
-                if (res?.success == true) {
-                    alert("Xóa vị trí thành công!");
-                    window.location.assign(
-                        window.location.origin + "/locations/detail"
-                    );
-                } else {
-                    alert("Bạn không đủ thẩm quyền để thực hiện chức năng này!");
-                        
-                }
-            },
-            error: function (err) {
-                console.error(err);
-            },
-        });
     }
 
     window.showModal = function (locationName) {

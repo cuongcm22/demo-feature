@@ -13,6 +13,5 @@ router.get('/detail', authenToken.authenToken, suppliersController.showDetailSup
 router.get('/retrieve', authenToken.authenToken, suppliersController.retrieveAllSuppliersTable);
 // Route update suppliers
 router.post('/update', authenToken.authenToken, suppliersController.updateSuppliers);
-// Delete supplier
-router.post('/delete', authenToken.authenToken, suppliersController.deleteSuppliers);
+
 module.exports = router;
