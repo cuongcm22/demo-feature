@@ -1,0 +1,4 @@
+lxml==5.2.2
+Pillow==9.5.0
+python-barcode==0.13.1
+python-docx==0.8.11
