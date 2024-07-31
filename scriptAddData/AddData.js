@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { User, DeviceType, Supplier, Location, Config } = require('./models/models');
+const { User, DeviceType, Supplier, Location, Config } = require('../models/models');
 
 mongoose.connect('mongodb://127.0.0.1:27017/CSVC', {
   useNewUrlParser: true,
@@ -12,18 +12,23 @@ db.once('open', async () => {
   try {
     // Example mock data
     const suppliersData = [
-      { name: 'Supplier 1', address: '123 Supplier St', phone: '123-456-7890', email: 'supplier1@example.com' },
-      { name: 'Supplier 2', address: '456 Supplier St', phone: '456-789-0123', email: 'supplier2@example.com' },
+      { name: 'Không bắt buộc', address: 'Không bắt buộc', phone: '123-456-7890', email: 'example@gmail.com' },
     ];
 
     const usersData = [
-      { username: 'admin', fullname: 'Admin User', password: 'adminpass', email: 'admin@example.com', phone: '987-654-3210', role: 'admin', createdAt: new Date() },
-      { username: 'moderator', fullname: 'Moderator User', password: 'modpass', email: 'moderator@example.com', phone: '789-012-3456', role: 'moderator', createdAt: new Date() },
+      { username: 'admin', fullname: 'Admin User', password: 'adminhuet86', email: 'admin@gmail.com', phone: '987-654-3210', role: 'admin', createdAt: new Date() },
+      { username: 'namds', fullname: 'Nguyễn Danh Nam', password: 'namds', email: 'namds@gmail.com', phone: '789-012-3456', role: 'admin', createdAt: new Date() },
+      { username: 'lichnguyen', fullname: 'Nguyễn Quang Lịch', password: 'lichnguyen', email: 'lichnguyen@gmail.com', phone: '789-012-3456', role: 'admin', createdAt: new Date() },
     ];
 
     const locationsData = [
-      { name: 'Location 1', description: 'First Location', address: '123 Location St' },
-      { name: 'Location 2', description: 'Second Location', address: '456 Location St' },
+      { name: 'R.I', description: 'R.I', address: 'R.I' },
+      { name: 'R.II', description: 'R.II', address: 'R.II' },
+      { name: 'R.III', description: 'R.III', address: 'R.III' },
+      { name: 'R.IV', description: 'R.IV', address: 'R.IV' },
+      { name: 'R.V', description: 'R.V', address: 'R.V' },
+      { name: 'R.VI', description: 'R.VI', address: 'R.VI' },
+      { name: 'R.VII', description: 'R.VII', address: 'R.VII' },
     ];
 
     const deviceTypesData = [
