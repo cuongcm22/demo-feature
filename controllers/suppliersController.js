@@ -1,5 +1,6 @@
 const { 
-    Supplier
+    Supplier,
+    ErrorSchema
  } = require('../models/models.js')
 
 function handleAlertWithRedirectPage(alertString, redirect) {
@@ -27,7 +28,16 @@ module.exports.showCreateSuppliersPage = async (req, res, next) => {
             suppliers: JSON.stringify(suppliers),
         });
     } catch (error) {
-        res.status(404)
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'showCreateSuppliersPage'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -53,7 +63,16 @@ module.exports.addSuppliers = async (req, res, next) => {
                 })
             })
     } catch (error) {
-        res.status(404)
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'addSuppliers'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -78,7 +97,16 @@ module.exports.showDetailSuppliersPage = async (req, res, next) => {
             suppliers: JSON.stringify(suppliers),
         });
     } catch (error) {
-        res.status(404)
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'showDetailSuppliersPage'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -97,7 +125,16 @@ module.exports.retrieveAllSuppliersTable = async (req, res, next) => {
             data: suppliers
         })
     } catch (error) {
-        res.status(404)
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'retrieveAllSuppliersTable'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -127,8 +164,16 @@ module.exports.updateSuppliers = async (req, res, next) => {
             handleResult
         )
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: 'Lỗi server' });
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'updateSuppliers'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -149,7 +194,15 @@ module.exports.deleteSuppliers = async (req, res, next) => {
             success: true
         })
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: 'Lỗi server' });
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'deleteSuppliers'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }

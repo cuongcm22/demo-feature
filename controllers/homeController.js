@@ -19,7 +19,8 @@ const {
     Loan,
     Log,
     DeviceType,
-    Config
+    Config,
+    ErrorSchema
 } = require("../models/models.js");
 
 // Module
@@ -83,9 +84,17 @@ module.exports.homePage = async (req, res, next) => {
                 "Quản lý lịch sử mượn trả": "/record/loanrecord",
             },
         });
-    } catch (err) {
-        // console.log(err);
-        res.status(404);
+    } catch (error) {
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'homePage'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 };
 
@@ -302,9 +311,17 @@ module.exports.showDashBoard = async (req, res, next) => {
             arrUserIdsNotReturned: JSON.stringify(arrUserIdsNotReturned),
             arrDeviceIdsDue: JSON.stringify(arrDeviceIdsDue)
         });
-    } catch (err) {
-        console.log(err);
-        res.status(404);
+    } catch (error) {
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'showDashBoard'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 };
 
@@ -316,9 +333,17 @@ module.exports.errorPage = async (req, res, next) => {
                 "Trang chủ": "/",
             },
         });
-    } catch (err) {
-        console.log(err);
-        res.status(404);
+    } catch (error) {
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'errorPage'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 };
 
@@ -336,9 +361,17 @@ module.exports.showExportFileCSV = async (req, res, next) => {
                 Loan: "Loan table",
             },
         });
-    } catch (err) {
-        console.log(err);
-        res.status(404);
+    } catch (error) {
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'showExportFileCSV'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 };
 
@@ -413,9 +446,17 @@ module.exports.exportFileCSV = async (req, res, next) => {
                     "An error occurred while processing the request."
                 );
             });
-    } catch (err) {
-        console.log(err);
-        res.status(404);
+    } catch (error) {
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'exportFileCSV'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 };
 
@@ -631,10 +672,17 @@ module.exports.updateXlsxFile = async (req, res, next) => {
         }
 
         res.status(200).json({});
-    } catch {
-        (err) => {
-            res.status(404).json({ error: err });
-        };
+    } catch(error) {
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'updateXlsxFile'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 };
 
@@ -667,10 +715,17 @@ module.exports.ShowDownloadXlsxFile = async (req, res, next) => {
                 data: files,
             });
         });
-    } catch {
-        (err) => {
-            res.status(404).json({ error: err });
-        };
+    } catch(error) {
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'ShowDownloadXlsxFile'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 };
 
@@ -712,9 +767,17 @@ module.exports.downloadXlsxFile = async (req, res, next) => {
         // Stream the file to the response
         const fileStream = fs.createReadStream(filePath);
         fileStream.pipe(res);
-    } catch (err) {
-        console.error("Error reading file:", err);
-        res.status(500).send("Internal Server Error");
+    } catch (error) {
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'downloadXlsxFile'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 };
 
@@ -735,8 +798,16 @@ module.exports.sendEmail = async (req, res, next) => {
                 filesnamecsv: csvFiles,
             });
         });
-    } catch (err) {
-        console.log(err);
-        res.status(404);
+    } catch (error) {
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'sendEmail'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 };

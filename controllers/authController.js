@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 
 // Import device model
 // const User = require("../models/usersSchema.js");
-const { User, Config, Loan, Device } = require('../models/models')
+const { User, Config, Loan, Device, ErrorSchema } = require('../models/models')
 
 const bcrypt = require('bcrypt');
 const { match } = require("assert");
@@ -68,9 +68,16 @@ module.exports.showBioPage = async (req, res, next) => {
             data: { fullname, username, email, phone, role }
         });
     } catch (error) {
-        res.status(400).json({
-            error: error
-        })
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'showBioPage'
+          });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -85,9 +92,16 @@ module.exports.showLoginForm = async (req, res, next) => {
             }
         });
     } catch (error) {
-        res.status(400).json({
-            error: error
-        })
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'showLoginForm'
+          });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -305,9 +319,16 @@ module.exports.login = async (req, res, next) => {
             })
         })
     } catch (error) {
-        res.status(400).json({
-            error: error
-        })
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'login'
+          });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -322,9 +343,16 @@ module.exports.showRegisterForm = async (req, res, next) => {
             }
         });
     } catch (error) {
-        res.status(400).json({
-            error: error
-        })
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'showRegisterForm'
+          });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -366,7 +394,6 @@ module.exports.logOut = async (req, res, next) => {
     
         res.setHeader('Set-Cookie', [sessionId, sessionUserName, sessionToken]);
     
-        const handleReturn = handleAlertWithRedirectPage('', '/')
         res.send(
             `<script>
                 localStorage.setItem("notReturn", "true");
@@ -375,7 +402,16 @@ module.exports.logOut = async (req, res, next) => {
             </script>`
         )
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'logOut'
+          });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -398,7 +434,16 @@ module.exports.ShowManageUserPage = async (req, res, next) => {
             data: JSON.stringify(users)
         });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'ShowManageUserPage'
+          });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -435,7 +480,16 @@ module.exports.manageUserDB = async (req, res, next) => {
             success: true
         })
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'manageUserDB'
+          });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -459,7 +513,16 @@ module.exports.ShowConfigPage = async (req, res, next) => {
             configSetting: configSchema
         });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'ShowConfigPage'
+          });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -499,7 +562,16 @@ module.exports.saveConfig = async (req, res, next) => {
             })
         })
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'showBioPage'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 

@@ -10,7 +10,8 @@ const {
     User,
     Loan,
     Log,
-    DeviceType
+    DeviceType,
+    ErrorSchema
  } = require('../models/models.js')
 
  // Import thư viện Moment.js để làm việc với ngày giờ
@@ -23,7 +24,12 @@ function formatDateTime(inputDateTime) {
   return formattedDateTime;
 }
 
-
+function handleAlertWithRedirectPage(alertString, redirect) {
+    return `<script>
+        alert('${alertString}')
+        window.location.assign(window.location.origin  + '${redirect}');
+    </script>`
+}
 
 module.exports.ShowLoanRecordPage = async (req, res, next) => {
     try {
@@ -97,9 +103,16 @@ module.exports.ShowLoanRecordPage = async (req, res, next) => {
             console.error('Error fetching records:', error);
         });
     } catch(error) {
-        res.status(400).json(
-            {success: false}
-        )
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'ShowLoanRecordPage'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -147,6 +160,15 @@ module.exports.retrieveAllLoanRecordTable = async (req, res, next) => {
             })
         })
     } catch (error) {
-        res.status(404)
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'retrieveAllLoanRecordTable'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }

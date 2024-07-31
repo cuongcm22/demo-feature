@@ -1,5 +1,6 @@
 const { 
-    Location
+    Location,
+    ErrorSchema
  } = require('../models/models.js')
 
 function handleAlertWithRedirectPage(alertString, redirect) {
@@ -27,7 +28,16 @@ module.exports.showCreateLocationsPage = async (req, res, next) => {
             locations: JSON.stringify(locations)
         });
     } catch (error) {
-        res.status(404)
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'showCreateLocationsPage'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -53,7 +63,16 @@ module.exports.addLocations = async (req, res, next) => {
                 })
             })
     } catch (error) {
-        res.status(404)
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'addLocations'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -78,7 +97,16 @@ module.exports.showDetailLocationsPage = async (req, res, next) => {
             locations: JSON.stringify(locations),
         });
     } catch (error) {
-        res.status(404)
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'showDetailLocationsPage'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -97,7 +125,16 @@ module.exports.retrieveAllLocationsTable = async (req, res, next) => {
             data: locations
         })
     } catch (error) {
-        res.status(404)
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'retrieveAllLocationsTable'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -125,8 +162,16 @@ module.exports.updateLocations = async (req, res, next) => {
             handleResult
         )
     } catch (error) {
-        console.error(error);
-        return res.redirect('/')
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'updateLocations'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -145,7 +190,15 @@ module.exports.deleteLocations = async (req, res, next) => {
             success: true
         })
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: 'Lỗi server' });
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'deleteLocations'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }

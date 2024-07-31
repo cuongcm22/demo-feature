@@ -7,6 +7,7 @@ const Loan = require('./loans.schema');
 const Log = require('./logs.schema');
 const DeviceType = require('./deviceTypes.schema');
 const Config = require('./config.schema');
+const ErrorSchema = require('./errors.schema')
 
 module.exports = {
   Device,
@@ -16,5 +17,6 @@ module.exports = {
   Loan,
   Log,
   DeviceType,
-  Config
+  Config,
+  ErrorSchema
 };

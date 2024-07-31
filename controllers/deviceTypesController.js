@@ -1,5 +1,6 @@
 const { 
-    DeviceType
+    DeviceType,
+    ErrorSchema
  } = require('../models/models.js')
 
 function handleAlertWithRedirectPage(alertString, redirect) {
@@ -25,7 +26,16 @@ module.exports.showCreateDeviceTypesPage = async (req, res, next) => {
             }
         });
     } catch (error) {
-        res.status(404)
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'showCreateDeviceTypesPage'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -45,7 +55,16 @@ module.exports.addDeviceTypes = async (req, res, next) => {
                 res.send(handleResult)
             })
     } catch (error) {
-        res.status(404)
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'addDeviceTypes'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -70,7 +89,16 @@ module.exports.showDetailDeviceTypesPage = async (req, res, next) => {
             deviceTypes: JSON.stringify(deviceTypes),
         });
     } catch (error) {
-        res.status(404)
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'showDetailDeviceTypesPage'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -89,7 +117,16 @@ module.exports.retrieveAllDeviceTypesTable = async (req, res, next) => {
             data: deviceTypes
         })
     } catch (error) {
-        res.status(404)
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'retrieveAllDeviceTypesTable'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -117,8 +154,16 @@ module.exports.updateDeviceTypes = async (req, res, next) => {
             handleResult
         )
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: 'Lỗi server' });
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'updateDeviceTypes'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -137,7 +182,15 @@ module.exports.deleteDeviceTypes = async (req, res, next) => {
             success: true
         })
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: 'Lỗi server' });
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'deleteDeviceTypes'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }

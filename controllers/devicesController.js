@@ -12,7 +12,8 @@ const {
     Loan,
     Log,
     DeviceType,
-    Config
+    Config,
+     ErrorSchema
  } = require('../models/models.js')
 
 function convertDatetoString(dateString) {
@@ -56,7 +57,16 @@ module.exports.readIdDevice = async (req, res, next) => {
             success: true
         })
     } catch {
-        res.status(400).json({})
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'readIdDevice'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -101,8 +111,16 @@ module.exports.showPageGetDetailDevice = async (req, res, next) => {
             statusLoanDevice: statusLoanDevice
         });
     } catch(err) {
-        console.log(err);
-        res.status(400).json({})
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'showPageGetDetailDevice'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -120,8 +138,16 @@ module.exports.showGetDetailDeviceByQrCode = async (req, res) => {
             }
         })
     } catch(err) {
-        console.log(err);
-        res.status(400).json({error: err})
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'showGetDetailDeviceByQrCode'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -238,7 +264,16 @@ module.exports.ShowReportDevicePage = async (req, res, next) => {
             });
         })
     } catch (error) {
-        res.status(400).send(error);
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'ShowReportDevicePage'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 };
 
@@ -269,7 +304,16 @@ module.exports.showCreateDevicePage = async (req, res, next) => {
         });
            
     } catch (error) {
-        res.status(400).send(error);
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'showCreateDevicePage'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 };
 
@@ -453,9 +497,16 @@ module.exports.ShowLoanDevicePage = async (req, res, next) => {
         });
 
     } catch (error) {
-        res.status(401).json({
-            message: error
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'ShowLoanDevicePage'
         });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
@@ -578,7 +629,16 @@ module.exports.ShowReturnDevicePage = async (req, res, next) => {
         });
         
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Internal server error' });
+        const errorlog = new ErrorSchema({
+            message: error,
+            statusCode: 400,
+            route: 'ShowReturnDevicePage'
+        });
+          
+        // Save the error to the database
+        errorlog.save()
+        const handleReturn = handleAlertWithRedirectPage('Đã có lỗi xảy ra! Liên hệ quản trị viên để giải quyết','/')
+        res.send(handleReturn);
     }
 }
 
