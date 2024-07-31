@@ -17,8 +17,10 @@ db.once('open', async () => {
 
     const usersData = [
       { username: 'admin', fullname: 'Admin User', password: 'adminhuet86', email: 'admin@gmail.com', phone: '987-654-3210', role: 'admin', createdAt: new Date() },
+      { username: 'moderator', fullname: 'Mod User', password: 'modhuet86', email: 'moderator@gmail.com', phone: '987-654-3210', role: 'admin', createdAt: new Date() },
       { username: 'namds', fullname: 'Nguyễn Danh Nam', password: 'namds', email: 'namds@gmail.com', phone: '789-012-3456', role: 'admin', createdAt: new Date() },
       { username: 'lichnguyen', fullname: 'Nguyễn Quang Lịch', password: 'lichnguyen', email: 'lichnguyen@gmail.com', phone: '789-012-3456', role: 'admin', createdAt: new Date() },
+      { username: 'nqsang', fullname: 'Nguyễn Quang Sang', password: 'nqsang', email: 'ngsang@gmail.com', phone: '789-012-3456', role: 'admin', createdAt: new Date() },
     ];
 
     const locationsData = [
@@ -29,6 +31,8 @@ db.once('open', async () => {
       { name: 'R.V', description: 'R.V', address: 'R.V' },
       { name: 'R.VI', description: 'R.VI', address: 'R.VI' },
       { name: 'R.VII', description: 'R.VII', address: 'R.VII' },
+      { name: 'R.VIII', description: 'R.VIII', address: 'R.VIII' },
+      { name: 'R.IX', description: 'R.IX', address: 'R.IX' },
     ];
 
     const deviceTypesData = [
