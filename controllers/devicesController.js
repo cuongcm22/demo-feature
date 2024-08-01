@@ -239,7 +239,7 @@ module.exports.ShowReportDevicePage = async (req, res, next) => {
                     branches: [
                       { case: { $eq: ['$status', 'Active'] }, then: 'Hoạt động' },
                       { case: { $eq: ['$status', 'Repair'] }, then: 'Đang sửa chữa' },
-                      { case: { $eq: ['$status', 'Damaged'] }, then: 'Bị hư hại' }
+                      { case: { $eq: ['$status', 'Damaged'] }, then: 'Bị hỏng' }
                     ],
                     default: '$status'
                   }

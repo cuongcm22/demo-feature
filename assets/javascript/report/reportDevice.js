@@ -1,7 +1,8 @@
-function forLoopArrayTypeReturnOpt(arrayType, key) {
+function forLoopArrayTypeReturnOpt(arrayTypeVietSub, arrayTypeOrigin, key) {
     var stringOption = '';
-    arrayType.forEach(element => {
-        var stringTemp = `<option value="${element}" ${element === key ? 'selected' : ''}>${element}</option>`
+    arrayTypeVietSub.forEach((element, index) => {
+        // console.log(element)
+        var stringTemp = `<option value="${arrayTypeOrigin[index]}" ${element === key ? 'selected' : ''}>${element}</option>`
         stringOption += stringTemp
     });
 
@@ -217,13 +218,13 @@ function updateRenderDevice(deviceInfo) {
 <div class="mb-3">
 <label for="type" class="form-label">Loại thiết bị</label>
 <select class="form-select" id="deviceType" name="deviceType" required>
-    ${forLoopArrayTypeReturnOpt(devicetypes, deviceInfo.deviceType)}
+    ${forLoopArrayTypeReturnOpt(devicetypes, devicetypes, deviceInfo.deviceType)}
 </select>
 </div>
 <div class="mb-3">
 <label for="deviceStatus" class="form-label">Trạng thái thiết bị: </label>
 <select class="form-select" id="deviceStatus" name="status" required>
-    ${forLoopArrayTypeReturnOpt(['Hoạt động', 'Đang sửa chữa', 'Bị hỏng'], deviceInfo.status)}
+    ${forLoopArrayTypeReturnOpt(['Hoạt động', 'Đang sửa chữa', 'Bị hỏng'], ['Active', 'Repair', 'Damaged'], deviceInfo.status)}
 </select>
 </div>
 <div class="mb-3">
@@ -257,13 +258,13 @@ function updateRenderDevice(deviceInfo) {
 <div class="mb-3">
 <label for="location" class="form-label">Vị trí</label>
 <select class="form-select" id="location" name="location" required>
-    ${forLoopArrayTypeReturnOpt(locations, deviceInfo.location)}
+    ${forLoopArrayTypeReturnOpt(locations, locations, deviceInfo.location)}
 </select>
 </div>
 <div class="mb-3">
 <label for="supplier" class="form-label">Nhà cung cấp</label>
 <select class="form-select" id="supplier" name="supplier" required>
-    ${forLoopArrayTypeReturnOpt(suppliers, deviceInfo.supplier)}
+    ${forLoopArrayTypeReturnOpt(suppliers, suppliers,deviceInfo.supplier)}
 </select>
 </div>
 <div class="mb-3">
